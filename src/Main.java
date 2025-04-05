@@ -1,8 +1,9 @@
 import View.MainFrame;
+import View.StartFrame;
 
 public class Main {
     public static void main(String[] args) {
-        MainFrame frame = new MainFrame();
+        StartFrame frame = new StartFrame();
         frame.setVisible(true);
 
     }
