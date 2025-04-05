@@ -1,5 +1,5 @@
 package Business.Entities;
 
-public class Bot {
+public class WalletManager {
 
 }
