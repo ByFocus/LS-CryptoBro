@@ -10,7 +10,7 @@ public class LoadFrame extends JFrame {
         setLayout(new BorderLayout());
 
         // Agregar la imagen del logo
-        JLabel logo = new JLabel(new ImageIcon(logoImgURL)); // Cambia "ruta/a/tu/logo.png" por la ruta real de tu logo
+        JLabel logo = new JLabel(new ImageIcon(logoImgURL));
         add(logo, BorderLayout.CENTER);
 
         // Crear la barra de progreso
@@ -21,8 +21,8 @@ public class LoadFrame extends JFrame {
         add(progressBar, BorderLayout.SOUTH);
 
         // Configurar tamaño y posición de la ventana
-        setSize(560, 480); // Ajusta el tamaño según tu imagen y barra
-        setLocationRelativeTo(null); // Centrar en la pantalla
+        setSize(560, 480);
+        setLocationRelativeTo(null);
     }
 
     public void uploadProgress(int progress) {
