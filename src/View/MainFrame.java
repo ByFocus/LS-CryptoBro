@@ -38,22 +38,26 @@ public class MainFrame extends JFrame {
 
     //Barra de arriba de la pagina
     private JPanel configureProfile() {
-        JPanel userPanel = new JPanel();
+        JPanel userMenu = new JPanel(new BorderLayout(20, 20));
 
         // Panel con el balance
-        JPanel BalancePanel = new JPanel();
-        BalancePanel.add(new JLabel("Balance: "));
-        BalancePanel.add(new JLabel("XXX "));
+        JPanel balancePanel = new JPanel();
+        
+        JLabel balanceLabel = new JLabel("Balance: ");
+        balanceLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        balancePanel.add(balanceLabel);
+        balancePanel.add(new JLabel("XXX "));
 
-
-        userPanel.add(BalancePanel);
+        userMenu.add(balancePanel, BorderLayout.WEST);
 
         // Panel del Usuario
-        JPanel UserPanel = new JPanel(new BorderLayout());
-        BalancePanel.add(new JLabel("USER"), BorderLayout.WEST);
+        JPanel userPanel = new JPanel();
+        userPanel.add(new JLabel("USER"));
 
-        userPanel.add(BalancePanel);
+        userMenu.add(userPanel, BorderLayout.EAST);
+        userMenu.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        return userPanel;
+        userMenu.setBackground(Color.DARK_GRAY);
+        return userMenu;
     }
 }

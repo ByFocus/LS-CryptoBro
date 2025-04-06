@@ -10,10 +10,7 @@ public class StartFrame extends JFrame {
     public static final String FRAME_TITLE = "CryptoBro Login";
 
     public StartFrame() {
-        setTitle("CryptoBro Login");
-        setSize(500, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        configureFrame();
 
         // Crear el CardLayout
         cardLayout = new CardLayout();
@@ -27,24 +24,22 @@ public class StartFrame extends JFrame {
 
         // Mostrar inicialmente el panel de Login
         cardLayout.show(mainPanel, "Login");
-
-        setLocationRelativeTo(null);
     }
 
     private JPanel createLoginPanel() {
         JPanel loginPanel = new JPanel(new BorderLayout());
-        loginPanel.setBackground(Color.BLACK); // Fondo negro
+        loginPanel.setBackground(new Color(40, 40, 45)); // Fondo negro
 
         // Título
         JLabel titleLabel = new JLabel("Login", JLabel.CENTER);
         titleLabel.setForeground(Color.WHITE); // Texto blanco
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Fuente personalizada
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32)); // Fuente personalizada
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         loginPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Panel central con campos de entrada
         JPanel inputPanel = new JPanel(new GridBagLayout());
-        inputPanel.setBackground(Color.BLACK); // Fondo negro
+        inputPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.5;
@@ -52,7 +47,7 @@ public class StartFrame extends JFrame {
 
         // User Panel
         JPanel userPanel = new JPanel(new BorderLayout());
-        userPanel.setBackground(Color.BLACK); // Fondo negro
+        userPanel.setOpaque(false); // Fondo negro
         JLabel userLabel = new JLabel("User:          ");
         userLabel.setForeground(Color.WHITE); // Texto blanco
         userPanel.add(userLabel, BorderLayout.WEST);
@@ -66,7 +61,7 @@ public class StartFrame extends JFrame {
 
         // Password Panel
         JPanel passwordPanel = new JPanel(new BorderLayout());
-        passwordPanel.setBackground(Color.BLACK); // Fondo negro
+        passwordPanel.setOpaque(false); // Fondo negro
         JLabel passwordLabel = new JLabel("Password: ");
         passwordLabel.setForeground(Color.WHITE); // Texto blanco
         passwordPanel.add(passwordLabel, BorderLayout.WEST);
@@ -79,19 +74,23 @@ public class StartFrame extends JFrame {
 
         // Botón de Login
         JPanel loginButtonPanel = new JPanel(new FlowLayout());
+        JLabel loginButtonLabel = new JLabel("Login");
+        loginButtonLabel.setForeground(Color.WHITE);
         JButton loginButton = new JButton("Login");
-        loginButton.setBackground(new Color(255, 185, 0)); // Color dorado
-        loginButton.setForeground(Color.BLACK); // Texto negro en el botón
+        loginButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 16));
+        loginButton.setBackground(new Color(115, 184, 90)); // Color dorado
+        loginButton.setForeground(Color.WHITE);
 
-        // Acción del botón Login (puedes personalizarla)
+        // Acción del botón Login
         loginButton.addActionListener(e -> {
             dispose();
             new MainFrame().setVisible(true);
         });
 
         loginButtonPanel.add(loginButton);
-        loginButtonPanel.setPreferredSize(new Dimension(120, 50));
+        loginButtonPanel.setPreferredSize(new Dimension(120, 80));
         loginButtonPanel.setOpaque(false);
+        loginButtonPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
         gbc.gridy = 2;
 
         inputPanel.add(loginButtonPanel, gbc);
@@ -99,15 +98,19 @@ public class StartFrame extends JFrame {
         loginPanel.add(inputPanel, BorderLayout.CENTER);
 
         // Botón para cambiar a Register
+        JPanel switchButtonPanel = new JPanel();
+        switchButtonPanel.setOpaque(false);
+
         JButton switchToRegisterButton = new JButton("Register");
-        switchToRegisterButton.setBackground(new Color(218, 165, 32)); // Color dorado
-        switchToRegisterButton.setForeground(Color.BLACK); // Texto negro en el botón
+        switchToRegisterButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 16));
+        switchToRegisterButton.setBackground(new Color(110, 37, 44)); // Color dorado
+        switchToRegisterButton.setForeground(Color.WHITE); // Texto negro en el botón
 
         switchToRegisterButton.addActionListener(e -> cardLayout.show(mainPanel, "Register"));
 
-        JPanel switchButtonPanel = new JPanel();
-        switchButtonPanel.setBackground(Color.BLACK); // Fondo negro
         switchButtonPanel.add(switchToRegisterButton);
+        switchButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
         loginPanel.add(switchButtonPanel, BorderLayout.SOUTH);
 
         return loginPanel;
@@ -179,9 +182,8 @@ public class StartFrame extends JFrame {
     }
 
     private void configureFrame() {
-        pack();
         setTitle(FRAME_TITLE);
-        setSize(700, 700);
+        setSize(500, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
