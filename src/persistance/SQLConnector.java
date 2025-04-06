@@ -5,6 +5,7 @@ import java.sql.*;
 public class SQLConnector {
 
     private static SQLConnector instance = null;
+    private static Connection connection;
 
     public static SQLConnector getInstance(){
         if (instance == null ){
@@ -74,6 +75,8 @@ public class SQLConnector {
         }
         return rs;
     }
+
+    public static Connection getConnection() {return connection;}
 
     public void disconnect(){
         try {
