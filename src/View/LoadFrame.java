@@ -21,11 +21,20 @@ public class LoadFrame extends JFrame {
         add(progressBar, BorderLayout.SOUTH);
 
         // Configurar tamaño y posición de la ventana
-        setSize(560, 480);
+        setSize(560, 500);
         setLocationRelativeTo(null);
     }
 
-    public void uploadProgress(int progress) {
-        progressBar.setValue(progress);
+    public void load(){
+        for (int i = 0; i <= 100; i++) {
+            try {
+                Thread.sleep(20); // Simula tiempo de carga (ajusta según lo necesario)
+                progressBar.setValue(i);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        dispose();
     }
+
 }
