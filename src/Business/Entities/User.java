@@ -7,7 +7,7 @@ public class User {
     private String username;
     private String password;
     private double balance;
-    private double estimatedGains;
+    private double estimatedGains; //TODO: canviar i fer que es recalculi en el "view", per evitar guard-lo, i així en el wallet manager només se li ha de passar el userName, y ha de retornar el valor
     private boolean cryptoDeletedFlag;
     private List<Purchase> purchases;
 
@@ -17,6 +17,7 @@ public class User {
         this.balance = balance;
         this.cryptoDeletedFlag = cryptoViewFlag;
         this.purchases = new ArrayList<>();
+        this.estimatedGains = 0;
     }
 
     public String getUsername() { return username; }
@@ -33,5 +34,8 @@ public class User {
 
     public List<Purchase> getPurchases() {
         return purchases;
+    }
+    public void setEstimatedGains(double estimatedGains) {
+        this.estimatedGains = estimatedGains;
     }
 }
