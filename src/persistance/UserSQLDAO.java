@@ -85,6 +85,7 @@ public class UserSQLDAO {
             throw new RuntimeException("Error validating user credential", e);
         }
     }
+
     public boolean deleteUser (String identifier) {
         String query = "DELETE FROM users WHERE user_name = ? OR user_email = ?";
         try {
