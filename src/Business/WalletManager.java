@@ -1,4 +1,4 @@
-package Business.Entities;
+package Business;
 
 public class WalletManager {
 
