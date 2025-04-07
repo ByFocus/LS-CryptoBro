@@ -1,27 +1,27 @@
 package Business.Entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private String username;
+    private String mail;
     private String password;
     private double balance;
-    private double estimatedGains; //TODO: canviar i fer que es recalculi en el "view", per evitar guard-lo, i així en el wallet manager només se li ha de passar el userName, y ha de retornar el valor
     private boolean cryptoDeletedFlag;
     private List<Purchase> purchases;
 
-        public User(String username, String password, double balance, boolean cryptoViewFlag) {
+    public User(String username, String password, String mail, double balance, boolean cryptoDeletedFlag) {
         this.username = username;
         this.password = password;
+        this.mail = mail;
         this.balance = balance;
-        this.cryptoDeletedFlag = cryptoViewFlag;
-        this.purchases = new ArrayList<>();
-        this.estimatedGains = 0;
+        this.cryptoDeletedFlag = cryptoDeletedFlag;
+        purchases = null;
     }
 
     public String getUsername() { return username; }
     public String getPassword() { return password; }
+    public String getMail() { return mail; }
     public double getBalance() { return balance; }
     public boolean getCryptoDeletedFlag() { return cryptoDeletedFlag; }
 
@@ -34,8 +34,5 @@ public class User {
 
     public List<Purchase> getPurchases() {
         return purchases;
-    }
-    public void setEstimatedGains(double estimatedGains) {
-        this.estimatedGains = estimatedGains;
     }
 }
