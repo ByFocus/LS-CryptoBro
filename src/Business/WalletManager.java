@@ -1,18 +1,25 @@
 package Business;
 
+import Business.BusinessExceptions.UnsufficientBalance;
 import Business.Entities.*;
 
 import java.util.List;
 
 public class WalletManager {
+
+     static String NOT_ENOUGH_BALANCE = "Bro, no tienes suficiente dinero, conoce tu lugar";
+
     public WalletManager() {
 
     }
     public void addTransaction(User user, Crypto crypto, int units) {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {
-
+            Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
+            user.addPurchase(p);
+            PurchaseDAO purchaseDAO = new PurchaseSqlDAO();
+            purchaseDAO.addTransaction(user.getUsername(), p);
         } else {
-            //throw new
+            throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
     public List<Purchase> getWalletByUserName(String username) {
