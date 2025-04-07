@@ -9,10 +9,15 @@ public class WalletManager {
 
     }
     public void addTransaction(User user, Crypto crypto, int units) {
+        if (crypto.getCurrentPrice() * units >= user.getBalance()) {
 
+        } else {
+            //throw new
+        }
     }
     public List<Purchase> getWalletByUserName(String username) {
-        return null;
+        PurchaseDao purchaseDao = new PurchaseSqlDAO();
+        return purchaseDao.getPurchasesByUserName();
     }
     public void recalculateGainsUser(User user) {
 
