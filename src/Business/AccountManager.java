@@ -34,28 +34,20 @@ public class AccountManager {
         }
     }
 
-    public void delateCurrentUser() {
-
+    public void delateCurrentUser(User user) {
+        UserDAO.removeUser(user);
     }
 
-    public void warnUserByUserName(String username) {
-        User user = UserDao.getUser(username);
+    public void warnUserByUserName(User user) {
         if (user.getCryptoDeletedFlag()) {
+            user.setCryptoDeletedFlag(false);
             throw new CryptoDelated(CRYPTO_DELATED_ERROR);
         }
     }
 
-    public void adminAccess(String username, String password) {
-        try {
-            User newUser = UserDAO.getUser(username);
-            if (UserDAO.validateAdmin(password)){
-
-            }
-            else{
-                throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
-            }
-        } catch(DBDataNotFound e) {
-            throw new UserAuthentificationError(INEXISTENT_USER_ERROR);
+    public void adminAccess(String password) {
+        if (!UserDAO.validateAdmin(password)){
+            throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
         }
     }
 }
