@@ -11,7 +11,7 @@ public class User {
     private boolean cryptoDeletedFlag;
     private List<Purchase> purchases;
 
-    public User(String username, String password, double balance, boolean cryptoViewFlag) {
+        public User(String username, String password, double balance, boolean cryptoViewFlag) {
         this.username = username;
         this.password = password;
         this.balance = balance;
