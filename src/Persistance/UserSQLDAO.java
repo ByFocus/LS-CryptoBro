@@ -7,24 +7,43 @@ import java.sql.SQLException;
 
 public class UserSQLDAO {
 
-    public boolean createUser (User user) {
-        String query = "INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)";
+    public boolean createUser(User user) {
+        if (user == null || user.getUsername() == null || user.getEmail() == null || user.getPassword() == null) {
+            throw new IllegalArgumentException("User and its fields must not be null");
+        }
+
+        String query = "INSERT INTO user (user_name, email, password) VALUES (?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
         try {
-            Connection conn = SQLConnector.getInstance().getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new RuntimeException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0; // Retorna true en cas de que s'hagui modifica alguna row de la bbd
+            return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Error creating user", e);
+            System.err.println("Error creating user: " + e.getMessage());
+            throw new RuntimeException("Failed to create user", e);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing statement: " + e.getMessage());
+            }
+            // Note: Don't close conn here since it's managed by SQLConnector
         }
     }
 
     public User getUserByUsername(String username) {
-        String query = "SELECT * FROM users WHERE user_name = '" + username + "';";
+        String query = "SELECT * FROM user WHERE user_name = '" + username + "';";
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
         User user = null;
 
@@ -42,7 +61,7 @@ public class UserSQLDAO {
     }
 
     public User getUserByMail(String mail) {
-        String query = "SELECT * FROM users WHERE email = '" + mail + "';";
+        String query = "SELECT * FROM user WHERE email = '" + mail + "';";
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
         User user = null;
 
@@ -60,7 +79,7 @@ public class UserSQLDAO {
     }
 
     public boolean validateAdmin(String password) {
-        String query = "SELECT * FROM users WHERE role = 'admin' AND password = '" + password + "';";
+        String query = "SELECT * FROM user WHERE role = 'admin' AND password = '" + password + "';";
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
 
         try {
@@ -72,9 +91,9 @@ public class UserSQLDAO {
     }
 
     public boolean validateCredentials(String identifier, String password) {
-        String query = "SELECT 1 FROM users WHERE (user_name = ? OR user_email = ?) AND user_password = ?";
+        String query = "SELECT 1 FROM user WHERE (user_name = ? OR email = ?) AND password = ?";
         Connection conn = SQLConnector.getInstance().getConnection();
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, identifier);
             stmt.setString(2, identifier);
             stmt.setString(3, password);
@@ -87,7 +106,7 @@ public class UserSQLDAO {
     }
 
     public boolean deleteUser (String identifier) {
-        String query = "DELETE FROM users WHERE user_name = ? OR user_email = ?";
+        String query = "DELETE FROM user WHERE user_name = ? OR email = ?";
         try {
             Connection conn = SQLConnector.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
