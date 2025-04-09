@@ -1,15 +1,13 @@
 import View.LoadFrame;
 import View.MainFrame;
 import View.StartFrame;
+import View.ViewController;
 
 public class Main {
     public static void main(String[] args) {
-        StartFrame menu = new StartFrame();
-        LoadFrame frame = new LoadFrame();
+        ViewController vc = new ViewController();
 
-        frame.setVisible(true);
-        frame.load();
-        menu.setVisible(true);
+        vc.start();
 
     }
 }

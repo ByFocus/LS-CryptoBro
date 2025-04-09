@@ -1,15 +1,21 @@
 package View;
 
+import Popups.UserPopUp;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class StartFrame extends JFrame {
+    private ViewController controller;
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
+
     public static final String FRAME_TITLE = "CryptoBro Login";
 
-    public StartFrame() {
+    public StartFrame(ViewController controller) {
+        this.controller = controller;
+
         configureFrame();
 
         // Crear el CardLayout
@@ -87,8 +93,7 @@ public class StartFrame extends JFrame {
 
         // Acción del botón Login
         loginButton.addActionListener(e -> {
-            dispose();
-            new MainFrame().setVisible(true);
+            controller.userConfirmed();
         });
 
         loginButtonPanel.add(loginButton);
@@ -170,14 +175,14 @@ public class StartFrame extends JFrame {
 
         // Email Panel
         JPanel emailPanel = new JPanel(new BorderLayout());
-        emailPanel.setOpaque(false); // Fondo transparente
+        emailPanel.setOpaque(false);
         JLabel emailLabel = new JLabel("       Email: ");
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         emailLabel.setForeground(new Color(3, 25, 38)); // Texto blanco
         emailPanel.add(emailLabel, BorderLayout.WEST);
 
         JTextField emailField = new JTextField(15);
-        emailField.setBackground(new Color(244, 233, 205)); // Fondo oscuro para el campo
+        emailField.setBackground(new Color(244, 233, 205));
         emailField.setForeground(new Color(3, 25, 38));
         emailField.setFont(new Font("Arial", Font.PLAIN, 18));
         emailPanel.add(emailField, BorderLayout.CENTER);
@@ -207,13 +212,12 @@ public class StartFrame extends JFrame {
 
         JButton registerButton = new JButton("Register");
         registerButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
-        registerButton.setBackground(new Color(119, 172, 162)); // Color similar al botón Login en createLoginPanel
+        registerButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         registerButton.setForeground(Color.WHITE);
 
+        // Acción al presionar "Register"
         registerButton.addActionListener(e -> {
-            // Acción al presionar "Register"
-            dispose();
-            new MainFrame().setVisible(true);
+            controller.userConfirmed();
         });
 
         registerButtonPanel.add(registerButton);

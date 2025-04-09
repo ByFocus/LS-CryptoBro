@@ -1,13 +1,21 @@
 package View;
 
+import Popups.UserPopUp;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
-    public static final String FRAME_TITLE = "CryptoBro!";
+    private static final String FRAME_TITLE = "CryptoBro!";
 
-    public MainFrame() {
+    private ViewController controller;
+
+    public MainFrame(ViewController controller) {
+        this.controller = controller;
+
         configureFrame();
 
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -17,7 +25,8 @@ public class MainFrame extends JFrame {
     private void configureFrame() {
         pack();
         setTitle(FRAME_TITLE);
-        setSize(1000, 600);
+        setSize(1100, 700);
+        getContentPane().setBackground(new Color(3, 25, 38));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -29,7 +38,7 @@ public class MainFrame extends JFrame {
         JPanel marketPanel = new JPanel();
         marketPanel.setBackground(new Color(70, 129, 137));
         JPanel walletPanel = new JPanel();
-        walletPanel.setBackground(new Color(70, 129, 137));
+        walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
         mainPanel.addTab("Market", marketPanel);
         mainPanel.addTab("Wallet", walletPanel);
@@ -41,7 +50,7 @@ public class MainFrame extends JFrame {
     //Barra de arriba de la pagina
     private JPanel configureProfile() {
         JPanel userMenu = new JPanel(new BorderLayout(20, 20));
-        userMenu.setBackground(new Color(3, 25, 38));
+        userMenu.setOpaque(false);
 
         // Panel con el balance
         JPanel balancePanel = new JPanel();
@@ -49,13 +58,13 @@ public class MainFrame extends JFrame {
 
         JLabel balanceLabel = new JLabel("Balance: ");
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        balanceLabel.setForeground(new Color(244, 233, 205));
+        balanceLabel.setForeground(Color.WHITE);
         balanceLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceLabel);
 
-        JLabel balanceCountLabel = new JLabel("XXX ");
+        JLabel balanceCountLabel = new JLabel("0 ");
         balanceCountLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        balanceCountLabel.setForeground(new Color(244, 233, 205));
+        balanceCountLabel.setForeground(Color.WHITE);
         balanceCountLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceCountLabel);
 
@@ -68,11 +77,19 @@ public class MainFrame extends JFrame {
 
         JLabel userLabel = new JLabel("USER ");
         userLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        userLabel.setForeground(new Color(244, 233, 205));
+        userLabel.setForeground(Color.WHITE);
         userPanel.add(userLabel);
         Image userProfileImg = new ImageIcon(userProfileImgURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
         userPanel.add(userProfile);
+
+        userPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                controller.checkUserProfile();
+            }
+        });
+
         userMenu.add(userPanel, BorderLayout.EAST);
         userMenu.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
