@@ -7,7 +7,7 @@ public class AccountManager {
     private String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
     private String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
     private String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
-    private String CRYPTO_DELATED_ERROR = "Brother, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema!";
+    private String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
     private String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
 
     public void registerUser(String username, String mail, String password) {
