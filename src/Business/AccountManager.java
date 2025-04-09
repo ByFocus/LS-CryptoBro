@@ -4,11 +4,11 @@ import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 
 public class AccountManager {
-    private String EXISTENT_USER_ERROR = "User already exists";
-    private String INEXISTENT_USER_ERROR = "User does not exist";
-    private String INCORRECT_PASSWORD_ERROR = "Incorrect password";
-    private String CRYPTO_DELATED_ERROR = " One or more of the cryptocurrencies you had purchased have been removed from the system.";
-    private String INCORRECT_ADMIN_PASSWORD_ERROR = "Incorrect admin password";
+    private String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
+    private String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
+    private String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
+    private String CRYPTO_DELATED_ERROR = "Brother, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema!";
+    private String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
 
     public void registerUser(String username, String mail, String password) {
         try{
