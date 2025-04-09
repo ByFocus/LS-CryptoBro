@@ -1,5 +1,5 @@
-package View;
-import Popups.*;
+package Presentation.View;
+import Presentation.View.Popups.*;
 
 public class ViewController {
     private LoadFrame loadFrame;

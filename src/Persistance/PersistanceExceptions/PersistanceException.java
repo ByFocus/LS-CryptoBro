@@ -1,4 +1,4 @@
-package persistance.PersistanceExceptions;
+package Persistance.PersistanceExceptions;
 
 public class PersistanceException extends RuntimeException {
     public PersistanceException(String message) {

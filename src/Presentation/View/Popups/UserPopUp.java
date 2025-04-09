@@ -1,7 +1,6 @@
-package Popups;
+package Presentation.View.Popups;
 
-import View.MainFrame;
-import View.ViewController;
+import Presentation.View.ViewController;
 
 import javax.swing.*;
 import java.awt.*;

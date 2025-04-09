@@ -1,6 +1,4 @@
-package View;
-
-import Popups.UserPopUp;
+package Presentation.View;
 
 import javax.swing.*;
 import java.awt.*;
