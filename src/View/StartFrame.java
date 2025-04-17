@@ -1,18 +1,15 @@
 package View;
-
-import Popups.UserPopUp;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class StartFrame extends JFrame {
-    private ViewController controller;
-    private JPanel mainPanel;
-    private CardLayout cardLayout;
+    private final ViewController controller;
+    private final JPanel mainPanel;
+    private final CardLayout cardLayout;
 
 
     public static final String FRAME_TITLE = "CryptoBro Login";
-
+//9
     public StartFrame(ViewController controller) {
         this.controller = controller;
 
@@ -51,7 +48,7 @@ public class StartFrame extends JFrame {
         gbc.weightx = 1.5;
         gbc.insets = new Insets(8, 25, 8, 40); // Espaciado interno
 
-        // User Panel
+            // User Panel
         JPanel userPanel = new JPanel(new BorderLayout());
         userPanel.setOpaque(false); // Fondo negro
         JLabel userLabel = new JLabel("        User: ");
@@ -82,7 +79,7 @@ public class StartFrame extends JFrame {
         gbc.gridy = 1;
         inputPanel.add(passwordPanel, gbc);
 
-        // Botón de Login
+            //Botón de Login
         JPanel loginButtonPanel = new JPanel(new FlowLayout());
         JLabel loginButtonLabel = new JLabel("Login");
         loginButtonLabel.setForeground(Color.WHITE);
@@ -91,9 +88,17 @@ public class StartFrame extends JFrame {
         loginButton.setBackground(new Color(70, 129, 137, 255)); // Color dorado
         loginButton.setForeground(Color.WHITE);
 
-        // Acción del botón Login
+            // Acción del botón Login
         loginButton.addActionListener(e -> {
-            controller.userConfirmed();
+            if (passwordField.getText().isEmpty() || userField.getText().isEmpty()) {
+                controller.errorEmptyInput();
+            } else {
+                String userName = userField.getText();
+                String password = passwordField.getText();
+                if (controller.searchAdmin(userName, password)) controller.userConfirmed(true);
+                else if (controller.searchUser(userName, password)) controller.userConfirmed(false);
+                else controller.errorUserMismatch();
+            }
         });
 
         loginButtonPanel.add(loginButton);
@@ -217,7 +222,12 @@ public class StartFrame extends JFrame {
 
         // Acción al presionar "Register"
         registerButton.addActionListener(e -> {
-            controller.userConfirmed();
+            if (passwordField.getText().isEmpty() || userField.getText().isEmpty()) {
+                controller.errorEmptyInput();
+            } else {
+                //controller.newUser();
+                controller.userConfirmed(false);
+            }
         });
 
         registerButtonPanel.add(registerButton);

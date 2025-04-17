@@ -1,6 +1,3 @@
-import View.LoadFrame;
-import View.MainFrame;
-import View.StartFrame;
 import View.ViewController;
 
 public class Main {
@@ -8,7 +5,6 @@ public class Main {
         ViewController vc = new ViewController();
 
         vc.start();
-
     }
 }
 

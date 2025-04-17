@@ -19,7 +19,6 @@ public class MainFrame extends JFrame {
         configureFrame();
 
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
-        getContentPane().add(configureTabs(), BorderLayout.CENTER);
     }
 
     private void configureFrame() {
@@ -34,17 +33,17 @@ public class MainFrame extends JFrame {
     }
 
     //Pestañas con las acciones
-    private JTabbedPane configureTabs() {
+    public void configureTabs(boolean admin) {
         JPanel marketPanel = new JPanel();
         marketPanel.setBackground(new Color(70, 129, 137));
         JPanel walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
-        mainPanel.addTab("Market", marketPanel);
         mainPanel.addTab("Wallet", walletPanel);
-        getContentPane().add(mainPanel);
+        if (admin) mainPanel.addTab("Admin", marketPanel);
+        else mainPanel.addTab("Market", marketPanel);
 
-        return mainPanel;
+        getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
     //Barra de arriba de la pagina

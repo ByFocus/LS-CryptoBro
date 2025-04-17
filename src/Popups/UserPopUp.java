@@ -37,13 +37,36 @@ public class UserPopUp extends JFrame {
         userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userNameLabel);
 
-        JPanel logOutPanel = new JPanel(new FlowLayout());
+        JPanel infoPanel = new JPanel(new GridBagLayout());
+        infoPanel.setBackground(new Color(70, 129, 137));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(2, 10, 2, 10);
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel info1 = new JLabel("Info");
+        infoPanel.add(info1, gbc);
+
+        gbc.gridy = 1;
+        JLabel info2 = new JLabel("Info");
+        infoPanel.add(info2, gbc);
+
+        gbc.gridy = 2;
+        JLabel info3 = new JLabel("Info");
+        infoPanel.add(info3, gbc);
+
+        c.add(infoPanel);
+
+        //Boton para cerrar sesion
+        JPanel logOutPanel = new JPanel();
         JButton logOutButton = new JButton("Log Out");
         logOutButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         logOutButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         logOutButton.setForeground(Color.WHITE);
 
-        // Acción al presionar "Register"
         logOutButton.addActionListener(e -> {
             controller.logOut();
         });
