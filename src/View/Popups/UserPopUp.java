@@ -9,7 +9,7 @@ public class UserPopUp extends JFrame {
     private static final String FRAME_TITLE = "User Profile";
     private static final String userProfileImgURL = "imgs/follador.png";
 
-    private ViewController controller;
+    private final ViewController controller;
 
     public UserPopUp(ViewController controller) {
         this.controller = controller;
@@ -72,9 +72,7 @@ public class UserPopUp extends JFrame {
         logOutButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         logOutButton.setForeground(Color.WHITE);
 
-        logOutButton.addActionListener(e -> {
-            controller.logOut();
-        });
+        logOutButton.addActionListener(e -> controller.logOut());
 
         logOutPanel.add(logOutButton);
         logOutPanel.setOpaque(false);

@@ -5,11 +5,11 @@ import javax.swing.*;
 import java.util.Objects;
 
 public class ViewController {
-    private LoadFrame loadFrame;
-    private StartFrame startFrame;
-    private MainFrame mainFrame;
+    private final LoadFrame loadFrame;
+    private final StartFrame startFrame;
+    private final MainFrame mainFrame;
 
-    private UserPopUp userProfile;
+    private final UserPopUp userProfile;
 
     public ViewController() {
         loadFrame = new LoadFrame();

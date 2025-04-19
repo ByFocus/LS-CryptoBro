@@ -9,7 +9,7 @@ public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
     private static final String FRAME_TITLE = "CryptoBro!";
 
-    private ViewController controller;
+    private final ViewController controller;
 
     public MainFrame(ViewController controller) {
         this.controller = controller;
