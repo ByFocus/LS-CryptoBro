@@ -1,7 +1,5 @@
 package View;
 
-import Popups.UserPopUp;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;

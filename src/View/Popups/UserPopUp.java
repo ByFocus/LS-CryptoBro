@@ -1,6 +1,5 @@
-package Popups;
+package View.Popups;
 
-import View.MainFrame;
 import View.ViewController;
 
 import javax.swing.*;
@@ -37,28 +36,34 @@ public class UserPopUp extends JFrame {
         userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userNameLabel);
 
-        JPanel infoPanel = new JPanel(new GridBagLayout());
-        infoPanel.setBackground(new Color(70, 129, 137));
+        JPanel userInfoPanel = new JPanel(new BorderLayout());
+        userInfoPanel.setOpaque(false);
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+
+        JPanel textPanel = new JPanel(new GridBagLayout());
+        textPanel.setBackground(new Color(70, 129, 137));
+
+        textPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
         gbc.insets = new Insets(2, 10, 2, 10);
 
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         JLabel info1 = new JLabel("Info");
-        infoPanel.add(info1, gbc);
+        textPanel.add(info1, gbc);
 
         gbc.gridy = 1;
         JLabel info2 = new JLabel("Info");
-        infoPanel.add(info2, gbc);
+        textPanel.add(info2, gbc);
 
         gbc.gridy = 2;
         JLabel info3 = new JLabel("Info");
-        infoPanel.add(info3, gbc);
+        textPanel.add(info3, gbc);
 
-        c.add(infoPanel);
+        userInfoPanel.add(textPanel);
+        c.add(userInfoPanel);
 
         //Boton para cerrar sesion
         JPanel logOutPanel = new JPanel();

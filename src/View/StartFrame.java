@@ -131,8 +131,8 @@ public class StartFrame extends JFrame {
 
         switchToRegisterButton.addActionListener(e -> cardLayout.show(mainPanel, "Register"));
 
-        switchButtonPanel.add(switchToRegisterButton);
         switchButtonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 40, 0));
+        switchButtonPanel.add(switchToRegisterButton);
         registerPanel.add(switchButtonPanel, BorderLayout.CENTER);
 
         loginPanel.add(registerPanel, BorderLayout.SOUTH);
@@ -222,7 +222,7 @@ public class StartFrame extends JFrame {
 
         // Acción al presionar "Register"
         registerButton.addActionListener(e -> {
-            if (passwordField.getText().isEmpty() || userField.getText().isEmpty()) {
+            if (passwordField.getText().isEmpty() || userField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                 controller.errorEmptyInput();
             } else {
                 //controller.newUser();
