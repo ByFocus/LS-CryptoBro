@@ -1,14 +1,16 @@
 package Persistance;
 
+import Business.Entities.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserSQLDAO {
+public class UserSQLDAO implements UserDAO{
 
     public boolean createUser(User user) {
-        if (user == null || user.getUsername() == null || user.getEmail() == null || user.getPassword() == null) {
+        if (user == null || user.getUsername() == null || user.getMail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User and its fields must not be null");
         }
 
@@ -24,7 +26,7 @@ public class UserSQLDAO {
 
             stmt = conn.prepareStatement(query);
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getEmail());
+            stmt.setString(2, user.getMail());
             stmt.setString(3, user.getPassword());
 
             int rowsAffected = stmt.executeUpdate();
@@ -52,7 +54,7 @@ public class UserSQLDAO {
                 String user_name = result.getString("user_name");
                 String mail = result.getString("email");
                 String password = result.getString("password");
-                user = new User(user_name, mail, password);
+                user = new User(user_name, mail, password, 0, false); //fix
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +72,7 @@ public class UserSQLDAO {
                 String user_name = result.getString("user_name");
                 String email = result.getString("email");
                 String password = result.getString("password");
-                user = new User(user_name, email, password);
+                user = new User(user_name, email, password, 0, false); //fix
             }
         } catch (SQLException e) {
             e.printStackTrace();
