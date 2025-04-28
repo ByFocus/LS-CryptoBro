@@ -1,36 +1,45 @@
 package Business;
 import Business.BusinessExceptions.CryptoDelated;
+import Business.BusinessExceptions.DataPersistanceError;
 import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.PersistanceExceptions.PersistanceException;
+import Persistance.UserDAO;
+import Persistance.UserSQLDAO;
 
 public class AccountManager {
-    private String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
-    private String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
-    private String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
-    private String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
-    private String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
-    private String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
-    private String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
-    private String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
-    private String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!"
+    private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
+    private final String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
+    private final String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
+    private final String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
+    private final String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
+    private final String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
+    private final String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
+    private final String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
+    private final String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!"
 
     public void registerUser(String username, String mail, String password) {
         try{
-            User newUser = UserDAO.getUser(username); //donde se crea esto?
+            UserDAO userDAO = new UserSQLDAO();
+            User newUser = userDAO.getUser(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
             if (passwordIsValid(password) == 1) {
+                UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
-                UserDAO.registerUser(newUser);
+                userDAO.createUser(newUser);
             }
+        } catch (PersistanceException e2)  {
+            throw new DataPersistanceError(e2.getMessage());
         }
     }
 
     public User loginUser (String username, String password) {
         try {
-            User newUser = UserDAO.getUser(username);
-            if (UserDAO.validateUser(password)){
+            UserDAO userDAO = new UserSQLDAO();
+            User newUser = userDAO.getUser(username);
+            if (userDAO.validateCredentials(username, password)){
                 return newUser;
             }
             else{
@@ -41,8 +50,9 @@ public class AccountManager {
         }
     }
 
-    public void delateCurrentUser(User user) {
-        UserDAO.removeUser(user);
+    public void delateCurrentUser(String username) {
+        UserDAO userDAO = new UserSQLDAO();
+        userDAO.deleteUser(username);
     }
 
     public void warnUserByUserName(User user) {
@@ -53,7 +63,8 @@ public class AccountManager {
     }
 
     public void adminAccess(String password) {
-        if (!UserDAO.validateAdmin(password)){
+        UserDAO userDAO = new UserSQLDAO();
+        if (!userDAO.validateAdmin(password)){
             throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
         }
     }
