@@ -1,5 +1,7 @@
 package Presentation.Controllers;
 
+import Business.EventType;
+
 public interface EventListener {
-    void update(String Context);
+    void update(EventType context);
 }

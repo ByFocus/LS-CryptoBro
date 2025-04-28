@@ -1,0 +1,7 @@
+package Business;
+
+public enum EventType {
+    CRYPTO_PRICE_CHANGED,
+    USER_BALANCE_CHANGED,
+    NEW_HISTORICAL_VALUE
+}
