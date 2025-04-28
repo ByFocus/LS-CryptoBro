@@ -10,14 +10,20 @@ public class AccountManager {
     private String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
     private String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
     private String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
+    private String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
+    private String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
+    private String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
+    private String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!"
 
     public void registerUser(String username, String mail, String password) {
         try{
             User newUser = UserDAO.getUser(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
-            User newUser = new User(username, password, mail, 1000, false);
-            UserDAO.registerUser(newUser);
+            if (passwordIsValid(password) == 1) {
+                User newUser = new User(username, password, mail, 1000, false);
+                UserDAO.registerUser(newUser);
+            }
         }
     }
 
@@ -50,5 +56,40 @@ public class AccountManager {
         if (!UserDAO.validateAdmin(password)){
             throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
         }
+    }
+
+    public int passwordIsValid (String password) {
+        if (password == null || password.length() < 8) {
+            throw new UserAuthentificationError(PASSWORD_LENGHT_INVALID);
+        }
+
+        boolean hasLowercase = false;
+        boolean hasUppercase = false;
+        boolean hasDigit = false;
+
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+            if (Character.isLowerCase(c)) {
+                hasLowercase = true;
+            } else if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+        }
+
+        if (!hasUppercase) {
+            throw new UserAuthentificationError(PASSWORD_CAPTIAL_LETTERS);
+        }
+
+        if (!hasDigit) {
+            throw new UserAuthentificationError(PASSWORD_NUMBERS_ERROR);
+        }
+
+        if (!hasLowercase) {
+            throw new UserAuthentificationError(PASSWORD_LOWE_CASE);
+        }
+
+        return 1;
     }
 }
