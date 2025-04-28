@@ -1,13 +1,16 @@
 package Persistance;
 
+import Business.Entities.Purchase;
+import Business.Entities.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PurchaseSQLDAO {
+public class PurchaseSQLDAO implements PurchaseDAO{
 
     public boolean addPurchase(User user, Purchase purchase) {
-        if (user == null || user.getUsername() == null || purchase == null || purchase.getCryptoName() == null) {
+        if (user == null || user.getUsername() == null || purchase == null || purchase.getCrypto().getName() == null) {
             throw new IllegalArgumentException("User and Purchase objects and their required fields must not be null");
         }
 
@@ -23,9 +26,9 @@ public class PurchaseSQLDAO {
 
             stmt = conn.prepareStatement(query);
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, purchase.getCryptoName());
-            stmt.setInt(3, purchase.getNumber());
-            stmt.setBoolean(4, purchase.isChangesWarrant());
+            stmt.setString(2, purchase.getCrypto().getName());
+            stmt.setDouble(3, purchase.getUnits());
+            //stmt.setBoolean(4, purchase.isChangesWarrant()); !!!!!!!!!
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;

@@ -2,6 +2,8 @@ package Business;
 
 import Business.BusinessExceptions.UnsufficientBalance;
 import Business.Entities.*;
+import Persistance.PurchaseDAO;
+import Persistance.PurchaseSQLDAO;
 
 import java.util.List;
 
@@ -16,14 +18,14 @@ public class WalletManager {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {
             Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
             user.addPurchase(p);
-            PurchaseDAO purchaseDAO = new PurchaseSqlDAO();
+            PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
             purchaseDAO.addTransaction(user.getUsername(), p);
         } else {
             throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
     public List<Purchase> getWalletByUserName(String username) {
-        PurchaseDao purchaseDao = new PurchaseSqlDAO();
+        PurchaseDAO purchaseDao = new PurchaseSQLDAO();
         return purchaseDao.getPurchasesByUserName();
     }
     public void recalculateGainsUser(User user) {

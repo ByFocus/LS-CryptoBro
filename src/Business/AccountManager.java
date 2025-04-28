@@ -13,7 +13,7 @@ public class AccountManager {
 
     public void registerUser(String username, String mail, String password) {
         try{
-            User newUser = UserDAO.getUser(username);
+            User newUser = UserDAO.getUser(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
             User newUser = new User(username, password, mail, 1000, false);

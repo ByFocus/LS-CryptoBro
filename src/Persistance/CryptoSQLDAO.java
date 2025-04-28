@@ -1,10 +1,12 @@
 package Persistance;
 
+import Business.Entities.Crypto;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CryptoSQLDAO {
+public class CryptoSQLDAO implements CryptoDAO{
 
     public boolean updateCrypto(Crypto crypto) {
         if (crypto == null || crypto.getName() == null) {
@@ -63,9 +65,9 @@ public class CryptoSQLDAO {
                 double currentPrice = rs.getDouble("current_price");
                 double initialPrice = rs.getDouble("initial_price");
                 String category = rs.getString("category");
-                double volatility = rs.getDouble("volatility");
+                int volatility = rs.getInt("volatility");
 
-                Crypto crypto = new Crypto(name, currentPrice, initialPrice, category, volatility);
+                Crypto crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
                 cryptoList.add(crypto);
             }
         } catch (SQLException e) {
@@ -109,9 +111,9 @@ public class CryptoSQLDAO {
                 double currentPrice = rs.getDouble("current_price");
                 double initialPrice = rs.getDouble("initial_price");
                 String category = rs.getString("category");
-                double volatility = rs.getDouble("volatility");
+                int volatility = rs.getInt("volatility");
 
-                crypto = new Crypto(cryptoName, currentPrice, initialPrice, category, volatility);
+                crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
             }
         } catch (SQLException e) {
             System.err.println("Error fetching crypto by name: " + e.getMessage());
