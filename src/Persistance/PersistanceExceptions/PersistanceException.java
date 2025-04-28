@@ -1,6 +1,6 @@
 package Persistance.PersistanceExceptions;
 
-public class PersistanceException extends RuntimeException {
+public abstract class PersistanceException extends Exception {
     public PersistanceException(String message) {
         super(message);
     }

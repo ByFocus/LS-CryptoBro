@@ -2,6 +2,7 @@ package Business;
 import Business.BusinessExceptions.CryptoDelated;
 import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.DBDataNotFound;
 
 public class AccountManager {
     private String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
