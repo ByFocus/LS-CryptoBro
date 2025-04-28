@@ -7,7 +7,7 @@ public class ApplicationController implements EventListener{
     private MarketManager market;
 
     public ApplicationController() {
-        market = new MarketManager();
+        market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.CRYPTO_PRICE_CHANGED);
     }

@@ -13,8 +13,16 @@ import java.util.Map;
 public class MarketManager {
     private List<Bot> bots;
     private Map<EventType, List<EventListener>> listeners = new HashMap<>();
+    private static MarketManager instance;
 
-    public MarketManager() {
+    public static MarketManager getMarketManager() {
+        if (instance == null) {
+            instance = new MarketManager();
+        }
+        return instance;
+    }
+
+    private MarketManager() {
         bots = createBots();
     }
 
