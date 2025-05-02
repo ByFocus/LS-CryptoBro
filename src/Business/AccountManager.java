@@ -17,18 +17,32 @@ public class AccountManager {
     private final String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
     private final String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
     private final String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
-    private final String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!"
+    private final String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!";
+
+    private User currentUser;
+    private static AccountManager instance;
+
+    public static AccountManager getInstance() {
+        if (instance == null) {
+            instance = new AccountManager();
+        }
+        return instance;
+    }
+    void AccountManager() {
+
+    }
 
     public void registerUser(String username, String mail, String password) {
         try{
             UserDAO userDAO = new UserSQLDAO();
-            User newUser = userDAO.getUser(username); //donde se crea esto?
+            User newUser = userDAO.getUserByUsername(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
             if (passwordIsValid(password) == 1) {
                 UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
                 userDAO.createUser(newUser);
+                //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
         } catch (PersistanceException e2)  {
             throw new DataPersistanceError(e2.getMessage());
@@ -38,7 +52,7 @@ public class AccountManager {
     public User loginUser (String username, String password) {
         try {
             UserDAO userDAO = new UserSQLDAO();
-            User newUser = userDAO.getUser(username);
+            //User newUser = userDAO.getUserByUsernameOrMail(username);
             if (userDAO.validateCredentials(username, password)){
                 return newUser;
             }
@@ -55,9 +69,12 @@ public class AccountManager {
         userDAO.deleteUser(username);
     }
 
-    public void warnUserByUserName(User user) {
-        if (user.getCryptoDeletedFlag()) {
-            user.setCryptoDeletedFlag(false);
+        public void checkCurrentUserWarning() {
+        if (currentUser.getCryptoDeletedFlag()) {
+            currentUser.setCryptoDeletedFlag(false);
+            //TODO:se tiene que actualizar en la base de datos
+            UserDAO userDAO = new UserSQLDAO();
+            //userDA0.updateCryptoDeletedFlag(currentUser.getUsername(), false);
             throw new CryptoDelated(CRYPTO_DELATED_ERROR);
         }
     }
@@ -102,5 +119,9 @@ public class AccountManager {
         }
 
         return 1;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 }

@@ -17,6 +17,19 @@ public class CryptoManager {
         return cryptoDA0.getCryptoByName(cryptoName);
     }
 
+    public void botMakeTransaction(String cryptoName, boolean buy){
+        makeTransaction(cryptoName, buy? 1: -1);
+        new WalletManager().notifyChangeInCryptoValue(cryptoName);
+    }
+
     public synchronized void makeTransaction(String cryptoName, int units) {
+    }
+
+    public float getCryptoCurrentPrice(String cryptoName) {
+        return new CryptoSQLDAO().getCryptoCurrentPrice(cryptoName);
+    }
+
+    public void deleteCrypto(String cryptoName) {
+
     }
 }

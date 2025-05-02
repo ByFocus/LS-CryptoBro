@@ -51,7 +51,7 @@ public class MarketManager extends Thread {
         }
     }
 
-    private void notify(EventType event) {
+    public void notify(EventType event) {
         List<EventListener> subscribers = listeners.get(event);
         for (EventListener eventListener : subscribers) {
             eventListener.update(event);
@@ -78,7 +78,7 @@ public class MarketManager extends Thread {
                     }
                     queue.offer(c.getCryptoByName(entry.getKey()).getCurrentPrice());
                 }
-
+                notify(EventType.NEW_HISTORICAL_VALUE);
                 Thread.sleep(TIME_TO_GET);
             } catch (InterruptedException _) {
                 //

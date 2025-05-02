@@ -7,4 +7,5 @@ public interface CryptoDAO {
     boolean updateCrypto(Crypto crypto);
     List<Crypto> getAllCryptos();
     Crypto getCryptoByName(String name);
+    float getCryptoCurrentPrice(String name);
 }

@@ -5,6 +5,7 @@ import Business.Entities.*;
 import Persistance.PurchaseDAO;
 import Persistance.PurchaseSQLDAO;
 
+import javax.print.attribute.standard.RequestingUserName;
 import java.util.List;
 
 public class WalletManager {
@@ -17,28 +18,37 @@ public class WalletManager {
     public void addTransaction(User user, Crypto crypto, int units) {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {
             Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
-            user.addPurchase(p);
+            //user.addPurchase(p); no es nnecesario, solo actualizarlo en la base de datos, eso si
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
-            purchaseDAO.addTransaction(user.getUsername(), p);
+            purchaseDAO.addPurchase(user, p);
+            //TODO: falta actualizar el balance del usuario
+            //TODO: falta notificar que se ha cambiado el balance
+            //TODO: falta notificar que ha cambiado el precio de una crypto, y cambiarlo llamando al add Transaction del Crypto
         } else {
             throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
     public List<Purchase> getWalletByUserName(String username) {
         PurchaseDAO purchaseDao = new PurchaseSQLDAO();
-        return purchaseDao.getPurchasesByUserName();
+        return purchaseDao.getPurchasesByUserName(username);
     }
-    public void recalculateGainsUser(User user) {
+    public double calculateEstimatedGainsByUserName(String userName) {
 
-        List <Purchase> purchases = user.getPurchases();
+       // esto no es yas List <Purchase> purchases = user.getPurchases();
+        List<Purchase> purchases = getWalletByUserName(userName);
         double gains = 0;
         for (Purchase purchase : purchases) {
-            Crypto crypto;
-            // TODO:obté la crypto de cada purchase
-            //crypto = new CryptoManager().getCryptoByName(purchase.getCryptoName());
-            crypto = new Crypto("PROBA", "PROBA", 2350, 1000, 3);
-            gains+= purchase.getUnits() * (crypto.getCurrentPrice() -purchase.getPriceUnit());
+            gains+= purchase.getUnits() * (new CryptoManager().getCryptoCurrentPrice(purchase.getCrypto()) - purchase.getPriceUnit());
         }
-        user.setEstimatedGains(gains);
+        //user.setEstimatedGains(gains);
+        return gains;
+    }
+
+    public void notifyChangeInCryptoValue(String cryptoName) {
+        String currentUser = AccountManager.getInstance().getCurrentUser().getUsername();
+        List<String> usernames = new PurchaseSQLDAO().getUsernamesByCryptoName(cryptoName);
+        if (usernames.contains(currentUser)) {
+            MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
+        }
     }
 }

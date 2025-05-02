@@ -10,6 +10,8 @@ import java.util.List;
 public class PurchaseSQLDAO implements PurchaseDAO{
 
     public boolean addPurchase(User user, Purchase purchase) {
+
+        //TODO: ESTO SOBRA
         if (user == null || user.getUsername() == null || purchase == null || purchase.getCrypto().getName() == null) {
             throw new IllegalArgumentException("User and Purchase objects and their required fields must not be null");
         }
@@ -45,7 +47,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         }
     }
 
-    public String[] getUsernamesByCryptoName(String cryptoName) {
+    public List<String> getUsernamesByCryptoName(String cryptoName) {
         if (cryptoName == null) {
             throw new IllegalArgumentException("Crypto name must not be null");
         }
@@ -81,6 +83,6 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
-        return usernames.toArray(new String[0]);
+        return usernames;
     }
 }
