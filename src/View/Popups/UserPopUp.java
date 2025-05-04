@@ -4,12 +4,17 @@ import View.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class UserPopUp extends JFrame {
+    public static final String USER_LOGOUT = "USER_LOGOUT";
+
     private static final String FRAME_TITLE = "User Profile";
     private static final String userProfileImgURL = "imgs/follador.png";
 
     private final ViewController controller;
+
+    private JButton logOutButton;
 
     public UserPopUp(ViewController controller) {
         this.controller = controller;
@@ -67,12 +72,13 @@ public class UserPopUp extends JFrame {
 
         //Boton para cerrar sesion
         JPanel logOutPanel = new JPanel();
-        JButton logOutButton = new JButton("Log Out");
+
+        logOutButton = new JButton("Log Out");
         logOutButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         logOutButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         logOutButton.setForeground(Color.WHITE);
+        logOutButton.setActionCommand(USER_LOGOUT);
 
-        logOutButton.addActionListener(e -> controller.logOut());
 
         logOutPanel.add(logOutButton);
         logOutPanel.setOpaque(false);
@@ -86,5 +92,9 @@ public class UserPopUp extends JFrame {
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+    }
+
+    public void registerController(ActionListener listener) {
+        logOutButton.addActionListener(listener);
     }
 }

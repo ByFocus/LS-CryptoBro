@@ -1,18 +1,37 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class StartFrame extends JFrame {
-    private final ViewController controller;
+    public static final String USER_LOGIN = "USER_LOGIN";
+    public static final String USER_REGISTER = "USER_REGISTER";
+    public static final String SWITCH_LOGIN = "SWITCH_LOGIN";
+    public static final String SWITCH_REGISTER = "SWITCH_REGISTER";
+
+    public static final String LOGIN_VIEW = "LOGIN";
+    public static final String REGISTER_VIEW = "REGISTER";
+
+    public static final String FRAME_TITLE = "CryptoBro Login";
+
+    private JTextField userLogInField;
+    private JPasswordField passwordLogInField;
+    private JTextField userRegisterField;
+    private JPasswordField passwordRegisterField;
+    private JTextField emailRegisterField;
+
+    private JButton loginButton;
+    private JButton switchToRegisterButton;
+    private JButton registerButton;
+    private JButton switchToLoginButton;
+
     private final JPanel mainPanel;
     private final CardLayout cardLayout;
 
+    private String actualCard;
 
-    public static final String FRAME_TITLE = "CryptoBro Login";
-//9
-    public StartFrame(ViewController controller) {
-        this.controller = controller;
-
+    public StartFrame() {
         configureFrame();
 
         // Crear el CardLayout
@@ -20,13 +39,14 @@ public class StartFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // Agregar paneles de Login y Register al CardLayout
-        mainPanel.add(createLoginPanel(), "Login");
-        mainPanel.add(createRegisterPanel(), "Register");
+        mainPanel.add(createLoginPanel(), LOGIN_VIEW);
+        mainPanel.add(createRegisterPanel(), REGISTER_VIEW);
 
         add(mainPanel, BorderLayout.CENTER);
 
         // Mostrar inicialmente el panel de Login
-        cardLayout.show(mainPanel, "Login");
+        actualCard = LOGIN_VIEW;
+        cardLayout.show(mainPanel, LOGIN_VIEW);
     }
 
     private JPanel createLoginPanel() {
@@ -48,18 +68,18 @@ public class StartFrame extends JFrame {
         gbc.weightx = 1.5;
         gbc.insets = new Insets(8, 25, 8, 40); // Espaciado interno
 
-            // User Panel
+        // User Panel
         JPanel userPanel = new JPanel(new BorderLayout());
         userPanel.setOpaque(false); // Fondo negro
         JLabel userLabel = new JLabel("        User: ");
         userLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         userLabel.setForeground(Color.WHITE); // Texto blanco
         userPanel.add(userLabel, BorderLayout.WEST);
-        JTextField userField = new JTextField(15);
-        userField.setBackground(Color.DARK_GRAY); // Fondo oscuro para el campo
-        userField.setForeground(Color.WHITE);
-        userField.setFont(new Font("Arial", Font.PLAIN, 18));
-        userPanel.add(userField, BorderLayout.CENTER);
+        userLogInField = new JTextField(15);
+        userLogInField.setBackground(Color.DARK_GRAY); // Fondo oscuro para el campo
+        userLogInField.setForeground(Color.WHITE);
+        userLogInField.setFont(new Font("Arial", Font.PLAIN, 18));
+        userPanel.add(userLogInField, BorderLayout.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(userPanel, gbc);
@@ -71,35 +91,23 @@ public class StartFrame extends JFrame {
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         passwordLabel.setForeground(Color.WHITE); // Texto blanco
         passwordPanel.add(passwordLabel, BorderLayout.WEST);
-        JPasswordField passwordField = new JPasswordField(15);
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 18));
-        passwordField.setBackground(Color.DARK_GRAY); // Fondo oscuro para el campo
-        passwordField.setForeground(Color.WHITE); // Texto blanco en el campo
-        passwordPanel.add(passwordField, BorderLayout.CENTER);
+        passwordLogInField = new JPasswordField(15);
+        passwordLogInField.setFont(new Font("Arial", Font.PLAIN, 18));
+        passwordLogInField.setBackground(Color.DARK_GRAY); // Fondo oscuro para el campo
+        passwordLogInField.setForeground(Color.WHITE); // Texto blanco en el campo
+        passwordPanel.add(passwordLogInField, BorderLayout.CENTER);
         gbc.gridy = 1;
         inputPanel.add(passwordPanel, gbc);
 
-            //Botón de Login
+        //Botón de Login
         JPanel loginButtonPanel = new JPanel(new FlowLayout());
         JLabel loginButtonLabel = new JLabel("Login");
         loginButtonLabel.setForeground(Color.WHITE);
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         loginButton.setBackground(new Color(70, 129, 137, 255)); // Color dorado
         loginButton.setForeground(Color.WHITE);
-
-            // Acción del botón Login
-        loginButton.addActionListener(e -> {
-            if (passwordField.getText().isEmpty() || userField.getText().isEmpty()) {
-                controller.errorEmptyInput();
-            } else {
-                String userName = userField.getText();
-                String password = passwordField.getText();
-                if (controller.searchAdmin(userName, password)) controller.userConfirmed(true);
-                else if (controller.searchUser(userName, password)) controller.userConfirmed(false);
-                else controller.errorUserMismatch();
-            }
-        });
+        loginButton.setActionCommand(USER_LOGIN);
 
         loginButtonPanel.add(loginButton);
         loginButtonPanel.setPreferredSize(new Dimension(120, 80));
@@ -124,12 +132,11 @@ public class StartFrame extends JFrame {
         JPanel switchButtonPanel = new JPanel();
         switchButtonPanel.setOpaque(false);
 
-        JButton switchToRegisterButton = new JButton("Register");
+        switchToRegisterButton = new JButton("Register");
         switchToRegisterButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         switchToRegisterButton.setBackground(new Color(244, 233, 205)); // Color dorado
         switchToRegisterButton.setForeground(new Color(28, 36, 52)); // Texto negro en el botón
-
-        switchToRegisterButton.addActionListener(e -> cardLayout.show(mainPanel, "Register"));
+        switchToRegisterButton.setActionCommand(SWITCH_REGISTER);
 
         switchButtonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 40, 0));
         switchButtonPanel.add(switchToRegisterButton);
@@ -168,11 +175,11 @@ public class StartFrame extends JFrame {
         userLabel.setForeground(new Color(3, 25, 38));
         userPanel.add(userLabel, BorderLayout.WEST);
 
-        JTextField userField = new JTextField(15);
-        userField.setBackground(new Color(244, 233, 205));
-        userField.setForeground(new Color(3, 25, 38));
-        userField.setFont(new Font("Arial", Font.PLAIN, 18));
-        userPanel.add(userField, BorderLayout.CENTER);
+        userRegisterField = new JTextField(15);
+        userRegisterField.setBackground(new Color(244, 233, 205));
+        userRegisterField.setForeground(new Color(3, 25, 38));
+        userRegisterField.setFont(new Font("Arial", Font.PLAIN, 18));
+        userPanel.add(userRegisterField, BorderLayout.CENTER);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -186,11 +193,11 @@ public class StartFrame extends JFrame {
         emailLabel.setForeground(new Color(3, 25, 38)); // Texto blanco
         emailPanel.add(emailLabel, BorderLayout.WEST);
 
-        JTextField emailField = new JTextField(15);
-        emailField.setBackground(new Color(244, 233, 205));
-        emailField.setForeground(new Color(3, 25, 38));
-        emailField.setFont(new Font("Arial", Font.PLAIN, 18));
-        emailPanel.add(emailField, BorderLayout.CENTER);
+        emailRegisterField = new JTextField(15);
+        emailRegisterField.setBackground(new Color(244, 233, 205));
+        emailRegisterField.setForeground(new Color(3, 25, 38));
+        emailRegisterField.setFont(new Font("Arial", Font.PLAIN, 18));
+        emailPanel.add(emailRegisterField, BorderLayout.CENTER);
 
         gbc.gridy = 1;
         inputPanel.add(emailPanel, gbc);
@@ -203,11 +210,11 @@ public class StartFrame extends JFrame {
         passwordLabel.setForeground(new Color(3, 25, 38)); // Texto blanco
         passwordPanel.add(passwordLabel, BorderLayout.WEST);
 
-        JPasswordField passwordField = new JPasswordField(15);
-        passwordField.setBackground(new Color(244, 233, 205)); // Fondo oscuro para el campo
-        passwordField.setForeground(new Color(3, 25, 38));
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 18));
-        passwordPanel.add(passwordField, BorderLayout.CENTER);
+        passwordRegisterField = new JPasswordField(15);
+        passwordRegisterField.setBackground(new Color(244, 233, 205)); // Fondo oscuro para el campo
+        passwordRegisterField.setForeground(new Color(3, 25, 38));
+        passwordRegisterField.setFont(new Font("Arial", Font.PLAIN, 18));
+        passwordPanel.add(passwordRegisterField, BorderLayout.CENTER);
 
         gbc.gridy = 2;
         inputPanel.add(passwordPanel, gbc);
@@ -215,20 +222,11 @@ public class StartFrame extends JFrame {
         // Botón de Register
         JPanel registerButtonPanel = new JPanel(new FlowLayout());
 
-        JButton registerButton = new JButton("Register");
+        registerButton = new JButton("Register");
         registerButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         registerButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         registerButton.setForeground(Color.WHITE);
-
-        // Acción al presionar "Register"
-        registerButton.addActionListener(e -> {
-            if (passwordField.getText().isEmpty() || userField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                controller.errorEmptyInput();
-            } else {
-                //controller.newUser();
-                controller.userConfirmed(false);
-            }
-        });
+        registerButton.setActionCommand(USER_REGISTER);
 
         registerButtonPanel.add(registerButton);
         registerButtonPanel.setOpaque(false);
@@ -248,12 +246,11 @@ public class StartFrame extends JFrame {
         switchToLoginLabel.setFont(new Font("Arial", Font.BOLD, 18));
         switchToLoginPanel.add(switchToLoginLabel, BorderLayout.NORTH);
 
-        JButton switchToLoginButton = new JButton("Login");
+        switchToLoginButton = new JButton("Login");
         switchToLoginButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         switchToLoginButton.setBackground(new Color(70, 129, 137));
         switchToLoginButton.setForeground(Color.WHITE);
-
-        switchToLoginButton.addActionListener(e -> cardLayout.show(mainPanel, "Login"));
+        switchToLoginButton.setActionCommand(SWITCH_LOGIN);
 
         JPanel switchButtonWrapper = new JPanel();
         switchButtonWrapper.setOpaque(false);
@@ -274,5 +271,44 @@ public class StartFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    public void switchView(String view) {
+        actualCard = view;
+        cardLayout.show(mainPanel, view);
+    }
 
+    public void reset() {
+        userLogInField.setText("");
+        passwordLogInField.setText("");
+        userRegisterField.setText("");
+        passwordRegisterField.setText("");
+        emailRegisterField.setText("");
+    }
+
+    public String getNameInput() {
+        String text;
+
+        if (actualCard.equals(LOGIN_VIEW)) text = userLogInField.getText();
+        else text = userRegisterField.getText();
+
+        return text;
+    }
+
+    public String getPasswordInput() {
+        String text;
+
+        if (actualCard.equals(LOGIN_VIEW)) text = new String(passwordLogInField.getPassword());
+        else text = new String(passwordRegisterField.getPassword());
+        return text;
+    }
+
+    public String getEmailInput() {
+        return emailRegisterField.getText();
+    }
+
+    public void registerController(ActionListener listener) {
+        loginButton.addActionListener(listener);
+        registerButton.addActionListener(listener);
+        switchToLoginButton.addActionListener(listener);
+        switchToRegisterButton.addActionListener(listener);
+    }
 }

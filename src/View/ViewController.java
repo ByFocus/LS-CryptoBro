@@ -1,4 +1,5 @@
 package View;
+import View.Controllers.AccountViewController;
 import View.Popups.*;
 
 import javax.swing.*;
@@ -11,12 +12,19 @@ public class ViewController {
 
     private final UserPopUp userProfile;
 
+    private final AccountViewController accountController;
+s
     public ViewController() {
         loadFrame = new LoadFrame();
-        startFrame = new StartFrame(this);
+        startFrame = new StartFrame();
         mainFrame = new MainFrame(this);
 
         userProfile = new UserPopUp(this);
+
+        accountController = new AccountViewController(this, startFrame, userProfile);
+
+        startFrame.registerController(accountController);
+        userProfile.registerController(accountController);
     }
 
     public void start() {
@@ -49,7 +57,7 @@ public class ViewController {
     public boolean searchUser(String username, String password) {
         boolean confirmated = false;
 
-        if (Objects.equals(username, "Pol") && Objects.equals(password, "1234")) confirmated = true;
+        if (username.equals("Pol") && password.equals("1234")) confirmated = true;
 
         return confirmated;
     }
@@ -76,5 +84,9 @@ public class ViewController {
 
     public void errorUserMismatch() {
         JOptionPane.showMessageDialog(null, "Bro no existente en nuestra BroBase", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void errorPasswordMismatch() {
+        JOptionPane.showMessageDialog(null, "Bro te equivocaste de contraseña", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
     }
 }

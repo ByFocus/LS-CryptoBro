@@ -1,5 +1,7 @@
 package View;
 
+import View.Tabs.MarketTab;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -32,8 +34,7 @@ public class MainFrame extends JFrame {
 
     //Pestañas con las acciones
     public void configureTabs(boolean admin) {
-        JPanel marketPanel = new JPanel();
-        marketPanel.setBackground(new Color(70, 129, 137));
+        JPanel marketPanel = new MarketTab();
         JPanel walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
