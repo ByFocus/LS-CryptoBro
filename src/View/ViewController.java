@@ -13,7 +13,7 @@ public class ViewController {
     private final UserPopUp userProfile;
 
     private final AccountViewController accountController;
-s
+
     public ViewController() {
         loadFrame = new LoadFrame();
         startFrame = new StartFrame();
