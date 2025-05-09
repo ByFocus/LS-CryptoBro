@@ -11,11 +11,9 @@ import java.util.List;
 public class PurchaseSQLDAO implements PurchaseDAO{
 
     public boolean addPurchase(User user, Purchase purchase) {
-        if (user == null || user.getUsername() == null || purchase == null || purchase.getCrypto().getName() == null) {
-            throw new IllegalArgumentException("User and Purchase objects and their required fields must not be null");
-        }
 
-        String query = "INSERT INTO bought (user_name, crypto_name, number, changesWarrant) VALUES (?, ?, ?, ?)";
+
+        String query = "INSERT INTO bought (user_name, crypto_name, number) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -27,9 +25,8 @@ public class PurchaseSQLDAO implements PurchaseDAO{
 
             stmt = conn.prepareStatement(query);
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, purchase.getCrypto().getName());
+            stmt.setString(2, purchase.getCrypto());
             stmt.setDouble(3, purchase.getUnits());
-            //stmt.setBoolean(4, purchase.isChangesWarrant()); !!!!!!!!!
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
