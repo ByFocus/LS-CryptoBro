@@ -8,12 +8,49 @@ import java.util.List;
 
 public class CryptoSQLDAO implements CryptoDAO{
 
+    public boolean createCrypto(Crypto crypto){
+        if(crypto == null ){
+            throw new IllegalArgumentException("Crypto object must be not null");
+        }
+
+        String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility, cryptoDeleted) VALUES (?, ?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new RuntimeException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, crypto.getName());
+            stmt.setDouble(2, crypto.getInitialPrice());
+            stmt.setDouble(3, crypto.getCurrentPrice());
+            stmt.setString(4, crypto.getCategory());
+            stmt.setInt(5, crypto.getVolatility());
+            stmt.setBoolean(6, false); // Assuming you want to set cryptoDeleted as false initially
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create crypto entry", e);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing statement: " + e.getMessage());
+            }
+            // Note: Don't close conn here since it's managed by SQLConnector
+        }
+    }
     public boolean updateCrypto(Crypto crypto) {
         if (crypto == null || crypto.getName() == null) {
             throw new IllegalArgumentException("Crypto object and its name must not be null");
         }
 
-        String query = "UPDATE cryptos SET current_price = ?, category = ?, volatility = ? WHERE name = ?";
+        String query = "UPDATE cryptocurrency SET current_value = ?, category = ?, volatility = ? WHERE name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -32,21 +69,55 @@ public class CryptoSQLDAO implements CryptoDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating crypto: " + e.getMessage());
             throw new RuntimeException("Failed to update crypto in database", e);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing statement: " + e.getMessage());
+                throw new RuntimeException("Error closing statement " + e.getMessage());
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
     }
 
+    public void deleteCrypto(String cryptoname){
+        if(cryptoname == null){
+            throw new IllegalArgumentException("Crypto name cannot be null!");
+        }
+        String query = "UPDATE cryptocurrency SET cryptoDeleted = ? WHERE name = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try{
+            conn = SQLConnector.getInstance().getConnection();
+            if(conn == null){
+                throw new SQLException("Database connection is null");
+            }
+            stmt = conn.prepareStatement(query);
+            stmt.setBoolean(1, true);
+            stmt.setString(2, cryptoname);
+
+            // Execute the update
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No records were updated. Check if the crypto name exists.");
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("Failed to delete crypto in database", e);
+        } finally{
+            if(stmt != null){
+                try {
+                    stmt.close();
+                } catch (SQLException e){
+                    System.err.println("Error closing statement: " + e.getMessage());
+                }
+            }
+        }
+    }
+
     public List<Crypto> getAllCryptos() {
         List<Crypto> cryptoList = new ArrayList<>();
-        String query = "SELECT * FROM cryptos";
+        String query = "SELECT * FROM cryptocurrency";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -62,8 +133,8 @@ public class CryptoSQLDAO implements CryptoDAO{
 
             while (rs.next()) {
                 String name = rs.getString("name");
-                double currentPrice = rs.getDouble("current_price");
-                double initialPrice = rs.getDouble("initial_price");
+                double currentPrice = rs.getDouble("current_value");
+                double initialPrice = rs.getDouble("init_value");
                 String category = rs.getString("category");
                 int volatility = rs.getInt("volatility");
 
@@ -71,7 +142,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 cryptoList.add(crypto);
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching all cryptos: " + e.getMessage());
+            System.err.println("Error fetching all cryptocurrency: " + e.getMessage());
             throw new RuntimeException("Failed to retrieve cryptos from database", e);
         } finally {
             try {
@@ -90,7 +161,7 @@ public class CryptoSQLDAO implements CryptoDAO{
             throw new IllegalArgumentException("Crypto name must not be null");
         }
 
-        String query = "SELECT * FROM cryptos WHERE name = ?";
+        String query = "SELECT * FROM cryptocurrency WHERE name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -108,8 +179,8 @@ public class CryptoSQLDAO implements CryptoDAO{
 
             if (rs.next()) {
                 String cryptoName = rs.getString("name");
-                double currentPrice = rs.getDouble("current_price");
-                double initialPrice = rs.getDouble("initial_price");
+                double currentPrice = rs.getDouble("current_value");
+                double initialPrice = rs.getDouble("init_value");
                 String category = rs.getString("category");
                 int volatility = rs.getInt("volatility");
 

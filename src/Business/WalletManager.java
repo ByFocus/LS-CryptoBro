@@ -19,15 +19,16 @@ public class WalletManager {
             Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
             user.addPurchase(p);
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
-            purchaseDAO.addTransaction(user.getUsername(), p);
+            purchaseDAO.addPurchase(user, p);
         } else {
             throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
     public List<Purchase> getWalletByUserName(String username) {
         PurchaseDAO purchaseDao = new PurchaseSQLDAO();
-        return purchaseDao.getPurchasesByUserName();
+        return purchaseDao.getPurchasesByUserName(username);
     }
+
     public void recalculateGainsUser(User user) {
 
         List <Purchase> purchases = user.getPurchases();
@@ -39,6 +40,6 @@ public class WalletManager {
             crypto = new Crypto("PROBA", "PROBA", 2350, 1000, 3);
             gains+= purchase.getUnits() * (crypto.getCurrentPrice() -purchase.getPriceUnit());
         }
-        user.setEstimatedGains(gains);
+        //user.setEstimatedGains(gains);
     }
 }

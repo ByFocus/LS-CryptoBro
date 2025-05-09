@@ -1,6 +1,7 @@
 package Persistance;
 
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.DBDataNotFound;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,12 +10,12 @@ import java.sql.SQLException;
 
 public class UserSQLDAO implements UserDAO{
 
-    public boolean createUser(User user) {
+    public boolean registerUser(User user) {
         if (user == null || user.getUsername() == null || user.getMail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User and its fields must not be null");
         }
 
-        String query = "INSERT INTO user (user_name, email, password) VALUES (?, ?, ?)";
+        String query = "INSERT INTO user (user_name, email, password, balance) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -28,11 +29,11 @@ public class UserSQLDAO implements UserDAO{
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getMail());
             stmt.setString(3, user.getPassword());
+            stmt.setDouble(4, user.getBalance());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error creating user: " + e.getMessage());
             throw new RuntimeException("Failed to create user", e);
         } finally {
             try {
@@ -44,39 +45,29 @@ public class UserSQLDAO implements UserDAO{
         }
     }
 
-    public User getUserByUsername(String username) {
-        String query = "SELECT * FROM user WHERE user_name = '" + username + "';";
-        ResultSet result = SQLConnector.getInstance().selectQuery(query);
+    public User getUserByUsernameOrEmail(String value) throws DBDataNotFound {
+        String query = "SELECT * FROM user WHERE user_name = ? OR email = ?;";
         User user = null;
 
         try {
-            if (result.next()) {
-                String user_name = result.getString("user_name");
-                String mail = result.getString("email");
-                String password = result.getString("password");
-                user = new User(user_name, mail, password, 0, false); //fix
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
+            PreparedStatement preparedStatement = SQLConnector.getInstance().getConnection().prepareStatement(query);
+            preparedStatement.setString(1, value);
+            preparedStatement.setString(2, value);
+            ResultSet result = preparedStatement.executeQuery();
 
-    public User getUserByMail(String mail) {
-        String query = "SELECT * FROM user WHERE email = '" + mail + "';";
-        ResultSet result = SQLConnector.getInstance().selectQuery(query);
-        User user = null;
-
-        try {
             if (result.next()) {
                 String user_name = result.getString("user_name");
                 String email = result.getString("email");
                 String password = result.getString("password");
-                user = new User(user_name, email, password, 0, false); //fix
+                user = new User(user_name, email, password, 0, false); // Adjust constructor parameters if needed
+            } else {
+                // Throw custom exception if no data is found
+                throw new DBDataNotFound("No user found with username or email: " + value);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // It's often better to handle logging or further exception handling here
         }
+
         return user;
     }
 
@@ -92,7 +83,7 @@ public class UserSQLDAO implements UserDAO{
         return false;
     }
 
-    public boolean validateCredentials(String identifier, String password) {
+    public boolean validateUser(String identifier, String password) {
         String query = "SELECT 1 FROM user WHERE (user_name = ? OR email = ?) AND password = ?";
         Connection conn = SQLConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -107,7 +98,26 @@ public class UserSQLDAO implements UserDAO{
         }
     }
 
-    public boolean deleteUser (String identifier) {
+    public void updateBalance(double newPurchaseValue, String identifier) throws DBDataNotFound{
+        try{
+            double oldBalance = getUserByUsernameOrEmail(identifier).getBalance();
+            String query = "UPDATE USER SET balance = ? WHERE name = ? OR email = ?";
+            Connection conn = SQLConnector.getInstance().getConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(query)){
+                stmt.setDouble(1, newPurchaseValue + oldBalance);
+                stmt.setString(3, identifier);
+                stmt.setString(2, identifier);
+            }catch (SQLException e){
+                throw new RuntimeException("Error validating user credential", e);
+            }
+        }catch (DBDataNotFound e){
+            throw new DBDataNotFound("Error user not found");
+        }
+
+
+    }
+
+    public boolean removeUser (String identifier) {
         String query = "DELETE FROM user WHERE user_name = ? OR email = ?";
         try {
             Connection conn = SQLConnector.getInstance().getConnection();

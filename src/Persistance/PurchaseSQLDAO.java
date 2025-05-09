@@ -1,5 +1,6 @@
 package Persistance;
 
+import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
 
@@ -45,13 +46,13 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         }
     }
 
-    public String[] getUsernamesByCryptoName(String cryptoName) {
+    public List<String> getUsernamesByCryptoName(String cryptoName) {
         if (cryptoName == null) {
             throw new IllegalArgumentException("Crypto name must not be null");
         }
 
         List<String> usernames = new ArrayList<>();
-        String query = "SELECT DISTINCT user_name FROM bought WHERE crypto_name = ?";
+        String query = "SELECT DISTINCT user_name FROM purchase WHERE crypto_name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -81,6 +82,33 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
-        return usernames.toArray(new String[0]);
+        return usernames;
+    }
+    public List<Purchase> getPurchasesByUserName(String user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Username must not be null!");
+        }
+
+        List<Purchase> purchases = new ArrayList<>();
+        String query = "SELECT DISTINCT * FROM purchase WHERE user_name = ?";
+        CryptoDAO cryptoDAO = new CryptoSQLDAO();
+
+        try (
+                Connection conn = SQLConnector.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ) {
+            stmt.setString(1, user);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Crypto crypto = cryptoDAO.getCryptoByName(rs.getString("crypto_name"));
+                    int number = rs.getInt("number"); // assuming "number" is int, change type if needed
+                    purchases.add(new Purchase(crypto, number, crypto.getCurrentPrice()));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to get purchases by user name", e);
+        }
+
+        return purchases;
     }
 }

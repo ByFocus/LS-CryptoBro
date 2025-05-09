@@ -1,12 +1,12 @@
 package Persistance;
 
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.DBDataNotFound;
 
 public interface UserDAO {
-    boolean createUser(User user);
-    User getUserByUsername(String username);
-    User getUserByMail(String mail);
+    boolean registerUser(User user);
+    User getUserByUsernameOrEmail(String value) throws DBDataNotFound;
     boolean validateAdmin(String password);
-    boolean validateCredentials(String identifier, String password);
-    boolean deleteUser(String identifier);
+    boolean validateUser(String identifier, String password);
+    boolean removeUser(String identifier);
 }

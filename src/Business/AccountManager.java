@@ -3,8 +3,11 @@ import Business.BusinessExceptions.CryptoDelated;
 import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.UserDAO;
+import Persistance.UserSQLDAO;
 
 public class AccountManager {
+    UserDAO userDAO = new UserSQLDAO();
     private String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
     private String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
     private String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
@@ -13,18 +16,18 @@ public class AccountManager {
 
     public void registerUser(String username, String mail, String password) {
         try{
-            User newUser = UserDAO.getUser(username); //donde se crea esto?
+            User newUser = userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
             User newUser = new User(username, password, mail, 1000, false);
-            UserDAO.registerUser(newUser);
+            userDAO.registerUser(newUser);
         }
     }
 
     public User loginUser (String username, String password) {
         try {
-            User newUser = UserDAO.getUser(username);
-            if (UserDAO.validateUser(password)){
+            User newUser = userDAO.getUserByUsernameOrEmail(username);
+            if (userDAO.validateUser(username, password)){
                 return newUser;
             }
             else{
@@ -36,7 +39,7 @@ public class AccountManager {
     }
 
     public void delateCurrentUser(User user) {
-        UserDAO.removeUser(user);
+        userDAO.removeUser(user.getUsername());
     }
 
     public void warnUserByUserName(User user) {
@@ -47,7 +50,7 @@ public class AccountManager {
     }
 
     public void adminAccess(String password) {
-        if (!UserDAO.validateAdmin(password)){
+        if (!userDAO.validateAdmin(password)){
             throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
         }
     }
