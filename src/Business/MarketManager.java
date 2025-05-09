@@ -3,19 +3,35 @@ package Business;
 import Business.Entities.Bot;
 import Business.Entities.Crypto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class MarketManager {
+import Presentation.Controllers.EventListener;
+
+public class MarketManager extends Thread {
     private List<Bot> bots;
+    private Map<EventType, List<EventListener>> listeners = new HashMap<>();
+    private Map<String, Queue<Double>> hitoricalValues = new HashMap<>();
+    private static MarketManager instance;
+    private static int MAX_SIZE = 120; // 10 min every 5 secs
+    private int TIME_TO_GET = 5000;
 
-    public MarketManager() {
-        bots = createBots();
+    public static MarketManager getMarketManager() {
+        if (instance == null) {
+            instance = new MarketManager();
+        }
+        return instance;
+    }
+
+    private MarketManager() {
+        createBotsAndHistorics();
     }
 
     public void startMarket() {
-        for (Bot bot : bots) {
-            bot.start();
+        if (!isAlive()) {
+            for (Bot bot : bots) {
+                bot.start();
+            }
+            this.start();
         }
     }
 
@@ -23,14 +39,55 @@ public class MarketManager {
         for (Bot bot : bots) {
             bot.kill();
         }
+        this.kill();
     }
 
-    private List<Bot> createBots() {
-        List<Bot> bots = new ArrayList<>();
+    private void createBotsAndHistorics() {
+        bots = new ArrayList<>();
         List<Crypto> cryptoList = new CryptoManager().getAllCryptos();
         for (Crypto crypto : cryptoList) {
             bots.add(new Bot(crypto));
+            hitoricalValues.put(crypto.getName(), new LinkedList<>());
         }
-        return bots;
+    }
+
+    public void notify(EventType event) {
+        List<EventListener> subscribers = listeners.get(event);
+        for (EventListener eventListener : subscribers) {
+            eventListener.update(event);
+        }
+    }
+
+    public void subscribe(EventListener eventListener, EventType event) {
+        listeners.get(event).add(eventListener);
+    }
+    public void unsubscribe(EventListener eventListener, EventType event) {
+        listeners.get(event).remove(eventListener);
+    }
+
+
+    @Override
+    public void run() {
+        while (isAlive()) { //TODO: A lo mejor es preferible tener un booleano
+            try {
+                CryptoManager c = new CryptoManager();
+                for (Map.Entry<String, Queue<Double>> entry : hitoricalValues.entrySet()) {
+                    Queue<Double> queue = entry.getValue();
+                    if (queue.size() == MAX_SIZE) {
+                        queue.poll(); // treu l'element més antic
+                    }
+                    queue.offer(c.getCryptoByName(entry.getKey()).getCurrentPrice());
+                }
+                notify(EventType.NEW_HISTORICAL_VALUE);
+                Thread.sleep(TIME_TO_GET);
+            } catch (InterruptedException _) {
+                //
+            }
+
+        }
+    }
+
+    public void kill() {
+        interrupt();
     }
 }

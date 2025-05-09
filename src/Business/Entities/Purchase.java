@@ -1,17 +1,17 @@
 package Business.Entities;
 
 public class Purchase {
-    private Crypto crypto;
+    private String crypto;
     private int units;
     private double priceUnit;
 
     public Purchase(Crypto crypto, int units, double priceUnit) {
-        this.crypto = crypto;
+        this.crypto = crypto.getName();
         this.units = units;
         this.priceUnit = priceUnit;
     }
 
-    public Crypto getCrypto() { return crypto; }
+    public String getCrypto() { return crypto; }
     public double getUnits() { return units; }
     public double getPriceUnit() { return priceUnit; }
 }

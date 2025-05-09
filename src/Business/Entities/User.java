@@ -8,7 +8,7 @@ public class User {
     private String password;
     private double balance;
     private boolean cryptoDeletedFlag;
-    private List<Purchase> purchases;
+    //private List<Purchase> purchases;
 
     public User(String username, String password, String mail, double balance, boolean cryptoDeletedFlag) {
         this.username = username;
@@ -16,7 +16,7 @@ public class User {
         this.mail = mail;
         this.balance = balance;
         this.cryptoDeletedFlag = cryptoDeletedFlag;
-        purchases = null;
+       // purchases = null;
     }
 
     public String getUsername() { return username; }
@@ -28,11 +28,11 @@ public class User {
     public void setBalance(double balance) { this.balance = balance; }
     public void setCryptoDeletedFlag(boolean flag) { this.cryptoDeletedFlag = flag; }
 
-    public void addPurchase(Purchase purchase) {
+   /* public void addPurchase(Purchase purchase) {
         purchases.add(purchase);
     }
 
     public List<Purchase> getPurchases() {
         return purchases;
-    }
+    }*/
 }
