@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.EventType;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
 import Presentation.View.ViewController;
@@ -7,7 +8,7 @@ import Presentation.View.ViewController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AccountViewController implements ActionListener {
+public class AccountViewController implements ActionListener, EventListener {
     private final ViewController controller;
 
     private final StartFrame startView;
@@ -67,5 +68,9 @@ public class AccountViewController implements ActionListener {
                 controller.logOut();
                 break;
         }
+    }
+
+    public void update(EventType event) {
+
     }
 }
