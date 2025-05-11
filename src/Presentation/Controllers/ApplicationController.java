@@ -21,11 +21,8 @@ public class ApplicationController implements EventListener{
             case EventType.USER_BALANCE_CHANGED:
                 break;
             case EventType.NEW_HISTORICAL_VALUE:
-                break;
-            default:
-                // si es algun evento que no nos interessa se ignora
+                //RSI_NewHistorical(): demana l'historic corresponent i li passa a la view, pq actualitzi el gràfic
                 break;
         }
-
     }
 }
