@@ -4,12 +4,17 @@ import Presentation.View.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class UserPopUp extends JFrame {
+    public static final String USER_LOGOUT = "USER_LOGOUT";
+
     private static final String FRAME_TITLE = "User Profile";
     private static final String userProfileImgURL = "imgs/follador.png";
 
-    private ViewController controller;
+    private final ViewController controller;
+
+    private JButton logOutButton;
 
     public UserPopUp(ViewController controller) {
         this.controller = controller;
@@ -36,16 +41,44 @@ public class UserPopUp extends JFrame {
         userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userNameLabel);
 
-        JPanel logOutPanel = new JPanel(new FlowLayout());
-        JButton logOutButton = new JButton("Log Out");
+        JPanel userInfoPanel = new JPanel(new BorderLayout());
+        userInfoPanel.setOpaque(false);
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+
+        JPanel textPanel = new JPanel(new GridBagLayout());
+        textPanel.setBackground(new Color(70, 129, 137));
+
+        textPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(2, 10, 2, 10);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel info1 = new JLabel("Info");
+        textPanel.add(info1, gbc);
+
+        gbc.gridy = 1;
+        JLabel info2 = new JLabel("Info");
+        textPanel.add(info2, gbc);
+
+        gbc.gridy = 2;
+        JLabel info3 = new JLabel("Info");
+        textPanel.add(info3, gbc);
+
+        userInfoPanel.add(textPanel);
+        c.add(userInfoPanel);
+
+        //Boton para cerrar sesion
+        JPanel logOutPanel = new JPanel();
+
+        logOutButton = new JButton("Log Out");
         logOutButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
         logOutButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
         logOutButton.setForeground(Color.WHITE);
+        logOutButton.setActionCommand(USER_LOGOUT);
 
-        // Acción al presionar "Register"
-        logOutButton.addActionListener(e -> {
-            controller.logOut();
-        });
 
         logOutPanel.add(logOutButton);
         logOutPanel.setOpaque(false);
@@ -59,5 +92,9 @@ public class UserPopUp extends JFrame {
         setSize(400, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+    }
+
+    public void registerController(ActionListener listener) {
+        logOutButton.addActionListener(listener);
     }
 }

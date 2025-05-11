@@ -1,5 +1,7 @@
 package Presentation.View;
 
+import Presentation.View.Tabs.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,7 +11,7 @@ public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
     private static final String FRAME_TITLE = "CryptoBro!";
 
-    private ViewController controller;
+    private final ViewController controller;
 
     public MainFrame(ViewController controller) {
         this.controller = controller;
@@ -17,7 +19,6 @@ public class MainFrame extends JFrame {
         configureFrame();
 
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
-        getContentPane().add(configureTabs(), BorderLayout.CENTER);
     }
 
     private void configureFrame() {
@@ -32,17 +33,16 @@ public class MainFrame extends JFrame {
     }
 
     //Pestañas con las acciones
-    private JTabbedPane configureTabs() {
-        JPanel marketPanel = new JPanel();
-        marketPanel.setBackground(new Color(70, 129, 137));
+    public void configureTabs(boolean admin) {
+        JPanel marketPanel = new MarketTab();
         JPanel walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
-        mainPanel.addTab("Market", marketPanel);
         mainPanel.addTab("Wallet", walletPanel);
-        getContentPane().add(mainPanel);
+        if (admin) mainPanel.addTab("Admin", marketPanel);
+        else mainPanel.addTab("Market", marketPanel);
 
-        return mainPanel;
+        getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
     //Barra de arriba de la pagina
