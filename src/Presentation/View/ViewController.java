@@ -1,4 +1,7 @@
 package Presentation.View;
+import Business.AccountManager;
+import Business.BusinessExceptions.BusinessExeption;
+import Business.MarketManager;
 import Presentation.Controllers.*;
 import Presentation.View.Popups.*;
 
@@ -39,8 +42,17 @@ public class ViewController {
             try {
                 Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
                 loadFrame.setProgress(i);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                if (i == 15) {
+                    AccountManager.getInstance();
+
+                } else if (i == 50) {
+                   MarketManager m = MarketManager.getMarketManager();
+                   m.startMarket();
+                }
+            } catch (InterruptedException _) {
+
+            } catch (BusinessExeption e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
 
