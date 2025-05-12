@@ -16,47 +16,13 @@ public class ViewController {
 
     private final UserPopUp userProfile;
 
-    private final AccountViewController accountController;
 
     public ViewController() {
         loadFrame = new LoadFrame();
         startFrame = new StartFrame();
-        mainFrame = new MainFrame(this);
+        mainFrame = new MainFrame();
 
-        userProfile = new UserPopUp(this);
-
-        accountController = new AccountViewController(this, startFrame, userProfile);
-
-        startFrame.registerController(accountController);
-        userProfile.registerController(accountController);
-    }
-
-    public void start() {
-        loadFrame.setVisible(true);
-        load();
-        startFrame.setVisible(true);
-    }
-
-    public void load() {
-        for (int i = 0; i <= 100; i++) {
-            try {
-                Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
-                loadFrame.setProgress(i);
-                if (i == 15) {
-                    AccountManager.getInstance();
-
-                } else if (i == 50) {
-                   MarketManager m = MarketManager.getMarketManager();
-                   m.startMarket();
-                }
-            } catch (InterruptedException _) {
-
-            } catch (BusinessExeption e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-        }
-
-        loadFrame.dispose();
+        userProfile = new UserPopUp();
     }
 
     public boolean searchAdmin(String adminName, String password) {
@@ -75,11 +41,7 @@ public class ViewController {
         return confirmated;
     }
 
-    public void userConfirmed(boolean admin) {
-        startFrame.dispose();
-        mainFrame.configureTabs(admin);
-        mainFrame.setVisible(true);
-    }
+
 
     public void checkUserProfile() {
         userProfile.setVisible(true);

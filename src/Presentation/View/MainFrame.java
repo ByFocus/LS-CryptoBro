@@ -11,13 +11,8 @@ public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
     private static final String FRAME_TITLE = "CryptoBro!";
 
-    private final ViewController controller;
-
-    public MainFrame(ViewController controller) {
-        this.controller = controller;
-
+    public MainFrame() {
         configureFrame();
-
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
     }
 

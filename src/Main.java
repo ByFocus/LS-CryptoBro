@@ -1,5 +1,6 @@
 import Persistance.CryptoDAO;
 import Persistance.CryptoSQLDAO;
+import Presentation.Controllers.LoadViewController;
 import Presentation.View.ViewController;
 
 import java.util.List;
@@ -7,10 +8,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         CryptoDAO cryptoDAO = new CryptoSQLDAO();
-        ViewController vc = new ViewController();
-        vc.start();
+        LoadViewController loadView = new LoadViewController();
 
-
+        loadView.start();
 
     }
 

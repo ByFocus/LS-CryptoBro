@@ -2,16 +2,29 @@ package Presentation.Controllers;
 
 import Business.MarketManager;
 import Business.EventType;
+import Presentation.View.MainFrame;
 
 public class ApplicationController implements EventListener{
+    private static ApplicationController instance;
+
     private MarketManager market;
 
+    private MainFrame appFrame;
+
     public ApplicationController() {
+        appFrame = new MainFrame();
+
         market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.CRYPTO_PRICE_CHANGED);
     }
 
+    public static ApplicationController getInstance() {
+        if (instance == null) {
+            instance = new ApplicationController();
+        }
+        return instance;
+    }
     @Override
     public void update(EventType context) {
 
@@ -24,5 +37,14 @@ public class ApplicationController implements EventListener{
                 //RSI_NewHistorical(): demana l'historic corresponent i li passa a la view, pq actualitzi el gràfic
                 break;
         }
+    }
+
+    public void userConfirmed(boolean admin) {
+        appFrame.configureTabs(admin);
+        appFrame.setVisible(true);
+    }
+
+    public void close() {
+        appFrame.dispose();
     }
 }

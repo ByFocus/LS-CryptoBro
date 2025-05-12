@@ -12,13 +12,9 @@ public class UserPopUp extends JFrame {
     private static final String FRAME_TITLE = "User Profile";
     private static final String userProfileImgURL = "imgs/follador.png";
 
-    private final ViewController controller;
-
     private JButton logOutButton;
 
-    public UserPopUp(ViewController controller) {
-        this.controller = controller;
-
+    public UserPopUp() {
         configureFrame();
         configureProfile();
     }

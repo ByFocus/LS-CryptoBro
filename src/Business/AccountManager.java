@@ -26,6 +26,7 @@ public class AccountManager {
         }
         return instance;
     }
+
     void AccountManager() {
 
     }

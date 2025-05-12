@@ -6,13 +6,13 @@ import Business.Entities.User;
 import Business.EventType;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
-import Presentation.View.ViewController;
+import Presentation.Controllers.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AccountViewController implements ActionListener, EventListener {
-    private final ViewController controller;
+    private static AccountViewController instance;
 
     private final StartFrame startView;
     private final UserPopUp userView;
@@ -21,20 +21,36 @@ public class AccountViewController implements ActionListener, EventListener {
     private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
     private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
 
-    public AccountViewController(ViewController controller, StartFrame startView, UserPopUp userView) {
-        this.controller = controller;
+    private AccountViewController() {
+        startView = new StartFrame();
+        userView = new UserPopUp();
 
-        this.startView = startView;
-        this.userView = userView;
+        startView.registerController(this);
+        userView.registerController(this);
     }
 
+    public static AccountViewController getInstance() {
+        if (instance == null) instance = new AccountViewController();
+
+        return instance;
+    }
+
+    public void start() {
+        startView.setVisible(true);
+    }
+
+    public void logOut() {
+        userView.dispose();
+        ApplicationController.getInstance().close();
+        startView.setVisible(true);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case StartFrame.USER_LOGIN:
                 if(startView.getNameInput().isEmpty() || startView.getPasswordInput().isEmpty()) {
-                    controller.displayError(ERROR_EMPTY_FIELD);
+                    ErrorDisplayer.displayError(ERROR_EMPTY_FIELD);
                 } else {
                     String userName = startView.getNameInput();
                     String password = startView.getPasswordInput();
@@ -42,9 +58,9 @@ public class AccountViewController implements ActionListener, EventListener {
                         try {
                             startView.reset();
                             AccountManager.getInstance().adminAccess(password);
-                            controller.userConfirmed(true);
+                            ApplicationController.getInstance().userConfirmed(true);
                         } catch (BusinessExeption e2) {
-                            controller.displayError(e2.getMessage());
+                            ErrorDisplayer.displayError(e2.getMessage());
                         }
                     }
                     else {
@@ -52,9 +68,9 @@ public class AccountViewController implements ActionListener, EventListener {
                             User user =AccountManager.getInstance().loginUser(userName, password);
                             //TODO: SE TIENE QUE HACER ALGO CON ESTE USUARIO PARA PRINTAR SU INFO
                             startView.reset();
-                            controller.userConfirmed(false);
+                            ApplicationController.getInstance().userConfirmed(false);
                         } catch (BusinessExeption e2) {
-                            controller.displayError(e2.getMessage());
+                            ErrorDisplayer.displayError(e2.getMessage());
                         }
                     }
                 }
@@ -62,11 +78,12 @@ public class AccountViewController implements ActionListener, EventListener {
 
             case StartFrame.USER_REGISTER:
                 if(startView.getNameInput().isEmpty() || startView.getPasswordInput().isEmpty() || startView.getEmailInput().isEmpty()) {
-                    controller.displayError(ERROR_EMPTY_FIELD);
+                    ErrorDisplayer.displayError(ERROR_EMPTY_FIELD);
                 } else {
                     //controller.newUser();
                     startView.reset();
-                    controller.userConfirmed(false);
+                    startView.dispose();
+                    ApplicationController.getInstance().userConfirmed(false);
                 }
                 break;
 
@@ -81,7 +98,7 @@ public class AccountViewController implements ActionListener, EventListener {
                 break;
 
             case UserPopUp.USER_LOGOUT:
-                controller.logOut();
+                logOut();
                 break;
         }
     }
