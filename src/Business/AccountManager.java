@@ -54,9 +54,9 @@ public class AccountManager {
     public User loginUser (String username, String password) {
         try {
             UserDAO userDAO = new UserSQLDAO();
-            User newUser = userDAO.getUserByUsernameOrEmail(username);
+            currentUser = userDAO.getUserByUsernameOrEmail(username);
             if (userDAO.validateUser(username, password)){
-                return newUser;
+                return currentUser;
             }
             else{
                 throw new UserAuthentificationError(INCORRECT_PASSWORD_ERROR);
