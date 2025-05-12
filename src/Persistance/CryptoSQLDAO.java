@@ -246,4 +246,78 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
         return crypto;
     }
+
+    public Crypto getCryptoByCategory (String category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category must not be null");
+        }
+
+        String query = "SELECT * FROM cryptocurrency WHERE category = ? AND cryptoDeleted = false";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Crypto crypto = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, category);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                double currentPrice = rs.getDouble("current_value");
+                double initialPrice = rs.getDouble("init_value");
+                int volatility = rs.getInt("volatility");
+
+                crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch crypto by category", e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return crypto;
+    }
+
+    public String getCategories () {
+        StringBuilder categories = new StringBuilder();
+        String query = "SELECT DISTINCT category FROM cryptocurrency WHERE cryptoDeleted = false";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            stmt = conn.prepareStatement(query);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (categories.length() > 0) {
+                    categories.append(", ");
+                }
+                categories.append(rs.getString("category"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to retrieve categories", e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return categories.toString();
+    }
 }
