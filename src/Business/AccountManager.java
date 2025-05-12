@@ -35,25 +35,27 @@ public class AccountManager {
     public void registerUser(String username, String mail, String password) {
         try{
             UserDAO userDAO = new UserSQLDAO();
-            User newUser = userDAO.getUserByUsername(username); //donde se crea esto?
+            User newUser = userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
             if (passwordIsValid(password) == 1) {
                 UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
-                userDAO.createUser(newUser);
+                try {
+                    userDAO.registerUser(newUser);
+                } catch (PersistanceException ex) {
+                    throw new DataPersistanceError(ex.getMessage());
+                }
                 //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
-        } catch (PersistanceException e2)  {
-            throw new DataPersistanceError(e2.getMessage());
         }
     }
 
     public User loginUser (String username, String password) {
         try {
             UserDAO userDAO = new UserSQLDAO();
-            //User newUser = userDAO.getUserByUsernameOrMail(username);
-            if (userDAO.validateCredentials(username, password)){
+            User newUser = userDAO.getUserByUsernameOrEmail(username);
+            if (userDAO.validateUser(username, password)){
                 return newUser;
             }
             else{
@@ -66,7 +68,7 @@ public class AccountManager {
 
     public void delateCurrentUser(String username) {
         UserDAO userDAO = new UserSQLDAO();
-        userDAO.deleteUser(username);
+        userDAO.removeUser(username);
     }
 
         public void checkCurrentUserWarning() {
