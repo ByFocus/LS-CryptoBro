@@ -1,4 +1,5 @@
 package Business;
+import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.CryptoDelated;
 import Business.BusinessExceptions.DataPersistanceError;
 import Business.BusinessExceptions.UserAuthentificationError;
@@ -51,7 +52,7 @@ public class AccountManager {
         }
     }
 
-    public User loginUser (String username, String password) {
+    public User loginUser (String username, String password) throws BusinessExeption {
         try {
             UserDAO userDAO = new UserSQLDAO();
             currentUser = userDAO.getUserByUsernameOrEmail(username);

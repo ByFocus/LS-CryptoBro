@@ -90,16 +90,19 @@ public class ViewController {
         mainFrame.dispose();
         startFrame.setVisible(true);
     }
+    private final String ERROR_EMPTY_FIELD = "Bro, te has dejado campos obligatorios sin rellenar";
+    private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
+    private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
 
-    public void errorEmptyInput() {
-        JOptionPane.showMessageDialog(null, "Bro, te has dejado campos obligatorios sin rellenar", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+    public void displayError(String message) {
+        JOptionPane.showMessageDialog(null, message ,"CryptoBro Error MSG" , JOptionPane.ERROR_MESSAGE);
     }
 
     public void errorUserMismatch() {
-        JOptionPane.showMessageDialog(null, "Bro no existente en nuestra BroBase", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, ERROR_NO_EXISTENT_USER , "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
     }
 
     public void errorPasswordMismatch() {
-        JOptionPane.showMessageDialog(null, "Bro te equivocaste de contraseña", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, , "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
     }
 }
