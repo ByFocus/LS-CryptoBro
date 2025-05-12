@@ -13,6 +13,6 @@ public interface CryptoDAO {
     Crypto getCryptoByName(String name);
     void deleteCrypto(String cryptoname);
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
-    List<Crypto> getCryptoByCategory (String category);
-    List<String> getCategories ();
+    List<Crypto> getCryptoByCategory (String category) throws PersistanceException;
+    List<String> getCategories () throws PersistanceException;
 }
