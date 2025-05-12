@@ -247,7 +247,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         return crypto;
     }
 
-    public Crypto getCryptoByCategory (String category) {
+    public List<Crypto> getCryptoByCategory (String category) {
         if (category == null) {
             throw new IllegalArgumentException("Category must not be null");
         }
@@ -257,6 +257,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Crypto crypto = null;
+        List<Crypto> cryptos = new ArrayList<>();
 
         try {
             conn = SQLConnector.getInstance().getConnection();
@@ -275,6 +276,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 int volatility = rs.getInt("volatility");
 
                 crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
+                cryptos.add(crypto);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to fetch crypto by category", e);
@@ -286,7 +288,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 System.err.println("Error closing resources: " + e.getMessage());
             }
         }
-        return crypto;
+        return cryptos;
     }
 
     public List<String> getCategories() {
