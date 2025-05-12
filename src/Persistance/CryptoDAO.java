@@ -14,5 +14,5 @@ public interface CryptoDAO {
     void deleteCrypto(String cryptoname);
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
     Crypto getCryptoByCategory (String category);
-    String getCategories ();
+    List<String> getCategories ();
 }

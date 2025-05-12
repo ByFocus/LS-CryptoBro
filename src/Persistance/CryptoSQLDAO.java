@@ -289,8 +289,8 @@ public class CryptoSQLDAO implements CryptoDAO{
         return crypto;
     }
 
-    public String getCategories () {
-        StringBuilder categories = new StringBuilder();
+    public List<String> getCategories() {
+        List<String> categories = new ArrayList<>();
         String query = "SELECT DISTINCT category FROM cryptocurrency WHERE cryptoDeleted = false";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -302,10 +302,7 @@ public class CryptoSQLDAO implements CryptoDAO{
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                if (categories.length() > 0) {
-                    categories.append(", ");
-                }
-                categories.append(rs.getString("category"));
+                categories.add(rs.getString("category"));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve categories", e);
@@ -318,6 +315,7 @@ public class CryptoSQLDAO implements CryptoDAO{
             }
         }
 
-        return categories.toString();
+        return categories;
     }
+
 }
