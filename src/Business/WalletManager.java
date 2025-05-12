@@ -1,5 +1,6 @@
 package Business;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.UnsufficientBalance;
 import Business.Entities.*;
 import Persistance.PurchaseDAO;
@@ -45,10 +46,13 @@ public class WalletManager {
     }
 
     public void notifyChangeInCryptoValue(String cryptoName) {
-        String currentUser = AccountManager.getInstance().getCurrentUser().getUsername();
-        List<String> usernames = new PurchaseSQLDAO().getUsernamesByCryptoName(cryptoName);
-        if (usernames.contains(currentUser)) {
-            MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
+        try{
+            String currentUser = AccountManager.getInstance().getCurrentUser().getUsername();
+            List<String> usernames = new PurchaseSQLDAO().getUsernamesByCryptoName(cryptoName);
+            if (usernames.contains(currentUser)) {
+                MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
+            }
         }
+        catch(BusinessExeption _){}
     }
 }

@@ -1,7 +1,9 @@
 package Persistance;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import Persistance.PersistanceExceptions.ConfigurationFileError;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -10,7 +12,8 @@ import java.io.FileReader;
 
 public class ConfigurationDAO {
 
-    private static final String FILE_NAME = "config.json"; // atributo privado, como en el diagrama
+    private final String FILE_NAME = "config.json";
+    private final String CONFIG_ERROR = "Brother, hay un error con el fichero de configuracion.";
 
     private String adminPass;
     private String dbPort;
@@ -19,11 +22,11 @@ public class ConfigurationDAO {
     private String dbPass;
     private String dbIP;
 
-    public ConfigurationDAO() throws IOException {
+    public ConfigurationDAO() throws ConfigurationFileError {
         loadConfiguration();
     }
 
-    private void loadConfiguration() throws IOException {
+    private void loadConfiguration() throws ConfigurationFileError {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
@@ -37,9 +40,10 @@ public class ConfigurationDAO {
             this.dbPass = jsonObject.get("db_pass").getAsString();
             this.adminPass = jsonObject.get("admin_pass").getAsString();
         }
+        catch (IOException e) {
+            throw new ConfigurationFileError(CONFIG_ERROR);
+        }
     }
-
-    // Métodos públicos exactos del diagrama:
 
     public String getAdminPass() {
         return adminPass;

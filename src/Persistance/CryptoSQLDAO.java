@@ -1,6 +1,7 @@
 package Persistance;
 
 import Business.Entities.Crypto;
+import Persistance.PersistanceExceptions.ConfigurationFileError;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class CryptoSQLDAO implements CryptoDAO{
 
-    public boolean createCrypto(Crypto crypto){
+    public boolean createCrypto(Crypto crypto) throws ConfigurationFileError {
         if(crypto == null ){
             throw new IllegalArgumentException("Crypto object must be not null");
         }
@@ -38,7 +39,9 @@ public class CryptoSQLDAO implements CryptoDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to create crypto entry", e);
+            throw new ConfigurationFileError("Failed to create crypto entry");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (stmt != null) stmt.close();

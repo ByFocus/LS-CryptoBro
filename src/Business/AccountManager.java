@@ -1,8 +1,5 @@
 package Business;
-import Business.BusinessExceptions.BusinessExeption;
-import Business.BusinessExceptions.CryptoDelated;
-import Business.BusinessExceptions.DataPersistanceError;
-import Business.BusinessExceptions.UserAuthentificationError;
+import Business.BusinessExceptions.*;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -125,6 +122,11 @@ public class AccountManager {
     }
 
     public User getCurrentUser() {
-        return currentUser;
+        if (currentUser == null) {
+            throw new NoCurrentUser("");
+        }
+        else{
+            return currentUser;
+        }
     }
 }
