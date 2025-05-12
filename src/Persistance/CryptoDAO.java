@@ -1,6 +1,8 @@
 package Persistance;
 
 import Business.Entities.Crypto;
+import Persistance.PersistanceExceptions.PersistanceException;
+
 import java.util.List;
 
 public interface CryptoDAO {
@@ -9,4 +11,5 @@ public interface CryptoDAO {
     List<Crypto> getAllCryptos();
     Crypto getCryptoByName(String name);
     void deleteCrypto(String cryptoname);
+    double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
 }

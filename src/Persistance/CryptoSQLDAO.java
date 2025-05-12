@@ -1,6 +1,9 @@
 package Persistance;
 
 import Business.Entities.Crypto;
+import Persistance.PersistanceExceptions.DBConnectionNotReached;
+import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -77,6 +80,44 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new RuntimeException("Error closing statement " + e.getMessage());
             }
             // Note: Don't close conn here as it's managed by SQLConnector
+        }
+    }
+
+    public double getCryptoCurrentPrice(String cryptoName) throws PersistanceException {
+        // Correct the query syntax to SELECT the current_value from the table
+        String query = "SELECT current_value FROM cryptocurrency WHERE name = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, cryptoName);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Retrieve the double value from the ResultSet
+                return rs.getDouble("current_value");
+            } else {
+                throw new DBDataNotFound("No cryptocurrency found with name: " + cryptoName);
+            }
+        } catch (SQLException e) {
+            throw new DBDataNotFound(e.getMessage());
+        } finally {
+            // Safely close resources
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Error closing resources!");
+                // Use logging for resources closing error if necessary
+            }
         }
     }
 

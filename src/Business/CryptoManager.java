@@ -1,8 +1,10 @@
 package Business;
 
+import Business.BusinessExceptions.DataPersistanceError;
 import Business.Entities.Crypto;
 import Persistance.CryptoDAO;
 import Persistance.CryptoSQLDAO;
+import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.List;
 
@@ -25,8 +27,12 @@ public class CryptoManager {
     public synchronized void makeTransaction(String cryptoName, int units) {
     }
 
-    public float getCryptoCurrentPrice(String cryptoName) {
-        return new CryptoSQLDAO().getCryptoCurrentPrice(cryptoName);
+    public double getCryptoCurrentPrice(String cryptoName) {
+        try {
+            return new CryptoSQLDAO().getCryptoCurrentPrice(cryptoName);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
     public void deleteCrypto(String cryptoName) {
