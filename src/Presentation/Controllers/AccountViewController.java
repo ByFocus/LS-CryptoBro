@@ -6,7 +6,6 @@ import Business.Entities.User;
 import Business.EventType;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
-import Presentation.Controllers.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,10 +38,8 @@ public class AccountViewController implements ActionListener, EventListener {
         startView.setVisible(true);
     }
 
-    public void logOut() {
-        userView.dispose();
-        ApplicationController.getInstance().close();
-        startView.setVisible(true);
+    public void checkUserProfile() {
+        userView.setVisible(true);
     }
 
     @Override
@@ -98,7 +95,9 @@ public class AccountViewController implements ActionListener, EventListener {
                 break;
 
             case UserPopUp.USER_LOGOUT:
-                logOut();
+                userView.dispose();
+                ApplicationController.getInstance().close();
+                startView.setVisible(true);
                 break;
         }
     }

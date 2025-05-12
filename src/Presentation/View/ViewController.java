@@ -43,9 +43,7 @@ public class ViewController {
 
 
 
-    public void checkUserProfile() {
-        userProfile.setVisible(true);
-    }
+
 
     public void logOut() {
         userProfile.dispose();

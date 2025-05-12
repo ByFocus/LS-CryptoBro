@@ -3,16 +3,27 @@ package Presentation.Controllers;
 import Business.MarketManager;
 import Business.EventType;
 import Presentation.View.MainFrame;
+import Presentation.View.ViewController;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ApplicationController implements EventListener{
     private static ApplicationController instance;
 
-    private MarketManager market;
+    private  MarketManager market;
 
-    private MainFrame appFrame;
+    private final MainFrame appFrame;
 
     public ApplicationController() {
         appFrame = new MainFrame();
+
+        appFrame.registerController().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                AccountViewController.getInstance().checkUserProfile();
+            }
+        });
 
         market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);

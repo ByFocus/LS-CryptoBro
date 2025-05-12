@@ -11,6 +11,8 @@ public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
     private static final String FRAME_TITLE = "CryptoBro!";
 
+    private JPanel userPanel;
+
     public MainFrame() {
         configureFrame();
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -65,7 +67,7 @@ public class MainFrame extends JFrame {
         userMenu.add(balancePanel, BorderLayout.WEST);
 
         // Panel del Usuario
-        JPanel userPanel = new JPanel();
+        userPanel = new JPanel();
         userPanel.setOpaque(false);
 
         JLabel userLabel = new JLabel("USER ");
@@ -76,16 +78,13 @@ public class MainFrame extends JFrame {
         JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
         userPanel.add(userProfile);
 
-        userPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                controller.checkUserProfile();
-            }
-        });
-
         userMenu.add(userPanel, BorderLayout.EAST);
         userMenu.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         return userMenu;
+    }
+
+    public JPanel registerController() {
+        return userPanel;
     }
 }
