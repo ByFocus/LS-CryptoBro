@@ -1,7 +1,9 @@
 package Persistance;
 
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +12,7 @@ import java.sql.SQLException;
 
 public class UserSQLDAO implements UserDAO{
 
-    public boolean registerUser(User user) {
+    public boolean registerUser(User user) throws PersistanceException {
         if (user == null || user.getUsername() == null || user.getMail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User and its fields must not be null");
         }
@@ -22,7 +24,7 @@ public class UserSQLDAO implements UserDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new RuntimeException("Database connection is null");
+                throw new DBConnectionNotReached("Could not reach DB!");
             }
 
             stmt = conn.prepareStatement(query);
@@ -34,12 +36,12 @@ public class UserSQLDAO implements UserDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to create user", e);
+            throw new DBConnectionNotReached("Failed to create user");
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing statement: " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing statement: " + e.getMessage());
             }
             // Note: Don't close conn here since it's managed by SQLConnector
         }

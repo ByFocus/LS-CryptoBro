@@ -41,11 +41,13 @@ public class AccountManager {
             if (passwordIsValid(password) == 1) {
                 UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
-                userDAO.registerUser(newUser);
+                try {
+                    userDAO.registerUser(newUser);
+                } catch (PersistanceException ex) {
+                    throw new DataPersistanceError(ex.getMessage());
+                }
                 //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
-        } catch (PersistanceException e2)  {
-            throw new DataPersistanceError(e2.getMessage());
         }
     }
 
