@@ -64,9 +64,9 @@ public class AccountManager {
         }
     }
 
-    public void delateCurrentUser(String username) {
+    public void delateCurrentUser() {
         UserDAO userDAO = new UserSQLDAO();
-        userDAO.removeUser(username);
+        userDAO.removeUser(currentUser.getUsername());
     }
 
         public void checkCurrentUserWarning() {
