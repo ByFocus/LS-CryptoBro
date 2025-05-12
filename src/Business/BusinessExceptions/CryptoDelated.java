@@ -1,6 +1,6 @@
 package Business.BusinessExceptions;
 
-public class CryptoDelated extends RuntimeException {
+public class CryptoDelated extends BusinessExeption {
     public CryptoDelated(String message) {
         super(message);
     }
