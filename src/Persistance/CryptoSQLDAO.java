@@ -12,6 +12,8 @@ import java.util.List;
 
 public class CryptoSQLDAO implements CryptoDAO{
 
+    private final String CRYPTO_FAILED = "Failed to create crypto entry";
+
     public boolean createCrypto(Crypto crypto) throws ConfigurationFileError {
         if(crypto == null ){
             throw new IllegalArgumentException("Crypto object must be not null");
@@ -39,7 +41,7 @@ public class CryptoSQLDAO implements CryptoDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new ConfigurationFileError("Failed to create crypto entry");
+            throw new ConfigurationFileError(CRYPTO_FAILED);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         } finally {
