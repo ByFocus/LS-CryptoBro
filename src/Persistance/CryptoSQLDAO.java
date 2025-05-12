@@ -247,21 +247,18 @@ public class CryptoSQLDAO implements CryptoDAO{
         return crypto;
     }
 
-    public Crypto getCryptoByCategory (String category) {
-        if (category == null) {
-            throw new IllegalArgumentException("Category must not be null");
-        }
-
+    public List<Crypto> getCryptoByCategory (String category) throws PersistanceException {
         String query = "SELECT * FROM cryptocurrency WHERE category = ? AND cryptoDeleted = false";
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Crypto crypto = null;
+        List<Crypto> cryptos = new ArrayList<>();
 
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -275,21 +272,22 @@ public class CryptoSQLDAO implements CryptoDAO{
                 int volatility = rs.getInt("volatility");
 
                 crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
+                cryptos.add(crypto);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch crypto by category", e);
+            throw new DBDataNotFound("Failed to fetch crypto by category");
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing resources: " + e.getMessage());
             }
         }
-        return crypto;
+        return cryptos;
     }
 
-    public List<String> getCategories() {
+    public List<String> getCategories() throws PersistanceException {
         List<String> categories = new ArrayList<>();
         String query = "SELECT DISTINCT category FROM cryptocurrency WHERE cryptoDeleted = false";
         Connection conn = null;
@@ -305,13 +303,13 @@ public class CryptoSQLDAO implements CryptoDAO{
                 categories.add(rs.getString("category"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to retrieve categories", e);
+            throw new DBDataNotFound("Failed to retrieve categories", e);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing resources: " + e.getMessage());
             }
         }
 

@@ -12,7 +12,6 @@ public class PurchaseSQLDAO implements PurchaseDAO{
 
     public boolean addPurchase(User user, Purchase purchase) {
 
-
         String query = "INSERT INTO bought (user_name, crypto_name, number) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -81,6 +80,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         }
         return usernames;
     }
+
     public List<Purchase> getPurchasesByUserName(String user) {
         if (user == null) {
             throw new IllegalArgumentException("Username must not be null!");
