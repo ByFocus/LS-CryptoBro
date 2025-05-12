@@ -51,6 +51,10 @@ public class MarketManager extends Thread {
         }
     }
 
+    public Queue<Double> getHistoricalValuesByCryptoName(String cryptoName) {
+        return hitoricalValues.get(cryptoName);
+    }
+
     public void notify(EventType event) {
         List<EventListener> subscribers = listeners.get(event);
         for (EventListener eventListener : subscribers) {

@@ -1,19 +1,34 @@
 package Presentation.View;
+import Business.AccountManager;
+import Business.BusinessExceptions.BusinessExeption;
+import Business.MarketManager;
+import Presentation.Controllers.*;
 import Presentation.View.Popups.*;
 
-public class ViewController {
-    private LoadFrame loadFrame;
-    private StartFrame startFrame;
-    private MainFrame mainFrame;
 
-    private UserPopUp userProfile;
+import javax.swing.*;
+import java.util.Objects;
+
+public class ViewController {
+    private final LoadFrame loadFrame;
+    private final StartFrame startFrame;
+    private final MainFrame mainFrame;
+
+    private final UserPopUp userProfile;
+
+    private final AccountViewController accountController;
 
     public ViewController() {
         loadFrame = new LoadFrame();
-        startFrame = new StartFrame(this);
+        startFrame = new StartFrame();
         mainFrame = new MainFrame(this);
 
         userProfile = new UserPopUp(this);
+
+        accountController = new AccountViewController(this, startFrame, userProfile);
+
+        startFrame.registerController(accountController);
+        userProfile.registerController(accountController);
     }
 
     public void start() {
@@ -27,17 +42,42 @@ public class ViewController {
             try {
                 Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
                 loadFrame.setProgress(i);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                if (i == 15) {
+                    AccountManager.getInstance();
+
+                } else if (i == 50) {
+                   MarketManager m = MarketManager.getMarketManager();
+                   m.startMarket();
+                }
+            } catch (InterruptedException _) {
+
+            } catch (BusinessExeption e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
 
         loadFrame.dispose();
     }
 
-    public void userConfirmed() {
-        startFrame.dispose();
+    public boolean searchAdmin(String adminName, String password) {
+        boolean confirmated = false;
 
+        if (Objects.equals(adminName, "PolAdmin") && Objects.equals(password, "1234")) confirmated = true;
+
+        return confirmated;
+    }
+
+    public boolean searchUser(String username, String password) {
+        boolean confirmated = false;
+
+        if (username.equals("Pol") && password.equals("1234")) confirmated = true;
+
+        return confirmated;
+    }
+
+    public void userConfirmed(boolean admin) {
+        startFrame.dispose();
+        mainFrame.configureTabs(admin);
         mainFrame.setVisible(true);
     }
 
@@ -49,5 +89,17 @@ public class ViewController {
         userProfile.dispose();
         mainFrame.dispose();
         startFrame.setVisible(true);
+    }
+
+    public void errorEmptyInput() {
+        JOptionPane.showMessageDialog(null, "Bro, te has dejado campos obligatorios sin rellenar", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void errorUserMismatch() {
+        JOptionPane.showMessageDialog(null, "Bro no existente en nuestra BroBase", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void errorPasswordMismatch() {
+        JOptionPane.showMessageDialog(null, "Bro te equivocaste de contraseña", "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
     }
 }

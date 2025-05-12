@@ -3,8 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoadFrame extends JFrame {
-    private JProgressBar progressBar;
-    private static String logoImgURL = "imgs/CryptoBro.png";
+    private static final String logoImgURL = "imgs/CryptoBro.png";
+
+    private final JProgressBar progressBar;
 
     public LoadFrame() {
         setLayout(new BorderLayout());
