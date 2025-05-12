@@ -97,12 +97,4 @@ public class ViewController {
     public void displayError(String message) {
         JOptionPane.showMessageDialog(null, message ,"CryptoBro Error MSG" , JOptionPane.ERROR_MESSAGE);
     }
-
-    public void errorUserMismatch() {
-        JOptionPane.showMessageDialog(null, ERROR_NO_EXISTENT_USER , "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public void errorPasswordMismatch() {
-        JOptionPane.showMessageDialog(null, , "CryptoBro Error MSG", JOptionPane.ERROR_MESSAGE);
-    }
 }
