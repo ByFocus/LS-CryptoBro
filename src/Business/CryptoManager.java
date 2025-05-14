@@ -8,13 +8,13 @@ import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.List;
 
-public class CryptoManager {
-    public List<Crypto> getAllCryptos() {
+public class CryptoManager{
+    public List<Crypto> getAllCryptos()  throws PersistanceException{
         CryptoDAO cryptoDA0 =new CryptoSQLDAO();
         return cryptoDA0.getAllCryptos();
     }
 
-    public Crypto getCryptoByName(String cryptoName) {
+    public Crypto getCryptoByName(String cryptoName)  throws PersistanceException{
         CryptoDAO cryptoDA0 =new CryptoSQLDAO();
         return cryptoDA0.getCryptoByName(cryptoName);
     }

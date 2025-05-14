@@ -6,8 +6,8 @@ import Persistance.PersistanceExceptions.PersistanceException;
 
 public interface UserDAO {
     public boolean registerUser(User user) throws PersistanceException;
-    User getUserByUsernameOrEmail(String value) throws DBDataNotFound;
-    boolean validateAdmin(String password);
-    boolean validateUser(String identifier, String password);
-    boolean removeUser(String identifier);
+    User getUserByUsernameOrEmail(String value)  throws PersistanceException;
+    boolean validateAdmin(String password) throws PersistanceException;
+    boolean validateUser(String identifier, String password) throws PersistanceException;
+    boolean removeUser(String identifier) throws PersistanceException;
 }

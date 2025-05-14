@@ -1,5 +1,9 @@
 package Persistance;
 
+import Business.BusinessExceptions.DataPersistanceError;
+import Persistance.PersistanceExceptions.DBConnectionNotReached;
+import Persistance.PersistanceExceptions.PersistanceException;
+
 import java.sql.*;
 
 public class SQLConnector {
@@ -16,14 +20,15 @@ public class SQLConnector {
         this.url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&serverTimezone=UTC";
     }
 
-    public static SQLConnector getInstance() {
+    public static SQLConnector getInstance() throws PersistanceException {
         if (instance == null) {
-            instance = new SQLConnector("root", "", "localhost", 3308, "cryptobro_db");
+            ConfigurationDAO cDao = new ConfigurationJSONDAO();
+            instance = new SQLConnector(cDao.getDBUser(), cDao.getDBPass(), cDao.getDBIP(), cDao.getDBPort(), cDao.getDBName());
             instance.connect();
         }
         return instance;
     }
-    public ResultSet selectQuery(String query) {
+    public ResultSet selectQuery(String query) throws DBConnectionNotReached{
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -42,24 +47,24 @@ public class SQLConnector {
         // Note: No finally block to close stmt here, as it would close the ResultSet prematurely
     }
 
-    public void connect() {
+    public void connect() throws DBConnectionNotReached {
         try {
             conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Successfully connected to database: " + url);
+            //System.out.println("Successfully connected to database: " + url); TODO: PARA QUÉ???
         } catch (SQLException e) {
-            System.err.println("Couldn't connect to --> " + url + " (" + e.getMessage() + ")");
-            throw new RuntimeException("Failed to establish database connection", e);
+            String message = "Couldn't connect to --> " + url + " (" + e.getMessage() + ")";
+            throw new DBConnectionNotReached(message);
         }
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws DBConnectionNotReached {
         try {
             if (conn == null || conn.isClosed()) {
                 connect();  // Reconnect if connection is null or closed
             }
             return conn;
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to validate database connection", e);
+            throw new DBConnectionNotReached("Failed to establish database connection");
         }
     }
 

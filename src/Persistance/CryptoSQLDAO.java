@@ -14,7 +14,7 @@ public class CryptoSQLDAO implements CryptoDAO{
 
     private final String CRYPTO_FAILED = "Failed to create crypto entry";
 
-    public boolean createCrypto(Crypto crypto) throws ConfigurationFileError {
+    public boolean createCrypto(Crypto crypto) throws PersistanceException {
         if(crypto == null ){
             throw new IllegalArgumentException("Crypto object must be not null");
         }
@@ -53,7 +53,7 @@ public class CryptoSQLDAO implements CryptoDAO{
             // Note: Don't close conn here since it's managed by SQLConnector
         }
     }
-    public boolean updateCrypto(Crypto crypto) {
+    public boolean updateCrypto(Crypto crypto)  throws PersistanceException{
         if (crypto == null || crypto.getName() == null) {
             throw new IllegalArgumentException("Crypto object and its name must not be null");
         }
@@ -126,7 +126,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
     }
 
-    public void deleteCrypto(String cryptoname){
+    public void deleteCrypto(String cryptoname) throws PersistanceException{
         if(cryptoname == null){
             throw new IllegalArgumentException("Crypto name cannot be null!");
         }
@@ -161,7 +161,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
     }
 
-    public List<Crypto> getAllCryptos() {
+    public List<Crypto> getAllCryptos()  throws PersistanceException{
         List<Crypto> cryptoList = new ArrayList<>();
         String query = "SELECT * FROM cryptocurrency";
         Connection conn = null;
@@ -202,7 +202,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         return cryptoList;
     }
 
-    public Crypto getCryptoByName(String name) {
+    public Crypto getCryptoByName(String name)  throws PersistanceException{
         if (name == null) {
             throw new IllegalArgumentException("Crypto name must not be null");
         }

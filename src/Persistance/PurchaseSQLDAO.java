@@ -3,6 +3,7 @@ package Persistance;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class PurchaseSQLDAO implements PurchaseDAO{
 
-    public boolean addPurchase(User user, Purchase purchase) {
+    public boolean addPurchase(User user, Purchase purchase)  throws PersistanceException {
 
         String query = "INSERT INTO bought (user_name, crypto_name, number) VALUES (?, ?, ?, ?)";
         Connection conn = null;
@@ -42,7 +43,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         }
     }
 
-    public List<String> getUsernamesByCryptoName(String cryptoName) {
+    public List<String> getUsernamesByCryptoName(String cryptoName)  throws PersistanceException{
         if (cryptoName == null) {
             throw new IllegalArgumentException("Crypto name must not be null");
         }
@@ -81,7 +82,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         return usernames;
     }
 
-    public List<Purchase> getPurchasesByUserName(String user) {
+    public List<Purchase> getPurchasesByUserName(String user)  throws PersistanceException{
         if (user == null) {
             throw new IllegalArgumentException("Username must not be null!");
         }

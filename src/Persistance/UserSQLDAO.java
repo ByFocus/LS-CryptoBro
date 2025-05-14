@@ -47,7 +47,7 @@ public class UserSQLDAO implements UserDAO{
         }
     }
 
-    public User getUserByUsernameOrEmail(String value) throws DBDataNotFound {
+    public User getUserByUsernameOrEmail(String value) throws PersistanceException {
         String query = "SELECT * FROM user WHERE user_name = ? OR email = ?;";
         User user = null;
 
@@ -73,7 +73,8 @@ public class UserSQLDAO implements UserDAO{
         return user;
     }
 
-    public boolean validateAdmin(String password) {
+    //TODO: ESTA FUNCIÓN PARA QUÉ??
+    public boolean validateAdmin(String password) throws PersistanceException{
         String query = "SELECT * FROM user WHERE role = 'admin' AND password = '" + password + "';";
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
 
@@ -85,7 +86,7 @@ public class UserSQLDAO implements UserDAO{
         return false;
     }
 
-    public boolean validateUser(String identifier, String password) {
+    public boolean validateUser(String identifier, String password) throws PersistanceException{
         String query = "SELECT 1 FROM user WHERE (user_name = ? OR email = ?) AND password = ?";
         Connection conn = SQLConnector.getInstance().getConnection();
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -100,7 +101,7 @@ public class UserSQLDAO implements UserDAO{
         }
     }
 
-    public void updateBalance(double newPurchaseValue, String identifier) throws DBDataNotFound{
+    public void updateBalance(double newPurchaseValue, String identifier) throws PersistanceException{
         try{
             double oldBalance = getUserByUsernameOrEmail(identifier).getBalance();
             String query = "UPDATE USER SET balance = ? WHERE name = ? OR email = ?";
@@ -119,7 +120,7 @@ public class UserSQLDAO implements UserDAO{
 
     }
 
-    public boolean removeUser (String identifier) {
+    public boolean removeUser (String identifier)  throws PersistanceException{
         String query = "DELETE FROM user WHERE user_name = ? OR email = ?";
         try {
             Connection conn = SQLConnector.getInstance().getConnection();

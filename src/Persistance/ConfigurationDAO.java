@@ -6,7 +6,7 @@ public interface ConfigurationDAO {
 
     public String getAdminPass() throws ConfigurationFileError;
 
-    public String getDBPort() throws ConfigurationFileError;
+    public int getDBPort() throws ConfigurationFileError;
 
     public String getDBName() throws ConfigurationFileError;
 

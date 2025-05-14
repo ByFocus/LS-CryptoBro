@@ -1,8 +1,10 @@
 package Business;
 
 import Business.BusinessExceptions.BusinessExeption;
+import Business.BusinessExceptions.DataPersistanceError;
 import Business.BusinessExceptions.UnsufficientBalance;
 import Business.Entities.*;
+import Persistance.PersistanceExceptions.PersistanceException;
 import Persistance.PurchaseDAO;
 import Persistance.PurchaseSQLDAO;
 
@@ -18,20 +20,28 @@ public class WalletManager {
     }
     public void addTransaction(User user, Crypto crypto, int units) {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {
-            Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
+            try{
+                Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
             //user.addPurchase(p); no es nnecesario, solo actualizarlo en la base de datos, eso si
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
             purchaseDAO.addPurchase(user, p);
             //TODO: falta actualizar el balance del usuario
             //TODO: falta notificar que se ha cambiado el balance
             //TODO: falta notificar que ha cambiado el precio de una crypto, y cambiarlo llamando al add Transaction del Crypto
+            } catch (PersistanceException e) {
+                throw new DataPersistanceError(e.getMessage());
+            }
         } else {
             throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
     public List<Purchase> getWalletByUserName(String username) {
         PurchaseDAO purchaseDao = new PurchaseSQLDAO();
-        return purchaseDao.getPurchasesByUserName(username);
+        try {
+            return purchaseDao.getPurchasesByUserName(username);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
     public double calculateEstimatedGainsByUserName(String userName) {
 
@@ -53,6 +63,9 @@ public class WalletManager {
                 MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
             }
         }
-        catch(BusinessExeption _){}
+        catch(BusinessExeption _){/*if there is no user*/}
+        catch(PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 }

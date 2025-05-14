@@ -1,6 +1,8 @@
 package Business;
 import Business.BusinessExceptions.*;
 import Business.Entities.User;
+import Persistance.ConfigurationDAO;
+import Persistance.ConfigurationJSONDAO;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Persistance.UserDAO;
@@ -47,6 +49,9 @@ public class AccountManager {
                 }
                 //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
+        catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
     public User loginUser (String username, String password) throws BusinessExeption {
@@ -61,12 +66,18 @@ public class AccountManager {
             }
         } catch(DBDataNotFound e) {
             throw new UserAuthentificationError(INEXISTENT_USER_ERROR);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
         }
     }
 
-    public void delateCurrentUser() {
-        UserDAO userDAO = new UserSQLDAO();
-        userDAO.removeUser(currentUser.getUsername());
+    public void delateCurrentUser() throws BusinessExeption{
+        try {
+            UserDAO userDAO = new UserSQLDAO();
+            userDAO.removeUser(currentUser.getUsername());
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
         public void checkCurrentUserWarning() {
@@ -79,16 +90,22 @@ public class AccountManager {
         }
     }
 
-    public void adminAccess(String password) {
-        UserDAO userDAO = new UserSQLDAO();
-        if (!userDAO.validateAdmin(password)){
-            throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
+    public void adminAccess(String password) throws BusinessExeption {
+        try {
+            ConfigurationDAO conDAO = new ConfigurationJSONDAO();
+            if(!(conDAO.getAdminPass().equals(password))){
+                throw new UserAuthentificationError(INCORRECT_ADMIN_PASSWORD_ERROR);
+            }
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
         }
     }
 
     public void checkPasswordIsValid (String password) throws BusinessExeption{
+        String errorMessage = null;
+
         if (password == null || password.length() < 8) {
-            throw new UserAuthentificationError(PASSWORD_LENGHT_INVALID);
+            errorMessage = PASSWORD_LENGHT_INVALID;
         }
 
         boolean hasLowercase = false;
@@ -107,21 +124,25 @@ public class AccountManager {
         }
 
         if (!hasUppercase) {
-            throw new UserAuthentificationError(PASSWORD_CAPTIAL_LETTERS);
+            errorMessage = PASSWORD_CAPTIAL_LETTERS;
         }
 
         if (!hasDigit) {
-            throw new UserAuthentificationError(PASSWORD_NUMBERS_ERROR);
+            errorMessage = PASSWORD_NUMBERS_ERROR;
         }
 
         if (!hasLowercase) {
-            throw new UserAuthentificationError(PASSWORD_LOWE_CASE);
+            errorMessage = PASSWORD_LOWE_CASE;
+        }
+
+        if (!errorMessage.isEmpty()) {
+            throw new UserAuthentificationError(errorMessage);
         }
     }
 
     public User getCurrentUser() {
         if (currentUser == null) {
-            throw new NoCurrentUser("");
+            throw new NoCurrentUser("There is no current user");
         }
         else{
             return currentUser;

@@ -1,10 +1,12 @@
 package Business;
 
+import Business.BusinessExceptions.DataPersistanceError;
 import Business.Entities.Bot;
 import Business.Entities.Crypto;
 
 import java.util.*;
 
+import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.Controllers.EventListener;
 
 public class MarketManager extends Thread {
@@ -43,11 +45,15 @@ public class MarketManager extends Thread {
     }
 
     private void createBotsAndHistorics() {
-        bots = new ArrayList<>();
-        List<Crypto> cryptoList = new CryptoManager().getAllCryptos();
-        for (Crypto crypto : cryptoList) {
-            bots.add(new Bot(crypto));
-            hitoricalValues.put(crypto.getName(), new LinkedList<>());
+        try {
+            bots = new ArrayList<>();
+            List<Crypto> cryptoList = new CryptoManager().getAllCryptos();
+            for (Crypto crypto : cryptoList) {
+                bots.add(new Bot(crypto));
+                hitoricalValues.put(crypto.getName(), new LinkedList<>());
+            }
+        }catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
         }
     }
 
@@ -86,6 +92,8 @@ public class MarketManager extends Thread {
                 Thread.sleep(TIME_TO_GET);
             } catch (InterruptedException _) {
                 //
+            } catch (PersistanceException e) {
+                throw new DataPersistanceError(e.getMessage());
             }
 
         }

@@ -7,11 +7,11 @@ import Persistance.PersistanceExceptions.PersistanceException;
 import java.util.List;
 
 public interface CryptoDAO {
-    boolean createCrypto(Crypto crypto) throws ConfigurationFileError;
-    boolean updateCrypto(Crypto crypto);
-    List<Crypto> getAllCryptos();
-    Crypto getCryptoByName(String name);
-    void deleteCrypto(String cryptoname);
+    boolean createCrypto(Crypto crypto) throws PersistanceException;
+    boolean updateCrypto(Crypto crypto) throws PersistanceException;
+    List<Crypto> getAllCryptos() throws PersistanceException;
+    Crypto getCryptoByName(String name) throws PersistanceException;
+    void deleteCrypto(String cryptoname) throws PersistanceException;
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
     List<Crypto> getCryptoByCategory (String category) throws PersistanceException;
     List<String> getCategories () throws PersistanceException;
