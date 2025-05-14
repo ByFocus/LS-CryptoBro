@@ -1,7 +1,9 @@
 package Presentation.Controllers;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.MarketManager;
 import Presentation.View.LoadFrame;
+import Presentation.View.Popups.ErrorDisplayer;
 
 public class LoadViewController {
     private final LoadFrame loadFrame;
@@ -25,8 +27,9 @@ public class LoadViewController {
                 if (i == 50) {
                     MarketManager.getMarketManager().startMarket();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException _) {
+            } catch (BusinessExeption e) {
+                ErrorDisplayer.displayError(e.getMessage());
             }
         }
 
