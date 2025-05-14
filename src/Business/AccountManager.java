@@ -103,10 +103,11 @@ public class AccountManager {
            try {
                UserDAO userDAO = new UserSQLDAO();
                userDAO.updateCryptoDeletedFlag(currentUser.getUsername(), false);
-               throw new CryptoDeleted(CRYPTO_DELETED_ERROR);
+
            } catch (PersistanceException e) {
                throw new DataPersistanceError(e.getMessage());
            }
+            throw new CryptoDeleted(CRYPTO_DELETED_ERROR);
         }
     }
 

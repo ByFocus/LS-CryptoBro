@@ -142,11 +142,11 @@ public class UserSQLDAO implements UserDAO{
         try {
             Connection conn = SQLConnector.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, String.valueOf(flagValue));
+            stmt.setString(1, flagValue? "1": "0");
             stmt.setString(2, identifier);
             stmt.setString(3, identifier);
             //TODO: Tirar excepcion si no se ha afectado a ninguna columna
-            //int rowsAffected = stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
             //return rowsAffected > 0;
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());
