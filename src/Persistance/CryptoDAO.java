@@ -15,4 +15,5 @@ public interface CryptoDAO {
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
     List<Crypto> getCryptoByCategory (String category) throws PersistanceException;
     List<String> getCategories () throws PersistanceException;
+    public void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException;
 }

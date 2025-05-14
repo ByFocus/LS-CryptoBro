@@ -63,8 +63,10 @@ public class MarketManager extends Thread {
 
     public void notify(EventType event) {
         List<EventListener> subscribers = listeners.get(event);
-        for (EventListener eventListener : subscribers) {
-            eventListener.update(event);
+        if (subscribers != null) {
+            for (EventListener eventListener : subscribers) {
+                eventListener.update(event);
+            }
         }
     }
 

@@ -53,6 +53,37 @@ public class CryptoSQLDAO implements CryptoDAO{
             // Note: Don't close conn here since it's managed by SQLConnector
         }
     }
+
+    public void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException{
+
+        String query = "UPDATE cryptocurrency SET current_value = ? WHERE name = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
+            stmt.setDouble(1, price);
+            stmt.setString(2, cryptoName);
+
+            int rowsAffected = stmt.executeUpdate();
+            //return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update crypto in database", e);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException("Error closing statement " + e.getMessage());
+            }
+            // Note: Don't close conn here as it's managed by SQLConnector
+        }
+    }
+//TODO: IGUAL NO SE NECESSITA
     public boolean updateCrypto(Crypto crypto)  throws PersistanceException{
         if (crypto == null || crypto.getName() == null) {
             throw new IllegalArgumentException("Crypto object and its name must not be null");

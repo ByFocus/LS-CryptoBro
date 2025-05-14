@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.MarketManager;
 import Presentation.View.LoadFrame;
 
 public class LoadViewController {
@@ -21,6 +22,9 @@ public class LoadViewController {
             try {
                 Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
                 loadFrame.setProgress(i);
+                if (i == 50) {
+                    MarketManager.getMarketManager().startMarket();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
