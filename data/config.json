@@ -1,8 +1,8 @@
 {
-  "db_port": "69",
+  "db_port": "3308",
   "db_ip": "localhost",
-  "db_name": "mario",
-  "db_user": "puto",
-  "db_pass": "melón",
+  "db_name": "cryptobro_db",
+  "db_user": "root",
+  "db_pass": "",
   "admin_pass": "CONTRASEÑA"
 }
