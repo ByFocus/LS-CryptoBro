@@ -303,7 +303,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 categories.add(rs.getString("category"));
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to retrieve categories", e);
+            throw new DBDataNotFound("Failed to retrieve categories " +  e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();

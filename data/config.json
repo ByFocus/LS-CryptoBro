@@ -1,0 +1,8 @@
+{
+  "db_port": "69",
+  "db_ip": "localhost",
+  "db_name": "mario",
+  "db_user": "puto",
+  "db_pass": "melón",
+  "admin_pass": "CONTRASEÑA"
+}
