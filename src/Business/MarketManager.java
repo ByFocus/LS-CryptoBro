@@ -69,7 +69,11 @@ public class MarketManager extends Thread {
     }
 
     public void subscribe(EventListener eventListener, EventType event) {
-        listeners.get(event).add(eventListener);
+        List<EventListener> listSubscribers = listeners.get(event);
+        if (listSubscribers == null) {
+            listSubscribers = new ArrayList<>();
+        }
+        listSubscribers.add(eventListener);
     }
     public void unsubscribe(EventListener eventListener, EventType event) {
         listeners.get(event).remove(eventListener);
