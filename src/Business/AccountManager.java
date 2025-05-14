@@ -31,13 +31,13 @@ public class AccountManager {
 
     }
 
-    public void registerUser(String username, String mail, String password) {
+    public void registerUser(String username, String mail, String password) throws BusinessExeption{
         try{
             UserDAO userDAO = new UserSQLDAO();
             User newUser = userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
-            if (passwordIsValid(password) == 1) {
+                checkPasswordIsValid(password);
                 UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
                 try {
@@ -47,7 +47,6 @@ public class AccountManager {
                 }
                 //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
-        }
     }
 
     public User loginUser (String username, String password) throws BusinessExeption {
@@ -87,7 +86,7 @@ public class AccountManager {
         }
     }
 
-    public int passwordIsValid (String password) {
+    public void checkPasswordIsValid (String password) throws BusinessExeption{
         if (password == null || password.length() < 8) {
             throw new UserAuthentificationError(PASSWORD_LENGHT_INVALID);
         }
@@ -118,8 +117,6 @@ public class AccountManager {
         if (!hasLowercase) {
             throw new UserAuthentificationError(PASSWORD_LOWE_CASE);
         }
-
-        return 1;
     }
 
     public User getCurrentUser() {

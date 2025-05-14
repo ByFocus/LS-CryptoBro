@@ -66,21 +66,32 @@ public class AccountViewController implements ActionListener, EventListener {
                             //TODO: SE TIENE QUE HACER ALGO CON ESTE USUARIO PARA PRINTAR SU INFO
                             startView.reset();
                             ApplicationController.getInstance().userConfirmed(false);
-                        } catch (BusinessExeption e2) {
-                            ErrorDisplayer.displayError(e2.getMessage());
+                        } catch (BusinessExeption e1) {
+                            ErrorDisplayer.displayError(e1.getMessage());
                         }
                     }
                 }
                 break;
 
             case StartFrame.USER_REGISTER:
-                if(startView.getNameInput().isEmpty() || startView.getPasswordInput().isEmpty() || startView.getEmailInput().isEmpty()) {
+                String userName = startView.getNameInput();
+                String password = startView.getPasswordInput();
+                String email = startView.getEmailInput();
+
+                if(userName.isEmpty() || password.isEmpty() || email.isEmpty()) {
                     ErrorDisplayer.displayError(ERROR_EMPTY_FIELD);
                 } else {
-                    //controller.newUser();
-                    startView.reset();
-                    startView.dispose();
-                    ApplicationController.getInstance().userConfirmed(false);
+                    try {
+                        AccountManager am = AccountManager.getInstance();
+                        am.registerUser(userName, email, password);
+                        User user =AccountManager.getInstance().loginUser(userName, password);
+                        //TODO: SE TIENE QUE USAR EL USUARIO
+                        startView.reset();
+                        startView.dispose();
+                        ApplicationController.getInstance().userConfirmed(false);
+                    } catch (BusinessExeption e1) {
+                        ErrorDisplayer.displayError(e1.getMessage());
+                    }
                 }
                 break;
 
