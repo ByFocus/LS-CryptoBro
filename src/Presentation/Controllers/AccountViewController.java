@@ -60,6 +60,7 @@ public class AccountViewController implements ActionListener, EventListener {
             case StartFrame.SWITCH_REGISTER:
                 switchToRegisterView();
                 break;
+
             case UserPopUp.USER_LOGOUT:
                 userLogOut();
                 break;

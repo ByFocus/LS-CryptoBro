@@ -13,6 +13,10 @@ public class MainFrame extends JFrame {
 
     private JPanel userPanel;
 
+    private JLabel userLabel;
+    private JLabel userBalance;
+    private JLabel balanceLabel;
+
     public MainFrame() {
         configureFrame();
         getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -70,7 +74,7 @@ public class MainFrame extends JFrame {
         userPanel = new JPanel();
         userPanel.setOpaque(false);
 
-        JLabel userLabel = new JLabel("USER ");
+        userLabel = new JLabel("USER ");
         userLabel.setFont(new Font("Arial", Font.BOLD, 18));
         userLabel.setForeground(Color.WHITE);
         userPanel.add(userLabel);
