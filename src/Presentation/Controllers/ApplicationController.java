@@ -13,6 +13,7 @@ public class ApplicationController implements EventListener{
     private final MainFrame appFrame;
 
     private ApplicationController() {
+        //todo esto no, lo ponemos en lo otro
         appFrame = new MainFrame();
 
         appFrame.registerController().addMouseListener(new MouseAdapter() {
@@ -32,6 +33,14 @@ public class ApplicationController implements EventListener{
             instance = new ApplicationController();
         }
         return instance;
+    }
+
+    public void newUserApplication() {
+        // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
+    }
+
+    public void newAdminApplication() {
+        // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
     }
     @Override
     public void update(EventType context) {
