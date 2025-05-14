@@ -18,6 +18,7 @@ public class AccountManager {
     private final String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
     private final String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
     private final String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!";
+    private final String EMAIL_FORMAT_NOT_VALID = "Brother, ni de fly eso es un mail, recuerda que luce así: corrige.tu@email.bro";
 
     private User currentUser;
     private static AccountManager instance;
@@ -40,6 +41,7 @@ public class AccountManager {
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound e) {
                 checkPasswordIsValid(password);
+                checkEmailIsValid(mail);
                 UserDAO userDAO = new UserSQLDAO();
                 User newUser = new User(username, password, mail, 1000, false);
                 try {
@@ -101,11 +103,11 @@ public class AccountManager {
         }
     }
 
-    public void checkPasswordIsValid (String password) throws BusinessExeption{
+    private void checkPasswordIsValid (String password) throws BusinessExeption{
         String errorMessage = null;
 
         if (password == null || password.length() < 8) {
-            errorMessage = PASSWORD_LENGHT_INVALID;
+            throw new UserAuthentificationError(PASSWORD_LENGHT_INVALID);
         }
 
         boolean hasLowercase = false;
@@ -124,19 +126,27 @@ public class AccountManager {
         }
 
         if (!hasUppercase) {
-            errorMessage = PASSWORD_CAPTIAL_LETTERS;
+            throw new UserAuthentificationError(PASSWORD_CAPTIAL_LETTERS);
         }
 
         if (!hasDigit) {
-            errorMessage = PASSWORD_NUMBERS_ERROR;
+            throw new UserAuthentificationError(PASSWORD_NUMBERS_ERROR);
         }
 
         if (!hasLowercase) {
-            errorMessage = PASSWORD_LOWE_CASE;
+            throw new UserAuthentificationError(PASSWORD_LOWE_CASE);
         }
+    }
 
-        if (!errorMessage.isEmpty()) {
-            throw new UserAuthentificationError(errorMessage);
+    private void checkEmailIsValid(String email) throws BusinessExeption {
+        /*the email regex-> ^ indicates the begining of the string
+        *   allows characters from a-z, A-Z, 0-9 and _+&*-
+        *   also allows concatenetion with a point
+        *   then needs a @ followed by valid caracters and a point with more valid characters
+        * */
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if(!email.matches(emailRegex)) {
+            throw new UserAuthentificationError(EMAIL_FORMAT_NOT_VALID);
         }
     }
 
