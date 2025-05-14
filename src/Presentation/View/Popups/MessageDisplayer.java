@@ -7,6 +7,6 @@ public class MessageDisplayer {
         JOptionPane.showMessageDialog(null, message ,"CryptoBro Error MSG" , JOptionPane.ERROR_MESSAGE);
     }
     public static void displayWarning(String message) {
-        JOptionPane.showMessageDialog(null, message ,"CryptoBro Error MSG" , JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, message ,"CryptoBro Quien Avisa no es traidor" , JOptionPane.WARNING_MESSAGE);
     }
 }
