@@ -15,11 +15,16 @@ public class LoadViewController {
 
     public void start() {
         loadFrame.setVisible(true);
-        load();
-        AccountViewController.getInstance().start();
+        try {
+            load();
+            AccountViewController.getInstance().start();
+        } catch (BusinessExeption e) {
+            MessageDisplayer.displayError(e.getMessage());
+        }
+        loadFrame.dispose();
     }
 
-    public void load() {
+    public void load() throws BusinessExeption {
         for (int i = 0; i <= 100; i++) {
             try {
                 Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
@@ -27,10 +32,7 @@ public class LoadViewController {
                 if (i == 50) {
                     MarketManager.getMarketManager().startMarket();
                 }
-            } catch (InterruptedException _) {
-            } catch (BusinessExeption e) {
-                MessageDisplayer.displayError(e.getMessage());
-            }
+            } catch (InterruptedException _) {}
         }
 
         loadFrame.dispose();
