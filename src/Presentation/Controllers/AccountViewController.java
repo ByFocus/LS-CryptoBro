@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.AccountManager;
 import Business.BusinessExceptions.BusinessExeption;
+import Business.BusinessExceptions.CryptoDeleted;
 import Business.Entities.User;
 import Business.EventType;
 import Presentation.View.Popups.*;
@@ -119,6 +120,11 @@ public class AccountViewController implements ActionListener, EventListener {
             else {
                 try  {
                     User user =AccountManager.getInstance().loginUser(userName, password);
+                    try {
+                        AccountManager.getInstance().checkCurrentUserWarning();
+                    } catch (CryptoDeleted e){
+                        MessageDisplayer.displayWarning(e.getMessage());
+                    }
                     startView.reset();
                     startView.dispose();
                     ApplicationController.getInstance().newUserApplication(user);

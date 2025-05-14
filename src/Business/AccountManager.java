@@ -13,7 +13,7 @@ public class AccountManager {
     private final String EXISTENT_MAIL_ERROR = "Bro, este correo ya está en uso!";
     private final String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
     private final String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
-    private final String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
+    private final String CRYPTO_DELETED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
     private final String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
     private final String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
     private final String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";
@@ -96,13 +96,17 @@ public class AccountManager {
         }
     }
 
-        public void checkCurrentUserWarning() {
+    public void checkCurrentUserWarning() {
         if (currentUser.getCryptoDeletedFlag()) {
             currentUser.setCryptoDeletedFlag(false);
             //TODO:se tiene que actualizar en la base de datos
-            UserDAO userDAO = new UserSQLDAO();
-            //userDA0.updateCryptoDeletedFlag(currentUser.getUsername(), false);
-            throw new CryptoDelated(CRYPTO_DELATED_ERROR);
+           try {
+               UserDAO userDAO = new UserSQLDAO();
+               userDAO.updateCryptoDeletedFlag(currentUser.getUsername(), false);
+               throw new CryptoDeleted(CRYPTO_DELETED_ERROR);
+           } catch (PersistanceException e) {
+               throw new DataPersistanceError(e.getMessage());
+           }
         }
     }
 

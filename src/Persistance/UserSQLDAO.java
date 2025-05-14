@@ -61,7 +61,9 @@ public class UserSQLDAO implements UserDAO{
                 String user_name = result.getString("user_name");
                 String email = result.getString("email");
                 String password = result.getString("password");
-                user = new User(user_name, email, password, 0, false); // Adjust constructor parameters if needed
+                Double balance = result.getDouble("balance");
+                Boolean cryptoDeleted = result.getBoolean("cryptoDeleted");
+                user = new User(user_name, email, password, balance, cryptoDeleted); // Adjust constructor parameters if needed
             } else {
                 // Throw custom exception if no data is found
                 throw new DBDataNotFound("No user found with username or email: " + value);
@@ -108,9 +110,10 @@ public class UserSQLDAO implements UserDAO{
             Connection conn = SQLConnector.getInstance().getConnection();
             try (PreparedStatement stmt = conn.prepareStatement(query)){
                 stmt.setDouble(1, newPurchaseValue + oldBalance);
-                stmt.setString(3, identifier);
                 stmt.setString(2, identifier);
+                stmt.setString(3, identifier);
             }catch (SQLException e){
+                //TODO: CAMBIAR ESTO!!
                 throw new RuntimeException("Error validating user credential", e);
             }
         }catch (DBDataNotFound e){
@@ -131,6 +134,22 @@ public class UserSQLDAO implements UserDAO{
             return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting user", e);
+        }
+    }
+
+    public void updateCryptoDeletedFlag(String identifier, boolean flagValue) throws PersistanceException{
+        String query = "UPDATE USER SET cryptoDeleted = ? WHERE user_name = ? OR email  = ?";
+        try {
+            Connection conn = SQLConnector.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, String.valueOf(flagValue));
+            stmt.setString(2, identifier);
+            stmt.setString(3, identifier);
+            //TODO: Tirar excepcion si no se ha afectado a ninguna columna
+            //int rowsAffected = stmt.executeUpdate();
+            //return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached(e.getMessage());
         }
     }
 }
