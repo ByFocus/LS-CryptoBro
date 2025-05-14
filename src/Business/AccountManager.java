@@ -10,6 +10,7 @@ import Persistance.UserSQLDAO;
 
 public class AccountManager {
     private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
+    private final String EXISTENT_MAIL_ERROR = "Bro, este correo ya está en uso!";
     private final String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
     private final String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
     private final String CRYPTO_DELATED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
@@ -19,6 +20,7 @@ public class AccountManager {
     private final String PASSWORD_NUMBERS_ERROR = "Compadre, sé que no has tocado un número en tu vida, pero tu contraseña debe contener números";
     private final String PASSWORD_LENGHT_INVALID = "La contraseña debe ser de al menos 8 carácteres de longitud. Ánimo, escribe un poco más, bro!";
     private final String EMAIL_FORMAT_NOT_VALID = "Brother, ni de fly eso es un mail, recuerda que luce así: corrige.tu@email.bro";
+    private final String TRYING_TO_REGISTER_ADMIN = "Hermano, ya sabes que ese nombre de usario está pillado ;)";
 
     private User currentUser;
     private static AccountManager instance;
@@ -35,11 +37,19 @@ public class AccountManager {
     }
 
     public void registerUser(String username, String mail, String password) throws BusinessExeption{
+        if (username.equalsIgnoreCase("admin")) {
+            throw new UserAuthentificationError(TRYING_TO_REGISTER_ADMIN);
+        }
         try{
             UserDAO userDAO = new UserSQLDAO();
             User newUser = userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
-        } catch (DBDataNotFound e) {
+        } catch (DBDataNotFound _) {
+            try {
+                UserDAO userDAO = new UserSQLDAO();
+                User newUser = userDAO.getUserByUsernameOrEmail(mail); //donde se crea esto?
+                throw new UserAuthentificationError(EXISTENT_MAIL_ERROR);
+            } catch (DBDataNotFound _) {
                 checkPasswordIsValid(password);
                 checkEmailIsValid(mail);
                 UserDAO userDAO = new UserSQLDAO();
@@ -51,9 +61,13 @@ public class AccountManager {
                 }
                 //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
-        catch (PersistanceException e) {
+            catch (PersistanceException e) {
+                throw new DataPersistanceError(e.getMessage());
+            }
+        } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
+
     }
 
     public User loginUser (String username, String password) throws BusinessExeption {

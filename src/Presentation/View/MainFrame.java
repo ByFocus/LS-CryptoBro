@@ -1,27 +1,37 @@
 package Presentation.View;
 
+import Business.Entities.User;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class MainFrame extends JFrame {
     private static final String userProfileImgURL = "imgs/follador.png";
     private static final String FRAME_TITLE = "CryptoBro!";
 
     private JPanel userPanel;
+    private JLabel userNameLabel;
+    private JLabel balanceCountLabel;
 
-    private JLabel userLabel;
-    private JLabel userBalance;
-    private JLabel balanceLabel;
-
-    public MainFrame() {
+    private MainFrame(String userName, String balance) {
         configureFrame();
-        getContentPane().add(configureProfile(), BorderLayout.NORTH);
+        userNameLabel = new JLabel(userName);
+        balanceCountLabel = new JLabel(balance);
+        userPanel = new JPanel();
     }
-
+    public static MainFrame newUserMainFrame(User user) {
+        MainFrame userFrame = new MainFrame(user.getUsername(), String.valueOf(user.getBalance()));
+        userFrame.getContentPane().add(userFrame.configureProfile(), BorderLayout.NORTH);
+        userFrame.configureTabs(false);
+        return userFrame;
+    }
+    public static MainFrame newAdminMainFrame() {
+        MainFrame adminFrame = new MainFrame("admin", "UNLIMITED");
+        adminFrame.getContentPane().add(adminFrame.configureProfile(), BorderLayout.NORTH);
+        adminFrame.configureTabs(true);
+        return adminFrame;
+    }
     private void configureFrame() {
         pack();
         setTitle(FRAME_TITLE);
@@ -39,9 +49,9 @@ public class MainFrame extends JFrame {
         JPanel walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
-        mainPanel.addTab("Wallet", walletPanel);
+        mainPanel.addTab("Market", walletPanel);
         if (admin) mainPanel.addTab("Admin", marketPanel);
-        else mainPanel.addTab("Market", marketPanel);
+        else mainPanel.addTab("Wallet", marketPanel);
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
@@ -61,7 +71,6 @@ public class MainFrame extends JFrame {
         balanceLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceLabel);
 
-        JLabel balanceCountLabel = new JLabel("0 ");
         balanceCountLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         balanceCountLabel.setForeground(Color.WHITE);
         balanceCountLabel.setVerticalAlignment(JLabel.CENTER);
@@ -74,10 +83,9 @@ public class MainFrame extends JFrame {
         userPanel = new JPanel();
         userPanel.setOpaque(false);
 
-        userLabel = new JLabel("USER ");
-        userLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        userLabel.setForeground(Color.WHITE);
-        userPanel.add(userLabel);
+        userNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        userNameLabel.setForeground(Color.WHITE);
+        userPanel.add(userNameLabel);
         Image userProfileImg = new ImageIcon(userProfileImgURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
         userPanel.add(userProfile);

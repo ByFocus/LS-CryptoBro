@@ -109,7 +109,7 @@ public class AccountViewController implements ActionListener, EventListener {
             if (userName.equalsIgnoreCase("admin")) {
                 try {
                     AccountManager.getInstance().adminAccess(password);
-                    ApplicationController.getInstance().userConfirmed(true);
+                    ApplicationController.getInstance().newAdminApplication();
                     startView.reset();
                     startView.dispose();
                 } catch (BusinessExeption e2) {
@@ -119,10 +119,9 @@ public class AccountViewController implements ActionListener, EventListener {
             else {
                 try  {
                     User user =AccountManager.getInstance().loginUser(userName, password);
-                    //TODO: SE TIENE QUE HACER ALGO CON ESTE USUARIO PARA PRINTAR SU INFO
                     startView.reset();
                     startView.dispose();
-                    ApplicationController.getInstance().userConfirmed(false);
+                    ApplicationController.getInstance().newUserApplication(user);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
                 }
