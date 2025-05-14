@@ -3,7 +3,7 @@ package Presentation.Controllers;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.MarketManager;
 import Presentation.View.LoadFrame;
-import Presentation.View.Popups.ErrorDisplayer;
+import Presentation.View.Popups.MessageDisplayer;
 
 public class LoadViewController {
     private final LoadFrame loadFrame;
@@ -29,7 +29,7 @@ public class LoadViewController {
                 }
             } catch (InterruptedException _) {
             } catch (BusinessExeption e) {
-                ErrorDisplayer.displayError(e.getMessage());
+                MessageDisplayer.displayError(e.getMessage());
             }
         }
 

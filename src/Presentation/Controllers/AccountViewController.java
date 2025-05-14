@@ -83,7 +83,7 @@ public class AccountViewController implements ActionListener, EventListener {
         String email = startView.getEmailInput();
 
         if(userName.isEmpty() || password.isEmpty() || email.isEmpty()) {
-            ErrorDisplayer.displayError(ERROR_EMPTY_FIELD);
+            MessageDisplayer.displayError(ERROR_EMPTY_FIELD);
         } else {
             try {
                 AccountManager am = AccountManager.getInstance();
@@ -95,14 +95,14 @@ public class AccountViewController implements ActionListener, EventListener {
                 //ApplicationController.getInstance().userConfirmed(false);
                 switchToRegisterView();
             } catch (BusinessExeption e1) {
-                ErrorDisplayer.displayError(e1.getMessage());
+                MessageDisplayer.displayError(e1.getMessage());
             }
         }
     }
 
     private void loginUser() {
         if(startView.getNameInput().isEmpty() || startView.getPasswordInput().isEmpty()) {
-            ErrorDisplayer.displayError(ERROR_EMPTY_FIELD);
+            MessageDisplayer.displayError(ERROR_EMPTY_FIELD);
         } else {
             String userName = startView.getNameInput();
             String password = startView.getPasswordInput();
@@ -113,7 +113,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     startView.reset();
                     startView.dispose();
                 } catch (BusinessExeption e2) {
-                    ErrorDisplayer.displayError(e2.getMessage());
+                    MessageDisplayer.displayError(e2.getMessage());
                 }
             }
             else {
@@ -124,7 +124,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     startView.dispose();
                     ApplicationController.getInstance().userConfirmed(false);
                 } catch (BusinessExeption e1) {
-                    ErrorDisplayer.displayError(e1.getMessage());
+                    MessageDisplayer.displayError(e1.getMessage());
                 }
             }
         }
