@@ -8,6 +8,7 @@ import Business.EventType;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,19 +16,18 @@ public class AccountViewController implements ActionListener, EventListener {
     private static AccountViewController instance;
 
     private final StartFrame startView;
-    private final UserPopUp userView;
+    private UserPopUp userView;
 
     private final String ERROR_EMPTY_FIELD = "Bro, te has dejado campos obligatorios sin rellenar";
     private final String REGISTER_SUCCESFUL = "Brother, ahora formas parte de la familia!";
+    private final String ERASE_CONFIRMATION = "Tete, seguro que te quieres ir? No seas un mileurista!";
+    private final String ERASE_CANCELATION = "Nos emocionamos (de forma varonil) que sigas con nosotros!";
     private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
     private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
 
     private AccountViewController() {
         startView = new StartFrame();
-        userView = new UserPopUp();
-
         startView.registerController(this);
-        userView.registerController(this);
     }
 
     public static AccountViewController getInstance() {
@@ -65,6 +65,10 @@ public class AccountViewController implements ActionListener, EventListener {
 
             case UserPopUp.USER_LOGOUT:
                 userLogOut();
+                break;
+
+            case UserPopUp.USER_ERASE_ACCOUNT:
+                userEraseAccount();
                 break;
         }
     }
@@ -117,8 +121,9 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newAdminApplication();
-                    loadAdminProfile();
+                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", true);
+                    userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", "BRO", true);
+                    userView.registerController(this);
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
                 }
@@ -134,8 +139,10 @@ public class AccountViewController implements ActionListener, EventListener {
                     }
 
                     startView.dispose();
-                    ApplicationController.getInstance().newUserApplication(user);
-                    loadUserProfile(user);
+
+                    ApplicationController.getInstance().newApplication(userName, String.valueOf(user.getBalance()), false);
+                    userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword(), false);
+                    userView.registerController(this);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
                 }
@@ -143,17 +150,21 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
-    private void loadUserProfile(User user) {
-
-    }
-
-    private void loadAdminProfile() {
-
-    }
     private void userLogOut() {
         userView.dispose();
         ApplicationController.getInstance().close();
         startView.setVisible(true);
+    }
+
+    private void userEraseAccount() {
+        int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            //TODO: BORRAR EL USUARIO DE VERDAD
+        }
+        else {
+            MessageDisplayer.displayInformativeMessage(ERASE_CANCELATION);
+        }
     }
     public void update(EventType event) {
 

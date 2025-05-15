@@ -25,9 +25,9 @@ public class ApplicationController implements EventListener{
         return instance;
     }
 
-    public void newUserApplication(User user) {
+    public void newApplication(String userName, String balance, boolean admin) {
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
-        appFrame = MainFrame.newUserMainFrame(user);
+        appFrame = MainFrame.configureApp(userName, balance, admin);
 
         appFrame.registerController().addMouseListener(new MouseAdapter() {
             @Override
@@ -39,25 +39,10 @@ public class ApplicationController implements EventListener{
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
-        appFrame.configureTabs(false);
+        appFrame.configureTabs(admin);
         appFrame.setVisible(true);
     }
 
-    public void newAdminApplication() {
-        // CAMBIAMOS LOS VALORES DEL APPFRAMe Y LO OTRO
-        appFrame = MainFrame.newAdminMainFrame();
-        appFrame.registerController().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                AccountViewController.getInstance().checkUserProfile();
-            }
-        });
-        MarketManager market = MarketManager.getMarketManager();
-        market.subscribe(this, EventType.USER_BALANCE_CHANGED);
-        market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
-        appFrame.configureTabs(true);
-        appFrame.setVisible(true);
-    }
     @Override
     public void update(EventType context) {
 

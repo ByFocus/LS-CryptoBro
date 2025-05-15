@@ -30,18 +30,13 @@ public class MainFrame extends JFrame {
         balanceCountLabel = new JLabel(balance);
         userPanel = new JPanel();
     }
-    public static MainFrame newUserMainFrame(User user) {
-        MainFrame userFrame = new MainFrame(user.getUsername(), String.valueOf(user.getBalance()));
+    public static MainFrame configureApp(String userName, String balance, boolean admin) {
+        MainFrame userFrame = new MainFrame(userName, balance);
         userFrame.getContentPane().add(userFrame.configureProfile(), BorderLayout.NORTH);
-        userFrame.configureTabs(false);
+        userFrame.configureTabs(admin);
         return userFrame;
     }
-    public static MainFrame newAdminMainFrame() {
-        MainFrame adminFrame = new MainFrame("admin", "UNLIMITED");
-        adminFrame.getContentPane().add(adminFrame.configureProfile(), BorderLayout.NORTH);
-        adminFrame.configureTabs(true);
-        return adminFrame;
-    }
+
     private void configureFrame() {
         pack();
         setTitle(FRAME_TITLE);
