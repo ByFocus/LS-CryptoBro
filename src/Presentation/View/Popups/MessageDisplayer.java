@@ -9,4 +9,7 @@ public class MessageDisplayer {
     public static void displayWarning(String message) {
         JOptionPane.showMessageDialog(null, message ,"CryptoBro Quien Avisa no es traidor" , JOptionPane.WARNING_MESSAGE);
     }
+    public static void displayInformativeMessage(String message) {
+        JOptionPane.showMessageDialog(null, message ,"Bro, debes saber esto" , JOptionPane.INFORMATION_MESSAGE);
+    }
 }

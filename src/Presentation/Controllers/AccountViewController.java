@@ -18,6 +18,7 @@ public class AccountViewController implements ActionListener, EventListener {
     private final UserPopUp userView;
 
     private final String ERROR_EMPTY_FIELD = "Bro, te has dejado campos obligatorios sin rellenar";
+    private final String REGISTER_SUCCESFUL = "Brother, ahora formas parte de la familia!";
     private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
     private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
 
@@ -94,7 +95,8 @@ public class AccountViewController implements ActionListener, EventListener {
                 //startView.reset();
                 //startView.dispose();
                 //ApplicationController.getInstance().userConfirmed(false);
-                switchToRegisterView();
+                switchToLoginView();
+                MessageDisplayer.displayInformativeMessage(REGISTER_SUCCESFUL);
             } catch (BusinessExeption e1) {
                 MessageDisplayer.displayError(e1.getMessage());
             }
