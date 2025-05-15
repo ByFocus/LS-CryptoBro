@@ -109,27 +109,33 @@ public class AccountViewController implements ActionListener, EventListener {
         } else {
             String userName = startView.getNameInput();
             String password = startView.getPasswordInput();
+
             if (userName.equalsIgnoreCase("admin")) {
                 try {
-                    AccountManager.getInstance().adminAccess(password);
-                    ApplicationController.getInstance().newAdminApplication();
                     startView.reset();
+                    AccountManager.getInstance().adminAccess(password);
+
                     startView.dispose();
+
+                    ApplicationController.getInstance().newAdminApplication();
+                    loadAdminProfile();
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
                 }
             }
             else {
                 try  {
+                    startView.reset();
                     User user =AccountManager.getInstance().loginUser(userName, password);
                     try {
                         AccountManager.getInstance().checkCurrentUserWarning();
                     } catch (CryptoDeleted e){
                         MessageDisplayer.displayWarning(e.getMessage());
                     }
-                    startView.reset();
+
                     startView.dispose();
                     ApplicationController.getInstance().newUserApplication(user);
+                    loadUserProfile(user);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
                 }
@@ -137,6 +143,13 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    private void loadUserProfile(User user) {
+
+    }
+
+    private void loadAdminProfile() {
+
+    }
     private void userLogOut() {
         userView.dispose();
         ApplicationController.getInstance().close();

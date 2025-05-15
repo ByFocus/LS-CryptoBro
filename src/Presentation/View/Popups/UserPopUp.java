@@ -1,23 +1,32 @@
 package Presentation.View.Popups;
 
+import Business.Entities.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class UserPopUp extends JFrame {
+    //Constantes con los eventos
     public static final String USER_LOGOUT = "USER_LOGOUT";
 
+    //Constantes con titulos, enlaces a fotos y textos
     private static final String FRAME_TITLE = "User Profile";
-    private static final String userProfileImgURL = "imgs/follador.png";
+    private static final String userProfileImgURL = "imgs/usuario.png";
+
+    //Atributos
+    private String userName;
+    private String userEmail;
+    private String userBalance;
 
     private JButton logOutButton;
-
+    private JButton deleteAccountButton;
     public UserPopUp() {
         configureFrame();
-        configureProfile();
+        configureUserProfile();
     }
 
-    private void configureProfile(){
+    private void configureUserProfile(){
         Container c = getContentPane();
         c.setBackground(new Color(244, 233, 205));
         c.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));

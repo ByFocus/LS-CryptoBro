@@ -44,7 +44,7 @@ public class ApplicationController implements EventListener{
     }
 
     public void newAdminApplication() {
-        // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
+        // CAMBIAMOS LOS VALORES DEL APPFRAMe Y LO OTRO
         appFrame = MainFrame.newAdminMainFrame();
         appFrame.registerController().addMouseListener(new MouseAdapter() {
             @Override

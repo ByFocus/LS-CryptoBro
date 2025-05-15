@@ -7,9 +7,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
-    private static final String userProfileImgURL = "imgs/follador.png";
-    private static final String FRAME_TITLE = "CryptoBro!";
+    //Constantes con titulos, enlaces a fots y textos
+    public static final String userProfileImgURL = "imgs/usuario.png";
+    public static final String FONT = "Arial";
 
+    public static final String FRAME_TITLE = "CryptoBro!";
+
+    public static final String WALLET_TAB_TITLE = "Wallet";
+    public static final String MARKET_TAB_TITLE = "Market";
+    public static final String ADMIN_TAB_TITLE = "Admin";
+
+    public static final String BALANCE_LABEL = "Balance: ";
+
+    //Atributos
     private JPanel userPanel;
     private JLabel userNameLabel;
     private JLabel balanceCountLabel;
@@ -49,9 +59,9 @@ public class MainFrame extends JFrame {
         JPanel walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
         JTabbedPane mainPanel = new JTabbedPane();
-        mainPanel.addTab("Market", walletPanel);
-        if (admin) mainPanel.addTab("Admin", marketPanel);
-        else mainPanel.addTab("Wallet", marketPanel);
+        mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
+        if (admin) mainPanel.addTab(ADMIN_TAB_TITLE, marketPanel);
+        else mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
@@ -65,13 +75,13 @@ public class MainFrame extends JFrame {
         JPanel balancePanel = new JPanel();
         balancePanel.setOpaque(false);
 
-        JLabel balanceLabel = new JLabel("Balance: ");
-        balanceLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel balanceLabel = new JLabel(BALANCE_LABEL);
+        balanceLabel.setFont(new Font(FONT, Font.BOLD, 18));
         balanceLabel.setForeground(Color.WHITE);
         balanceLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceLabel);
 
-        balanceCountLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        balanceCountLabel.setFont(new Font(FONT, Font.PLAIN, 18));
         balanceCountLabel.setForeground(Color.WHITE);
         balanceCountLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceCountLabel);
@@ -83,7 +93,7 @@ public class MainFrame extends JFrame {
         userPanel = new JPanel();
         userPanel.setOpaque(false);
 
-        userNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        userNameLabel.setFont(new Font(FONT, Font.BOLD, 18));
         userNameLabel.setForeground(Color.WHITE);
         userPanel.add(userNameLabel);
         Image userProfileImg = new ImageIcon(userProfileImgURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
