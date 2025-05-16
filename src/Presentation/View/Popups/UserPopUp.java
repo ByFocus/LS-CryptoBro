@@ -12,28 +12,30 @@ public class UserPopUp extends JFrame {
     public static final String USER_ERASE_ACCOUNT = "USER_ERASE_ACCOUNT";
 
     //Constantes con titulos, enlaces a fotos y textos
+    private static final String FONT_TITLE = "Serif";
+    private static final String FONT_TEXT = "Arial";
+
     private static final String FRAME_TITLE = "User Profile";
     private static final String userProfileImgURL = "imgs/usuario.png";
 
     //Atributos
-    private final String userName;
-    private final String userEmail;
-    private String userBalance;
-    private final String userPassword;
+    private final JLabel userNameLabel;
+    private final JLabel userEmailLabel;
+    private JLabel userBalanceLabel;
+    private final JLabel userPasswordLabel;
 
     private JButton logOutButton;
     private JButton deleteAccountButton;
 
     public UserPopUp(String userName, String userEmail, String userBalance, String userPassword, boolean admin) {
         configureFrame();
+
+        this.userNameLabel = new JLabel(userName);;
+        this.userBalanceLabel = new JLabel("Balance: " + userBalance);
+        this.userEmailLabel = new JLabel("Email: " + userEmail);
+        this.userPasswordLabel = new JLabel("Password: " + userPassword);;
+
         configureUserProfile();
-
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userBalance = userBalance;
-        this.userPassword = userPassword;
-
-
         confiureActions(admin);
     }
 
@@ -49,8 +51,7 @@ public class UserPopUp extends JFrame {
         userProfile.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userProfile);
 
-        JLabel userNameLabel = new JLabel(userName);
-        userNameLabel.setFont(new Font("Serif", Font.BOLD, 32));
+        userNameLabel.setFont(new Font(FONT_TITLE, Font.BOLD, 38));
         userNameLabel.setForeground(new Color(3, 25, 38));
         userNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userNameLabel);
@@ -66,20 +67,26 @@ public class UserPopUp extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        gbc.insets = new Insets(2, 10, 2, 10);
+        gbc.insets = new Insets(15, 10, 15, 10);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        JLabel info1 = new JLabel("Balance: " + userBalance);
-        textPanel.add(info1, gbc);
+
+        userBalanceLabel.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+
+        textPanel.add(userBalanceLabel, gbc);
 
         gbc.gridy = 1;
-        JLabel info2 = new JLabel("Email: " + userEmail);
-        textPanel.add(info2, gbc);
+
+        userEmailLabel.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+
+        textPanel.add(userEmailLabel, gbc);
 
         gbc.gridy = 2;
-        JLabel info3 = new JLabel("Password: " + userPassword);
-        textPanel.add(info3, gbc);
+
+        userPasswordLabel.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+
+        textPanel.add(userPasswordLabel, gbc);
 
         userInfoPanel.add(textPanel);
         c.add(userInfoPanel);
@@ -90,8 +97,8 @@ public class UserPopUp extends JFrame {
         JPanel actionPanel = new JPanel();
 
         logOutButton = new JButton("Log Out");
-        logOutButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
-        logOutButton.setBackground(new Color(3, 25, 38)); // Color similar al botón Login en createLoginPanel
+        logOutButton.setFont(new Font(FONT_TEXT, Font.ITALIC | Font.BOLD, 21));
+        logOutButton.setBackground(new Color(3, 25, 38));
         logOutButton.setForeground(Color.WHITE);
         logOutButton.setActionCommand(USER_LOGOUT);
 
@@ -101,8 +108,8 @@ public class UserPopUp extends JFrame {
 
         if (!admin) {
             deleteAccountButton = new JButton("Delete Account");
-            deleteAccountButton.setFont(new Font("Arial", Font.ITALIC | Font.BOLD, 21));
-            deleteAccountButton.setBackground(new Color(3, 25, 38));
+            deleteAccountButton.setFont(new Font(FONT_TEXT, Font.ITALIC | Font.BOLD, 21));
+            deleteAccountButton.setBackground(new Color(119, 172, 162));
             deleteAccountButton.setForeground(Color.WHITE);
             deleteAccountButton.setActionCommand(USER_ERASE_ACCOUNT);
 
@@ -124,5 +131,9 @@ public class UserPopUp extends JFrame {
     public void registerController(ActionListener listener) {
         logOutButton.addActionListener(listener);
         deleteAccountButton.addActionListener(listener);
+    }
+
+    public void setBalance(String balance){
+        userBalanceLabel.setText(balance);
     }
 }

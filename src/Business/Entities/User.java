@@ -28,6 +28,7 @@ public class User {
     public void setBalance(double balance) { this.balance = balance; }
     public void setCryptoDeletedFlag(boolean flag) { this.cryptoDeletedFlag = flag; }
 
+    public void setPassword(String password) { this.password = password; }
    /* public void addPurchase(Purchase purchase) {
         purchases.add(purchase);
     }

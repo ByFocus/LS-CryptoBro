@@ -1,8 +1,10 @@
 package Presentation.Controllers;
 
+import Business.CryptoManager;
 import Business.Entities.User;
 import Business.MarketManager;
 import Business.EventType;
+import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.MainFrame;
 
 import java.awt.event.MouseAdapter;
@@ -25,9 +27,12 @@ public class ApplicationController implements EventListener{
         return instance;
     }
 
-    public void newApplication(String userName, String balance, boolean admin) {
+    public void newApplication(String userName, String balance, boolean admin) throws PersistanceException {
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
-        appFrame = MainFrame.configureApp(userName, balance, admin);
+        appFrame = MainFrame.configureApp(userName, balance);
+
+        CryptoManager cryptoManager = CryptoManager.getCryptoManager();
+        appFrame.configureTabs(cryptoManager.getAllCryptos(), admin);
 
         appFrame.registerController().addMouseListener(new MouseAdapter() {
             @Override
@@ -39,27 +44,24 @@ public class ApplicationController implements EventListener{
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
-        appFrame.configureTabs(admin);
+
         appFrame.setVisible(true);
     }
 
     @Override
     public void update(EventType context) {
-
         switch (context) {
             case EventType.CRYPTO_PRICE_CHANGED:
                 break;
             case EventType.USER_BALANCE_CHANGED:
+                //TODO: Como saber cuanto es el nuevo balance si no tenemos referencia directa al usuario
+                //appFrame.setBalance()
+                //AccountViewController.getInstance().setBalance();
                 break;
             case EventType.NEW_HISTORICAL_VALUE:
                 //RSI_NewHistorical(): demana l'historic corresponent i li passa a la view, pq actualitzi el gràfic
                 break;
         }
-    }
-
-    public void userConfirmed(boolean admin) {
-        appFrame.configureTabs(admin);
-        appFrame.setVisible(true);
     }
 
     public void close() {

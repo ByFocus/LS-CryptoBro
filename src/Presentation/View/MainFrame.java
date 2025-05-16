@@ -1,10 +1,12 @@
 package Presentation.View;
 
+import Business.Entities.Crypto;
 import Business.Entities.User;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class MainFrame extends JFrame {
     //Constantes con titulos, enlaces a fots y textos
@@ -21,8 +23,12 @@ public class MainFrame extends JFrame {
 
     //Atributos
     private JPanel userPanel;
-    private JLabel userNameLabel;
-    private JLabel balanceCountLabel;
+    private final JLabel userNameLabel;
+    private final JLabel balanceCountLabel;
+
+    private JPanel walletPanel;
+    private MarketTab marketPanel;
+    private JPanel adminPanel;
 
     private MainFrame(String userName, String balance) {
         configureFrame();
@@ -30,10 +36,10 @@ public class MainFrame extends JFrame {
         balanceCountLabel = new JLabel(balance);
         userPanel = new JPanel();
     }
-    public static MainFrame configureApp(String userName, String balance, boolean admin) {
+
+    public static MainFrame configureApp(String userName, String balance) {
         MainFrame userFrame = new MainFrame(userName, balance);
         userFrame.getContentPane().add(userFrame.configureProfile(), BorderLayout.NORTH);
-        userFrame.configureTabs(admin);
         return userFrame;
     }
 
@@ -49,13 +55,19 @@ public class MainFrame extends JFrame {
     }
 
     //Pestañas con las acciones
-    public void configureTabs(boolean admin) {
-        JPanel marketPanel = new MarketTab();
-        JPanel walletPanel = new JPanel();
+    public void configureTabs(List<Crypto> cryptoList, boolean admin) {
+        marketPanel = new MarketTab(cryptoList);
+
+        walletPanel = new JPanel();
         walletPanel.setBackground(new Color(119, 172, 162));
+
+        adminPanel = new JPanel();
+        adminPanel.setBackground(new Color(3, 25, 38));
+
         JTabbedPane mainPanel = new JTabbedPane();
+
         mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
-        if (admin) mainPanel.addTab(ADMIN_TAB_TITLE, marketPanel);
+        if (admin) mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
         else mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -103,5 +115,13 @@ public class MainFrame extends JFrame {
 
     public JPanel registerController() {
         return userPanel;
+    }
+
+    public void refreshMarket(List<Crypto> cryptoList) {
+        marketPanel.loadCryptoData(cryptoList);
+    }
+
+    public void setBalance(String balance) {
+        balanceCountLabel.setText(balance);
     }
 }

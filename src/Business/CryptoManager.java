@@ -10,6 +10,17 @@ import Persistance.PersistanceExceptions.PersistanceException;
 import java.util.List;
 
 public class CryptoManager{
+    private static CryptoManager instance;
+
+    public CryptoManager(){
+    }
+
+    public static CryptoManager getCryptoManager() {
+        if (instance == null) {
+            instance = new CryptoManager();
+        }
+        return instance;
+    }
     public List<Crypto> getAllCryptos()  throws PersistanceException{
         CryptoDAO cryptoDA0 =new CryptoSQLDAO();
         return cryptoDA0.getAllCryptos();

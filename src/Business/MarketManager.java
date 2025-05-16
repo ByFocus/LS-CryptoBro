@@ -14,18 +14,18 @@ public class MarketManager extends Thread {
     private Map<EventType, List<EventListener>> listeners = new HashMap<>();
     private Map<String, Queue<Double>> hitoricalValues = new HashMap<>();
     private static MarketManager instance;
-    private static int MAX_SIZE = 120; // 10 min every 5 secs
-    private int TIME_TO_GET = 5000;
+    private final static int MAX_SIZE = 120; // 10 min every 5 secs
+    private final int TIME_TO_GET = 5000;
+
+    private MarketManager() {
+        createBotsAndHistorics();
+    }
 
     public static MarketManager getMarketManager() {
         if (instance == null) {
             instance = new MarketManager();
         }
         return instance;
-    }
-
-    private MarketManager() {
-        createBotsAndHistorics();
     }
 
     public void startMarket() {

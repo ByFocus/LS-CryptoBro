@@ -5,6 +5,7 @@ import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.CryptoDeleted;
 import Business.Entities.User;
 import Business.EventType;
+import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
 
@@ -42,6 +43,10 @@ public class AccountViewController implements ActionListener, EventListener {
 
     public void checkUserProfile() {
         userView.setVisible(true);
+    }
+
+    public void setBalance(String balance) {
+        userView.setBalance(balance);
     }
 
     @Override
@@ -127,6 +132,10 @@ public class AccountViewController implements ActionListener, EventListener {
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
                 }
+                //Esto me lo ha puesto solo el IntelIJ, se tiene q cambiar
+                catch (PersistanceException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else {
                 try  {
@@ -145,6 +154,8 @@ public class AccountViewController implements ActionListener, EventListener {
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
+                } catch (PersistanceException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -166,6 +177,7 @@ public class AccountViewController implements ActionListener, EventListener {
             MessageDisplayer.displayInformativeMessage(ERASE_CANCELATION);
         }
     }
+
     public void update(EventType event) {
 
     }
