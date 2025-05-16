@@ -17,6 +17,13 @@ public class MarketTab extends JPanel {
 
         CryptoTableModel modelo = new CryptoTableModel(cryptoList);
         cryptoTabla = new JTable(modelo);
+        cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cryptoTabla.setRowSelectionAllowed(true);
+        cryptoTabla.setRowHeight(50);
+        cryptoTabla.setBackground(new Color(70, 129, 137));
+        cryptoTabla.setForeground(new Color(255, 255, 255));
+        cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 16));
+
         JScrollPane scroll = new JScrollPane(cryptoTabla);
         add(scroll);
     }
