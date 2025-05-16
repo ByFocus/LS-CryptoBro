@@ -6,14 +6,18 @@ import Business.MarketManager;
 import Business.EventType;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.MainFrame;
+import Presentation.View.Popups.CryptoInfo;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ApplicationController implements EventListener{
     private static ApplicationController instance;
 
-    private  MainFrame appFrame;
+    private MainFrame appFrame;
+    private CryptoInfo cryptoInfoFrame;
 
     private ApplicationController() {
         //todo esto no, lo ponemos en lo otro
@@ -40,6 +44,25 @@ public class ApplicationController implements EventListener{
                 AccountViewController.getInstance().checkUserProfile();
             }
         });
+
+        //Controller wallet
+        if (admin) {
+
+        } else {
+            appFrame.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    if (!e.getValueIsAdjusting()) {
+                        int row = appFrame.getTable().getSelectedRow();
+                        if (row != -1) {
+                            //TODO: Buscar info Crypto sabiendo posicion en la base de datos (fila)
+                            cryptoInfoFrame = new CryptoInfo();
+                            cryptoInfoFrame.setVisible(true);
+                        }
+                    }
+                }
+            });
+        }
 
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);

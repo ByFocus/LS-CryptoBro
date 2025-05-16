@@ -4,6 +4,7 @@ import java.awt.*;
 
 public class LoadFrame extends JFrame {
     private static final String logoImgURL = "imgs/CryptoBro.png";
+    private static final String iconImgURL = "imgs/icono.png";
 
     private final JProgressBar progressBar;
 
@@ -11,8 +12,7 @@ public class LoadFrame extends JFrame {
         setLayout(new BorderLayout());
 
         // Agregar la imagen del logo
-        ImageIcon icono = new ImageIcon(logoImgURL);
-        JLabel logo = new JLabel(icono);
+        JLabel logo = new JLabel(new ImageIcon(logoImgURL));
         add(logo, BorderLayout.CENTER);
 
         // Crear la barra de progreso
@@ -23,7 +23,7 @@ public class LoadFrame extends JFrame {
         add(progressBar, BorderLayout.SOUTH);
 
         // Configurar tamaño y posición de la ventana
-        setIconImage(icono.getImage());
+        setIconImage(new ImageIcon(iconImgURL).getImage());
         setSize(560, 490);
         setLocationRelativeTo(null);
     }

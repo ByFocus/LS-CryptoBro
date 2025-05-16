@@ -12,6 +12,8 @@ public class StartFrame extends JFrame {
     public static final String SWITCH_REGISTER = "SWITCH_REGISTER";
 
     //Constantes con titulos, enlaces a fots y textos
+    public static final String iconImgURL = "imgs/icono.png";
+
     public static final String FONT = "Arial";
 
     public static final String LOGIN_VIEW = "LOGIN";
@@ -280,6 +282,7 @@ public class StartFrame extends JFrame {
     private void configureFrame() {
         setTitle(FRAME_TITLE);
         setSize(500, 700);
+        setIconImage(new ImageIcon(iconImgURL).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }

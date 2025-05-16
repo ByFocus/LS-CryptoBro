@@ -11,6 +11,8 @@ import java.util.List;
 public class MainFrame extends JFrame {
     //Constantes con titulos, enlaces a fots y textos
     public static final String userProfileImgURL = "imgs/usuario.png";
+    public static final String iconImgURL = "imgs/icono.png";
+
     public static final String FONT = "Arial";
 
     public static final String FRAME_TITLE = "CryptoBro!";
@@ -46,6 +48,7 @@ public class MainFrame extends JFrame {
     private void configureFrame() {
         pack();
         setTitle(FRAME_TITLE);
+        setIconImage(new ImageIcon(iconImgURL).getImage());
         setSize(1100, 700);
         getContentPane().setBackground(new Color(3, 25, 38));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,20 +96,18 @@ public class MainFrame extends JFrame {
         balanceCountLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceCountLabel);
 
-
         userMenu.add(balancePanel, BorderLayout.WEST);
 
         // Panel del Usuario
         userPanel = new JPanel();
-        userPanel.setOpaque(false);
+        userPanel.setBackground(new Color(244, 233, 205));
 
         userNameLabel.setFont(new Font(FONT, Font.BOLD, 18));
-        userNameLabel.setForeground(Color.WHITE);
+        userNameLabel.setForeground(new Color(3, 25, 38));
         userPanel.add(userNameLabel);
         Image userProfileImg = new ImageIcon(userProfileImgURL).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
         userPanel.add(userProfile);
-
         userMenu.add(userPanel, BorderLayout.EAST);
         userMenu.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
@@ -117,6 +118,9 @@ public class MainFrame extends JFrame {
         return userPanel;
     }
 
+    public JTable getTable() {
+        return marketPanel.getTablaData();
+    }
     public void refreshMarket(List<Crypto> cryptoList) {
         marketPanel.loadCryptoData(cryptoList);
     }
