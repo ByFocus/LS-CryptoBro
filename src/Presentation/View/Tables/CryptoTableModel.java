@@ -1,4 +1,4 @@
-package Presentation.View;
+package Presentation.View.Tables;
 
 import Business.Entities.Crypto;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
-    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Ganancia", "Maximo historico"};
+    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Varición %"};
 
     public CryptoTableModel(List<Crypto> cryptos) {
         this.cryptos = cryptos;
@@ -31,7 +31,7 @@ public class CryptoTableModel extends AbstractTableModel {
             case 1: return crypto.getCategory();
             case 2: return crypto.getCurrentPrice();
             case 3: return "-";
-            case 4: return "MUXO";
+            case 4: return "%";
             default: return null;
         }
     }

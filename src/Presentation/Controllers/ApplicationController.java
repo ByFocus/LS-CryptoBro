@@ -45,24 +45,28 @@ public class ApplicationController implements EventListener{
             }
         });
 
-        //Controller wallet
-        if (admin) {
-
-        } else {
-            appFrame.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (!e.getValueIsAdjusting()) {
-                        int row = appFrame.getTable().getSelectedRow();
-                        int column = appFrame.getTable().getSelectedColumn();
-                        if (row != -1 && column == 0) {
-                            //TODO: Buscar info Crypto sabiendo posicion en la base de datos (fila)
-                            cryptoInfoFrame = new CryptoInfo();
+        appFrame.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int row = appFrame.getTable().getSelectedRow();
+                    int column = appFrame.getTable().getSelectedColumn();
+                    if (row != -1 && column == 0) {
+                        try {
+                            cryptoInfoFrame = new CryptoInfo(cryptoManager.getCryptoByName(String.valueOf(appFrame.getTable().getValueAt(row, column))));
                             cryptoInfoFrame.setVisible(true);
+                        } catch (PersistanceException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
                 }
-            });
+            }
+        });
+
+        if (admin) {
+
+        } else {
+            //Controller wallet
         }
 
         MarketManager market = MarketManager.getMarketManager();
