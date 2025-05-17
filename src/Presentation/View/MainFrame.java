@@ -2,6 +2,7 @@ package Presentation.View;
 
 import Business.Entities.Crypto;
 import Business.Entities.User;
+import Presentation.Controllers.AdminTabController;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
@@ -73,7 +74,7 @@ public class MainFrame extends JFrame {
 
         mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
         if (admin) {
-            adminPanel = new AdminTab();
+            adminPanel = AdminTabController.getInstance().getAdminTab();
             adminPanel.setBackground(new Color(3, 25, 38));
             mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
         }

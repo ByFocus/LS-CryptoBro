@@ -3,6 +3,7 @@ package Presentation.View.Handlers;
 import Presentation.View.Tabs.AdminTab;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileDrooperHandler extends TransferHandler {
+
     //ara només acceptem fitxers, no imatges o altres
     @Override
     public boolean canImport(TransferSupport support) {
@@ -37,8 +39,11 @@ public class FileDrooperHandler extends TransferHandler {
         }
 
         // obtenim el component pare
-        JComponent component = (JComponent) support.getComponent();
-        if (component instanceof AdminTab) {
+        Component component = (JComponent) support.getComponent();
+        while (component != null && !(component instanceof AdminTab)) {
+            component = component.getParent();
+        }
+        if (component != null) {
             AdminTab tab = (AdminTab) component;
             tab.handleFilesDrop(files);
         }

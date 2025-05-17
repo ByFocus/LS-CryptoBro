@@ -15,9 +15,6 @@ public class CryptoSQLDAO implements CryptoDAO{
     private final String CRYPTO_FAILED = "Failed to create crypto entry";
 
     public boolean createCrypto(Crypto crypto) throws PersistanceException {
-        if(crypto == null ){
-            throw new IllegalArgumentException("Crypto object must be not null");
-        }
 
         String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility, cryptoDeleted) VALUES (?, ?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
 
@@ -345,6 +342,29 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
 
         return categories;
+    }
+
+    public String addCryptosFromFile() throws PersistanceException{
+        List<Crypto> cryptos = new ArrayList<>();
+        int cryptoCount = 0;
+        StringBuilder log = new StringBuilder();
+        StringBuilder error = new StringBuilder();
+        for (Crypto crypto: cryptos) {
+            try {
+                getCryptoByName(crypto.getName());
+                error.append(crypto.getName() + " ya existe. ");
+            }
+            catch (DBDataNotFound _) {
+                // si no es troba está bé;
+                createCrypto(crypto);
+                cryptoCount ++;
+            }
+        }
+        log.append("Se han añadido " + cryptoCount + " cryptos.\n");
+        if (!error.isEmpty()) {
+            log.append("\t[" + error.toString() + ")]");
+        }
+        return log.toString();
     }
 
 }

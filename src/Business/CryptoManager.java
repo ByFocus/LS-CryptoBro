@@ -7,6 +7,7 @@ import Persistance.CryptoDAO;
 import Persistance.CryptoSQLDAO;
 import Persistance.PersistanceExceptions.PersistanceException;
 
+import java.io.File;
 import java.util.List;
 
 public class CryptoManager{
@@ -57,5 +58,13 @@ public class CryptoManager{
 
     public void deleteCrypto(String cryptoName) {
 
+    }
+
+    public String addCryptoFromFile(File file)  throws BusinessExeption {
+        try {
+            return new CryptoSQLDAO().addCryptosFromFile();
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 }
