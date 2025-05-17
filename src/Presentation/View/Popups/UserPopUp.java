@@ -130,7 +130,9 @@ public class UserPopUp extends JFrame {
 
     public void registerController(ActionListener listener) {
         logOutButton.addActionListener(listener);
-        deleteAccountButton.addActionListener(listener);
+        if (deleteAccountButton != null) {
+            deleteAccountButton.addActionListener(listener);
+        }
     }
 
     public void setBalance(String balance){
