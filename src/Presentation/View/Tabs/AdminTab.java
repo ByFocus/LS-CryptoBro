@@ -54,20 +54,6 @@ public class AdminTab extends JPanel {
         }
     }
 
-    // solo se tira un tipo de evento, no hace falta pasarle eventType, además, solo puede haber un subscriptor
-    public void subscribe(EventListener newListener) {
-        listener = newListener;
-    }
-
-    public void unsubscribe() {
-        listener = null;
-    }
-
-    private void notifyEvent() {
-        if (listener != null) {
-            listener.update(EventType.FILES_DROPPED);
-        }
-    }
 
     public List<File> getFilesDropped() {
         return lastFilesUpload;
