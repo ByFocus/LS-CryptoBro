@@ -62,6 +62,12 @@ public class MainFrame extends JFrame {
     public void configureTabs(List<Crypto> cryptoList, boolean admin) {
         marketPanel = new MarketTab(cryptoList);
 
+        //MODIFICACIONES DE LAS CARACTERISTICAS DE UN TABBED PANE
+        UIManager.put("TabbedPane.tabInsets", new Insets(5, 10, 5, 10));
+        UIManager.put("TabbedPane.tabAreaInsets", new Insets(0, 0, 0, 0));
+        UIManager.put("TabbedPane.selectedLabelShift", 0);
+        UIManager.put("TabbedPane.labelShift", 0);
+        UIManager.put("TabbedPane.tabAreaBackground", Color.LIGHT_GRAY);
 
         JTabbedPane mainPanel = new JTabbedPane();
 
