@@ -34,8 +34,7 @@ public class AdminTabController implements ActionListener, EventListener {
     @Override
     public void update(EventType context) {
         switch (context) {
-            case FILES_DROPPED:
-
+            default:
                 break;
 
         }
