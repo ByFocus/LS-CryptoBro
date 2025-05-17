@@ -29,7 +29,7 @@ public class MainFrame extends JFrame {
     private final JLabel userNameLabel;
     private final JLabel balanceCountLabel;
 
-    private JPanel walletPanel;
+    private WalletTab walletPanel;
     private MarketTab marketPanel;
     private AdminTab adminPanel;
 
@@ -68,7 +68,7 @@ public class MainFrame extends JFrame {
         UIManager.put("TabbedPane.tabAreaInsets", new Insets(0, 0, 0, 0));
         UIManager.put("TabbedPane.selectedLabelShift", 0);
         UIManager.put("TabbedPane.labelShift", 0);
-        UIManager.put("TabbedPane.tabAreaBackground", Color.LIGHT_GRAY);
+        UIManager.put("TabbedPane.tabAreaBackground", new Color(28, 36, 52));
 
         JTabbedPane mainPanel = new JTabbedPane();
 
@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
             mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
         }
         else {
-            walletPanel = new JPanel();
+            walletPanel = new WalletTab();
             walletPanel.setBackground(new Color(119, 172, 162));
             mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
         }

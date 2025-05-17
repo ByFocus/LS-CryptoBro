@@ -1,8 +1,8 @@
 package Presentation.View.Tabs;
 
 import Business.Entities.Crypto;
-import Presentation.View.CryptoNameRender;
-import Presentation.View.CryptoTableModel;
+import Presentation.View.Tables.CryptoNameRender;
+import Presentation.View.Tables.CryptoTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +26,7 @@ public class MarketTab extends JPanel {
 
         cryptoTabla.setRowSelectionAllowed(false);
         cryptoTabla.setCellSelectionEnabled(true);
+
         cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scroll = new JScrollPane(cryptoTabla);

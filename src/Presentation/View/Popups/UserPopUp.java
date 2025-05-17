@@ -12,11 +12,11 @@ public class UserPopUp extends JFrame {
     public static final String USER_ERASE_ACCOUNT = "USER_ERASE_ACCOUNT";
 
     //Constantes con titulos, enlaces a fotos y textos
-    private static final String FONT_TITLE = "Serif";
-    private static final String FONT_TEXT = "Arial";
+    public static final String FONT_TITLE = "Serif";
+    public static final String FONT_TEXT = "Arial";
 
-    private static final String FRAME_TITLE = "User Profile";
-    private static final String userProfileImgURL = "imgs/usuario.png";
+    public static final String FRAME_TITLE = "User Profile";
+    public static final String userProfileImgURL = "imgs/usuario.png";
 
     //Atributos
     private final JLabel userNameLabel;
