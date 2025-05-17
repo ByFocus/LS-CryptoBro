@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
-    private final String[] columnas = {"Nombre", "Precio Actual", "Categoría"};
+    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Ganancia", "Maximo historico"};
 
     public CryptoTableModel(List<Crypto> cryptos) {
         this.cryptos = cryptos;
@@ -28,8 +28,10 @@ public class CryptoTableModel extends AbstractTableModel {
         Crypto crypto = cryptos.get(rowIndex);
         switch (columnIndex) {
             case 0: return crypto.getName();
-            case 1: return crypto.getCurrentPrice();
-            case 2: return crypto.getCategory();
+            case 1: return crypto.getCategory();
+            case 2: return crypto.getCurrentPrice();
+            case 3: return "-";
+            case 4: return "MUXO";
             default: return null;
         }
     }

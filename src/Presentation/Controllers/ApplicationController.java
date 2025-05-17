@@ -54,7 +54,8 @@ public class ApplicationController implements EventListener{
                 public void valueChanged(ListSelectionEvent e) {
                     if (!e.getValueIsAdjusting()) {
                         int row = appFrame.getTable().getSelectedRow();
-                        if (row != -1) {
+                        int column = appFrame.getTable().getSelectedColumn();
+                        if (row != -1 && column == 0) {
                             //TODO: Buscar info Crypto sabiendo posicion en la base de datos (fila)
                             cryptoInfoFrame = new CryptoInfo();
                             cryptoInfoFrame.setVisible(true);

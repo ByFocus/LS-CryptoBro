@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
 
     private JPanel walletPanel;
     private MarketTab marketPanel;
-    private JPanel adminPanel;
+    private AdminTab adminPanel;
 
     public MainFrame(String userName, String balance) {
         configureFrame();
@@ -81,7 +81,7 @@ public class MainFrame extends JFrame {
         else {
             walletPanel = new JPanel();
             walletPanel.setBackground(new Color(119, 172, 162));
-            mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
+            mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
         }
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);

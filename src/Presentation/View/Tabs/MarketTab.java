@@ -1,10 +1,10 @@
 package Presentation.View.Tabs;
 
 import Business.Entities.Crypto;
+import Presentation.View.CryptoNameRender;
 import Presentation.View.CryptoTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
@@ -17,12 +17,16 @@ public class MarketTab extends JPanel {
 
         CryptoTableModel modelo = new CryptoTableModel(cryptoList);
         cryptoTabla = new JTable(modelo);
-        cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        cryptoTabla.setRowSelectionAllowed(true);
+
         cryptoTabla.setRowHeight(75);
         cryptoTabla.setBackground(new Color(70, 129, 137));
         cryptoTabla.setForeground(new Color(255, 255, 255));
         cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
+        cryptoTabla.getColumnModel().getColumn(0).setCellRenderer(new CryptoNameRender());
+
+        cryptoTabla.setRowSelectionAllowed(false);
+        cryptoTabla.setCellSelectionEnabled(true);
+        cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scroll = new JScrollPane(cryptoTabla);
         add(scroll);
