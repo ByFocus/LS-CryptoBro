@@ -5,9 +5,11 @@ import java.awt.*;
 
 public class ImageBackgroundPanel extends JPanel {
     private Image backgroundImage;
+    private float alpha; // 0.0 full transparent, 1.0 opaco
 
-    public ImageBackgroundPanel(Image image) {
+    public ImageBackgroundPanel(Image image, float alpha) {
         this.backgroundImage = image;
+        this.alpha = alpha;
         setLayout(new BorderLayout());
     }
 
@@ -21,7 +23,6 @@ public class ImageBackgroundPanel extends JPanel {
         super.paintComponent(g);
         if (backgroundImage != null) {
             Graphics2D g2d = (Graphics2D) g.create();
-            float alpha = 0.5f; // 0.0f = fully transparent, 1.0f = fully opaque
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
             g2d.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             g2d.dispose();

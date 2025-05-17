@@ -77,17 +77,19 @@ public class UserSQLDAO implements UserDAO{
     }
 
     //TODO: ESTA FUNCIÓN PARA QUÉ??
-    public boolean validateAdmin(String password) throws PersistanceException{
-        String query = "SELECT * FROM user WHERE role = 'admin' AND password = '" + password + "';";
-        ResultSet result = SQLConnector.getInstance().selectQuery(query);
+    public boolean validateAdmin(String password) throws PersistanceException {
+        String query = "SELECT * FROM user WHERE role = ? AND password = ?";
 
-        try {
+        try (PreparedStatement stmt = SQLConnector.getInstance().getConnection().prepareStatement(query)) {
+            stmt.setString(1, "admin");
+            stmt.setString(2, password);
+            ResultSet result = stmt.executeQuery();
             return result.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBConnectionNotReached("Error accessing the database" + e.getMessage());
         }
-        return false;
     }
+
 
     public boolean validateUser(String identifier, String password) throws PersistanceException{
         String query = "SELECT 1 FROM user WHERE (user_name = ? OR email = ?) AND password = ?";
@@ -100,7 +102,7 @@ public class UserSQLDAO implements UserDAO{
                 return rs.next();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error validating user credential", e);
+            throw new DBDataNotFound("Error validating user credential " + e.getMessage());
         }
     }
 
@@ -114,8 +116,7 @@ public class UserSQLDAO implements UserDAO{
                 stmt.setString(2, identifier);
                 stmt.setString(3, identifier);
             }catch (SQLException e){
-                //TODO: CAMBIAR ESTO!!
-                throw new RuntimeException("Error validating user credential", e);
+                throw new DBDataNotFound("Error validating user credential " + e.getMessage());
             }
         }catch (DBDataNotFound e){
             throw new DBDataNotFound("Error user not found");
@@ -134,7 +135,7 @@ public class UserSQLDAO implements UserDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting user", e);
+            throw new DBConnectionNotReached("Error deleting user " + e.getMessage());
         }
     }
 
