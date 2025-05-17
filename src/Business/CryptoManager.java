@@ -22,14 +22,22 @@ public class CryptoManager{
         }
         return instance;
     }
-    public List<Crypto> getAllCryptos()  throws PersistanceException{
-        CryptoDAO cryptoDA0 =new CryptoSQLDAO();
-        return cryptoDA0.getAllCryptos();
+    public List<Crypto> getAllCryptos()  throws BusinessExeption{
+        try {
+            CryptoDAO cryptoDA0 = new CryptoSQLDAO();
+            return cryptoDA0.getAllCryptos();
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
-    public Crypto getCryptoByName(String cryptoName)  throws PersistanceException{
-        CryptoDAO cryptoDA0 =new CryptoSQLDAO();
-        return cryptoDA0.getCryptoByName(cryptoName);
+    public Crypto getCryptoByName(String cryptoName)  throws BusinessExeption{
+        try {
+            CryptoDAO cryptoDA0 =new CryptoSQLDAO();
+            return cryptoDA0.getCryptoByName(cryptoName);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
     public void botMakeTransaction(String cryptoName, boolean buy){
@@ -77,5 +85,13 @@ public class CryptoManager{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    public String[] getAllCryptoNames() throws BusinessExeption{
+        List<Crypto> cryptos = getAllCryptos();
+        String[] cryptoNames = new String[cryptos.size()];
+        for (int i = 0; i < cryptos.size(); i++) {
+            cryptoNames[i] = cryptos.get(i).getName();
+        }
+        return cryptoNames;
     }
 }

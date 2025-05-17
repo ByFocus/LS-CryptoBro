@@ -1,5 +1,6 @@
 package Business.Entities;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.DataPersistanceError;
 import Business.CryptoManager;
 import Business.EventType;
@@ -45,7 +46,7 @@ public class Market extends Thread{
                 Thread.sleep(TIME_TO_GET);
             } catch (InterruptedException _) {
                 //
-            } catch (PersistanceException e) {
+            } catch (BusinessExeption e) {
                 throw new DataPersistanceError(e.getMessage());
             }
 

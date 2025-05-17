@@ -1,5 +1,6 @@
 package Business;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.DataPersistanceError;
 import Business.Entities.Bot;
 import Business.Entities.Crypto;
@@ -53,7 +54,7 @@ public class MarketManager  {
                 cryptoNames.add(crypto.getName());
             }
             market = new Market(bots, cryptoNames);
-        }catch (PersistanceException e) {
+        }catch (BusinessExeption e) {
             throw new DataPersistanceError(e.getMessage());
         }
     }
