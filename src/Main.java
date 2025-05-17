@@ -9,6 +9,7 @@ public class Main {
 
         loadView.start();
 
+
     }
 
     //Q&A
