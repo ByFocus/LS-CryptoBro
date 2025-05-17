@@ -17,7 +17,7 @@ public class UserSQLDAO implements UserDAO{
             throw new IllegalArgumentException("User and its fields must not be null");
         }
 
-        String query = "INSERT INTO user (user_name, email, password, balance) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO user (user_name, email, password, balance, cryptoDeleted) VALUES (?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -32,6 +32,7 @@ public class UserSQLDAO implements UserDAO{
             stmt.setString(2, user.getMail());
             stmt.setString(3, user.getPassword());
             stmt.setDouble(4, user.getBalance());
+            stmt.setBoolean(5, false);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
