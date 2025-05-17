@@ -3,6 +3,7 @@ package Persistance;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
@@ -31,13 +32,12 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error adding purchase: " + e.getMessage());
-            throw new RuntimeException("Failed to add purchase to database", e);
+            throw new DBConnectionNotReached("Failed to add purchase to database " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing statement: " + e.getMessage());
+                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
@@ -68,14 +68,13 @@ public class PurchaseSQLDAO implements PurchaseDAO{
                 usernames.add(rs.getString("user_name"));
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching usernames: " + e.getMessage());
-            throw new RuntimeException("Failed to get usernames by crypto name", e);
+            throw new DBConnectionNotReached("Failed to get usernames by crypto name " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
@@ -104,7 +103,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to get purchases by user name", e);
+            throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
         }
 
         return purchases;
