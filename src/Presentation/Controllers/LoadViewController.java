@@ -39,7 +39,8 @@ public class LoadViewController {
                 Thread.sleep(30); // Simula tiempo de carga (ajusta según lo necesario)
                 loadFrame.setProgress(i);
                 if (i == loadMarket) {
-                    MarketManager.getMarketManager().startMarket();
+                    //crea l'instancia e inicia el mercat
+                    MarketManager.getMarketManager();
                 }
             } catch (InterruptedException _) {}
         }

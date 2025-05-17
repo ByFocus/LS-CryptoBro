@@ -188,5 +188,7 @@ public class AdminTab extends JPanel {
     }
     public void resetTab() {
         filesNamesArea.setText("");
+        howManyFilesLabel.setText("0" + NUMB_FILES_TEXT_PLR);
+        lastFilesUpload = null;
     }
 }

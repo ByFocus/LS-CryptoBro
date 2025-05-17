@@ -18,7 +18,7 @@ public class MarketManager extends Thread {
     private final int TIME_TO_GET = 5000;
 
     private MarketManager() {
-        createBotsAndHistorics();
+        this.startMarket();
     }
 
     public static MarketManager getMarketManager() {
@@ -27,9 +27,9 @@ public class MarketManager extends Thread {
         }
         return instance;
     }
-
-    public void startMarket() {
+    private void startMarket() {
         if (!isAlive()) {
+            createBotsAndHistorics();
             for (Bot bot : bots) {
                 bot.start();
             }
@@ -42,6 +42,7 @@ public class MarketManager extends Thread {
             bot.kill();
         }
         this.kill();
+        instance = null;
     }
 
     private void createBotsAndHistorics() {

@@ -6,6 +6,7 @@ import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CryptoSQLDAO implements CryptoDAO{
 
     public boolean createCrypto(Crypto crypto) throws PersistanceException {
 
-        String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility, cryptoDeleted) VALUES (?, ?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
+        String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility) VALUES (?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -33,12 +34,11 @@ public class CryptoSQLDAO implements CryptoDAO{
             stmt.setDouble(3, crypto.getCurrentPrice());
             stmt.setString(4, crypto.getCategory());
             stmt.setInt(5, crypto.getVolatility());
-            stmt.setBoolean(6, false); // Assuming you want to set cryptoDeleted as false initially
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            throw new ConfigurationFileError(CRYPTO_FAILED);
+            throw new DBConnectionNotReached(e.getMessage());
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         } finally {
@@ -259,6 +259,9 @@ public class CryptoSQLDAO implements CryptoDAO{
                 int volatility = rs.getInt("volatility");
 
                 crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
+            } else {
+                //AQUESTA EXCEPCIÓ ESTÀ BÉ
+                throw new DBDataNotFound("No crypto found with name: " + name);
             }
         } catch (SQLException e) {
             System.err.println("Error fetching crypto by name: " + e.getMessage());
@@ -344,8 +347,8 @@ public class CryptoSQLDAO implements CryptoDAO{
         return categories;
     }
 
-    public String addCryptosFromFile() throws PersistanceException{
-        List<Crypto> cryptos = new ArrayList<>();
+    public String addCryptosFromFile(File file) throws PersistanceException{
+        List<Crypto> cryptos = new CryptoFileReadingJSONDAO().readCryptoFromFile(file);
         int cryptoCount = 0;
         StringBuilder log = new StringBuilder();
         StringBuilder error = new StringBuilder();
@@ -357,12 +360,12 @@ public class CryptoSQLDAO implements CryptoDAO{
             catch (DBDataNotFound _) {
                 // si no es troba está bé;
                 createCrypto(crypto);
-                cryptoCount ++;
+                cryptoCount++;
             }
         }
         log.append("Se han añadido " + cryptoCount + " cryptos.\n");
         if (!error.isEmpty()) {
-            log.append("\t[" + error.toString() + ")]");
+            log.append("\t\t[" + error.toString() + "]");
         }
         return log.toString();
     }

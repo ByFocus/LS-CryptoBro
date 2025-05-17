@@ -1,9 +1,8 @@
 package Presentation.Controllers;
 
-import Business.BusinessExceptions.BusinessExeption;
-import Business.BusinessExceptions.DataPersistanceError;
 import Business.CryptoManager;
 import Business.EventType;
+import Business.MarketManager;
 import Presentation.View.Popups.MessageDisplayer;
 import Presentation.View.Tabs.AdminTab;
 
@@ -49,19 +48,11 @@ public class AdminTabController implements ActionListener, EventListener {
             case AdminTab.ADD_CRYPTO_COMMAND:
                 List<File> files = adminTab.getFilesDropped();
                 if(files != null && !files.isEmpty()) {
-                    adminTab.resetTab();
                     CryptoManager cryptoManager = new CryptoManager();
-                    StringBuilder log = new StringBuilder();
-                    for (int i = 0; i < files.size(); i++) {
-                        log.append("File #" + i+": ");
-                        try {
-                            log.append(cryptoManager.addCryptoFromFile(files.get(i)));
-                        } catch (BusinessExeption err) {
-                            log.append(err.getMessage());
-                        }
-                    }
-                    MessageDisplayer.displayInformativeMessage(log.toString());
-
+                    MessageDisplayer.displayInformativeMessage(cryptoManager.addCryptoFromFiles(files));
+                    MarketManager.getMarketManager().stopMarket();
+                    MarketManager.getMarketManager();
+                    adminTab.resetTab();
                 }else {
                     MessageDisplayer.displayError("Brother, no has añadido ningun fichebro!");
 

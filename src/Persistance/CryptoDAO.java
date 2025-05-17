@@ -4,6 +4,7 @@ import Business.Entities.Crypto;
 import Persistance.PersistanceExceptions.ConfigurationFileError;
 import Persistance.PersistanceExceptions.PersistanceException;
 
+import java.io.File;
 import java.util.List;
 
 public interface CryptoDAO {
@@ -17,5 +18,5 @@ public interface CryptoDAO {
     List<String> getCategories () throws PersistanceException;
     public void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException;
 
-    String addCryptosFromFile() throws PersistanceException;
+    String addCryptosFromFile(File file) throws PersistanceException;
 }

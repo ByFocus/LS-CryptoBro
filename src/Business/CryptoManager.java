@@ -60,11 +60,22 @@ public class CryptoManager{
 
     }
 
-    public String addCryptoFromFile(File file)  throws BusinessExeption {
+    public String addCryptoFromFiles(List<File> files)  throws BusinessExeption {
         try {
-            return new CryptoSQLDAO().addCryptosFromFile();
-        } catch (PersistanceException e) {
-            throw new DataPersistanceError(e.getMessage());
+            CryptoDAO cryptoDAO = new CryptoSQLDAO();
+            StringBuilder log = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                log.append("\nFile #" + (i + 1) + ": " + files.get(i).getName()+"\n");
+                try {
+                    log.append(cryptoDAO.addCryptosFromFile(files.get(i)));
+                } catch (PersistanceException err) {
+                    log.append(err.getMessage());
+                }
+                log.append("\n");
+            }
+            return log.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
