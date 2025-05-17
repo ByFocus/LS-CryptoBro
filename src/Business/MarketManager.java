@@ -6,63 +6,63 @@ import Business.Entities.Crypto;
 
 import java.util.*;
 
+import Business.Entities.Market;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.Controllers.EventListener;
 
-public class MarketManager extends Thread {
-    private List<Bot> bots;
+public class MarketManager  {
+    private Market market;
     private Map<EventType, List<EventListener>> listeners = new HashMap<>();
-    private Map<String, Queue<Double>> hitoricalValues = new HashMap<>();
+
     private static MarketManager instance;
-    private final static int MAX_SIZE = 120; // 10 min every 5 secs
-    private final int TIME_TO_GET = 5000;
 
     private MarketManager() {
-        this.startMarket();
     }
 
-    public static MarketManager getMarketManager() {
+    public static synchronized MarketManager getMarketManager() {
         if (instance == null) {
             instance = new MarketManager();
         }
         return instance;
     }
-    private void startMarket() {
-        if (!isAlive()) {
-            createBotsAndHistorics();
-            for (Bot bot : bots) {
-                bot.start();
-            }
-            this.start();
+    private synchronized void startMarket() {
+        if (market == null || !market.isAlive()) {
+            createMarket();
+            market.start();
         }
     }
 
-    public void stopMarket() {
-        for (Bot bot : bots) {
-            bot.kill();
+    public synchronized void stopMarket() {
+        if (market != null) {
+            market.kill();
+            market = null;
         }
-        this.kill();
-        instance = null;
     }
 
-    private void createBotsAndHistorics() {
+    public synchronized void restartMarket() {
+        stopMarket();
+        startMarket();
+    }
+    private void createMarket() {
         try {
-            bots = new ArrayList<>();
+            List<Bot> bots = new ArrayList<>();
             List<Crypto> cryptoList = new CryptoManager().getAllCryptos();
+            List<String> cryptoNames = new ArrayList<>();
             for (Crypto crypto : cryptoList) {
                 bots.add(new Bot(crypto));
-                hitoricalValues.put(crypto.getName(), new LinkedList<>());
+                cryptoNames.add(crypto.getName());
             }
+            market = new Market(bots, cryptoNames);
         }catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
     }
 
     public Queue<Double> getHistoricalValuesByCryptoName(String cryptoName) {
-        return hitoricalValues.get(cryptoName);
+        return market.getHistoricalFromCrypto(cryptoName);
     }
 
-    public void notify(EventType event) {
+    public synchronized void notify(EventType event) {
         List<EventListener> subscribers = listeners.get(event);
         if (subscribers != null) {
             for (EventListener eventListener : subscribers) {
@@ -71,42 +71,18 @@ public class MarketManager extends Thread {
         }
     }
 
-    public void subscribe(EventListener eventListener, EventType event) {
+    public synchronized void subscribe(EventListener eventListener, EventType event) {
         List<EventListener> listSubscribers = listeners.get(event);
         if (listSubscribers == null) {
             listSubscribers = new ArrayList<>();
+            listeners.put(event, listSubscribers);
         }
         listSubscribers.add(eventListener);
     }
-    public void unsubscribe(EventListener eventListener, EventType event) {
+    public synchronized void unsubscribe(EventListener eventListener, EventType event) {
         listeners.get(event).remove(eventListener);
     }
 
 
-    @Override
-    public void run() {
-        while (isAlive()) { //TODO: A lo mejor es preferible tener un booleano
-            try {
-                CryptoManager c = new CryptoManager();
-                for (Map.Entry<String, Queue<Double>> entry : hitoricalValues.entrySet()) {
-                    Queue<Double> queue = entry.getValue();
-                    if (queue.size() == MAX_SIZE) {
-                        queue.poll(); // treu l'element més antic
-                    }
-                    queue.offer(c.getCryptoByName(entry.getKey()).getCurrentPrice());
-                }
-                notify(EventType.NEW_HISTORICAL_VALUE);
-                Thread.sleep(TIME_TO_GET);
-            } catch (InterruptedException _) {
-                //
-            } catch (PersistanceException e) {
-                throw new DataPersistanceError(e.getMessage());
-            }
 
-        }
-    }
-
-    public void kill() {
-        interrupt();
-    }
 }
