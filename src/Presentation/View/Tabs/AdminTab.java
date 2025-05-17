@@ -115,7 +115,7 @@ public class AdminTab extends JPanel {
         Image normalImage = new ImageIcon("imgs/dragndrop2.png").getImage();
         Image hoverImage = new ImageIcon("imgs/dragndrop.png").getImage();
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(normalImage);
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(normalImage, 0.5f);
         filesNamesArea.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
