@@ -1,7 +1,6 @@
 package Presentation.View;
 
 import Business.Entities.Crypto;
-import Business.Entities.User;
 import Presentation.Controllers.AdminTabController;
 import Presentation.View.Tabs.*;
 
@@ -23,6 +22,7 @@ public class MainFrame extends JFrame {
     public static final String ADMIN_TAB_TITLE = "Admin";
 
     public static final String BALANCE_LABEL = "Balance: ";
+    public static final String PROFIT_LABEL = "Profit: ";
 
     //Atributos
     private JPanel userPanel;
@@ -80,7 +80,7 @@ public class MainFrame extends JFrame {
         }
         else {
             walletPanel = new WalletTab();
-            walletPanel.setBackground(new Color(119, 172, 162));
+            walletPanel.setBackground(new Color(157, 190, 187));
             mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
         }
 
@@ -106,6 +106,12 @@ public class MainFrame extends JFrame {
         balanceCountLabel.setForeground(Color.WHITE);
         balanceCountLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(balanceCountLabel);
+
+        JLabel profitLabel = new JLabel(PROFIT_LABEL);
+        profitLabel.setFont(new Font(FONT, Font.BOLD, 18));
+        profitLabel.setForeground(Color.WHITE);
+        profitLabel.setVerticalAlignment(JLabel.CENTER);
+        balancePanel.add(profitLabel);
 
         userMenu.add(balancePanel, BorderLayout.WEST);
 
