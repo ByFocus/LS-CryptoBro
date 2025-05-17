@@ -33,7 +33,7 @@ public class ApplicationController implements EventListener{
 
     public void newApplication(String userName, String balance, boolean admin) throws PersistanceException {
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
-        appFrame = MainFrame.configureApp(userName, balance);
+        appFrame = new MainFrame(userName, balance);
 
         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
         appFrame.configureTabs(cryptoManager.getAllCryptos(), admin);

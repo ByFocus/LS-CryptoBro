@@ -32,11 +32,12 @@ public class MainFrame extends JFrame {
     private MarketTab marketPanel;
     private JPanel adminPanel;
 
-    private MainFrame(String userName, String balance) {
+    public MainFrame(String userName, String balance) {
         configureFrame();
         userNameLabel = new JLabel(userName);
         balanceCountLabel = new JLabel(balance);
         userPanel = new JPanel();
+        this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
     }
 
     public static MainFrame configureApp(String userName, String balance) {
@@ -61,17 +62,20 @@ public class MainFrame extends JFrame {
     public void configureTabs(List<Crypto> cryptoList, boolean admin) {
         marketPanel = new MarketTab(cryptoList);
 
-        walletPanel = new JPanel();
-        walletPanel.setBackground(new Color(119, 172, 162));
-
-        adminPanel = new JPanel();
-        adminPanel.setBackground(new Color(3, 25, 38));
 
         JTabbedPane mainPanel = new JTabbedPane();
 
-        mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
-        if (admin) mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
-        else mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
+        mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
+        if (admin) {
+            adminPanel = new AdminTab();
+            adminPanel.setBackground(new Color(3, 25, 38));
+            mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
+        }
+        else {
+            walletPanel = new JPanel();
+            walletPanel.setBackground(new Color(119, 172, 162));
+            mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
+        }
 
         getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
