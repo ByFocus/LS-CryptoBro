@@ -11,6 +11,7 @@ import java.util.List;
 public class MarketTab extends JPanel {
     private JTable cryptoTabla;
 
+
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
         setBackground(new Color(70, 129, 137));

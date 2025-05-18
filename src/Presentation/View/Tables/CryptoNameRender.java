@@ -11,8 +11,8 @@ public class CryptoNameRender extends DefaultTableCellRenderer {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         if (column == 0) {
-            c.setBackground(new Color(119, 172, 162));
-            c.setForeground(new Color(244, 233, 205));
+            c.setBackground(new Color(157, 190, 187));
+            c.setForeground(new Color(28, 36, 52));
             c.setFont(new Font("Arial", Font.BOLD, 18));
         } else {
             c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
