@@ -15,7 +15,7 @@ public class CryptoSQLDAO implements CryptoDAO{
 
     private final String CRYPTO_FAILED = "Failed to create crypto entry";
 
-    public boolean createCrypto(Crypto crypto) throws PersistanceException {
+    public void createCrypto(Crypto crypto) throws PersistanceException {
 
         String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility) VALUES (?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
 
@@ -36,7 +36,9 @@ public class CryptoSQLDAO implements CryptoDAO{
             stmt.setInt(5, crypto.getVolatility());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to create crypto");
+            }
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());
         } catch (RuntimeException e) {
@@ -81,10 +83,8 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
     }
 //TODO: IGUAL NO SE NECESSITA
-    public boolean updateCrypto(Crypto crypto)  throws PersistanceException{
-        if (crypto == null || crypto.getName() == null) {
-            throw new IllegalArgumentException("Crypto object and its name must not be null");
-        }
+    public void updateCrypto(Crypto crypto)  throws PersistanceException{
+
 
         String query = "UPDATE cryptocurrency SET current_value = ?, category = ?, volatility = ? WHERE name = ?";
         Connection conn = null;
@@ -103,7 +103,9 @@ public class CryptoSQLDAO implements CryptoDAO{
             stmt.setString(4, crypto.getName());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to update crypto");
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update crypto in database", e);
         } finally {
@@ -155,9 +157,7 @@ public class CryptoSQLDAO implements CryptoDAO{
     }
 
     public void deleteCrypto(String cryptoname) throws PersistanceException{
-        if(cryptoname == null){
-            throw new IllegalArgumentException("Crypto name cannot be null!");
-        }
+
         String query = "UPDATE cryptocurrency SET cryptoDeleted = ? WHERE name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -231,9 +231,6 @@ public class CryptoSQLDAO implements CryptoDAO{
     }
 
     public Crypto getCryptoByName(String name)  throws PersistanceException{
-        if (name == null) {
-            throw new IllegalArgumentException("Crypto name must not be null");
-        }
 
         String query = "SELECT * FROM cryptocurrency WHERE name = ?";
         Connection conn = null;
