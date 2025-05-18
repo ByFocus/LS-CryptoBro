@@ -149,8 +149,8 @@ public class StartFrame extends JFrame {
 
         switchToRegisterButton = new JButton(REGISTER_TITLE);
         switchToRegisterButton.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
-        switchToRegisterButton.setBackground(new Color(244, 233, 205)); // Color dorado
-        switchToRegisterButton.setForeground(new Color(28, 36, 52)); // Texto negro en el botón
+        switchToRegisterButton.setBackground(new Color(244, 233, 205));
+        switchToRegisterButton.setForeground(new Color(28, 36, 52));
         switchToRegisterButton.setActionCommand(SWITCH_REGISTER);
 
         switchButtonPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 40, 0));
