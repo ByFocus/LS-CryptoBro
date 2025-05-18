@@ -1,12 +1,9 @@
 package Business;
 import Business.BusinessExceptions.*;
 import Business.Entities.User;
-import Persistance.ConfigurationDAO;
-import Persistance.ConfigurationJSONDAO;
+import Persistance.*;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
-import Persistance.UserDAO;
-import Persistance.UserSQLDAO;
 
 public class AccountManager {
     private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
@@ -175,6 +172,18 @@ public class AccountManager {
         }
         else{
             return currentUser;
+        }
+    }
+
+
+    public void warnCryptoDeleted(double benefits, String username) {
+        try {
+            UserDAO userDAO = new UserSQLDAO();
+            User user = userDAO.getUserByUsernameOrEmail(username);
+            userDAO.updateBalance(benefits, username);
+            userDAO.updateCryptoDeletedFlag(user.getUsername(), true);
+        } catch (PersistanceException e){
+            throw new DataPersistanceError(e.getMessage());
         }
     }
 }

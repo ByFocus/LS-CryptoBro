@@ -62,6 +62,23 @@ public class AdminTabController implements ActionListener, EventListener {
 
                 }
                 break;
+
+            case AdminTab.DEL_CRYPTO_COMMAND:
+                String cryptoToDel = adminTab.getSelectedCryto();
+                if (cryptoToDel != null) {
+                    CryptoManager cryptoManager = new CryptoManager();
+                    try {
+                        MarketManager.getMarketManager().stopMarket();
+                        cryptoManager.deleteCrypto(cryptoToDel);
+                        MarketManager.getMarketManager().restartMarket();
+                        MessageDisplayer.displayInformativeMessage(cryptoToDel + " ha sucumbido a la selección natural\n(Ha sido eliminada)");
+                        adminTab.resetTab(cryptoManager.getAllCryptoNames());
+                    } catch (BusinessExeption ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+                }else {
+                    MessageDisplayer.displayError("No has seleccionado ninguna crypto, bro!");
+                }
         }
     }
 

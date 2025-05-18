@@ -10,4 +10,5 @@ public interface UserDAO {
     boolean validateUser(String identifier, String password) throws PersistanceException;
     void removeUser(String identifier) throws PersistanceException;
     void updateCryptoDeletedFlag(String username, boolean flagValue) throws PersistanceException;
+    void updateBalance(double newPurchaseValue, String identifier) throws PersistanceException;
 }

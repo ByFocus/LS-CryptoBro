@@ -158,7 +158,7 @@ public class CryptoSQLDAO implements CryptoDAO{
 
     public void deleteCrypto(String cryptoname) throws PersistanceException{
 
-        String query = "UPDATE cryptocurrency SET cryptoDeleted = ? WHERE name = ?";
+        String query = "DELETE FROM cryptocurrency WHERE name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -168,8 +168,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new SQLException("Database connection is null");
             }
             stmt = conn.prepareStatement(query);
-            stmt.setBoolean(1, true);
-            stmt.setString(2, cryptoname);
+            stmt.setString(1, cryptoname);
 
             // Execute the update
             int rowsAffected = stmt.executeUpdate();

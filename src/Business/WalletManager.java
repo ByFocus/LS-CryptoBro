@@ -68,4 +68,19 @@ public class WalletManager {
             throw new DataPersistanceError(e.getMessage());
         }
     }
+
+    public void warnUsersCryptoDeleted(String cryptoName) {
+        try {
+            PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
+            List<String> usersToWarn = purchaseDAO.getUsernamesByCryptoName(cryptoName);
+            if (usersToWarn != null) {
+                for (String user : usersToWarn) {
+                    double benefits = purchaseDAO.sellAllPurchasesFromCrypto(cryptoName, user);
+                    AccountManager.getInstance().warnCryptoDeleted(benefits, user);
+                }
+            }
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
 }

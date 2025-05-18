@@ -14,12 +14,14 @@ public class Market extends Thread{
     private List<Bot> bots;
     private final static int MAX_SIZE = 120; // 10 min every 5 secs
     private final int TIME_TO_GET = 5000;
+    private boolean running;
 
     public Market(List<Bot> bots, List<String> cryptoNames) {
         this.bots = bots;
         for (String cryptoName : cryptoNames) {
             hitoricalValues.put(cryptoName, new LinkedList<>());
         }
+        running = true;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class Market extends Thread{
 
     @Override
     public void run() {
-        while (isAlive()) { //TODO: A lo mejor es preferible tener un booleano
+        while (running) { //TODO: A lo mejor es preferible tener un booleano
             try {
                 CryptoManager c = new CryptoManager();
                 for (Map.Entry<String, Queue<Double>> entry : hitoricalValues.entrySet()) {
@@ -54,7 +56,11 @@ public class Market extends Thread{
     }
 
     public void kill() {
+        for (Bot bot : bots) {
+            bot.kill();
+        }
         interrupt();
+        running = false;
     }
 
     public Queue<Double> getHistoricalFromCrypto(String cryptoName) {

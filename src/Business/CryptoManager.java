@@ -6,7 +6,9 @@ import Business.Entities.Crypto;
 import Persistance.CryptoDAO;
 import Persistance.CryptoSQLDAO;
 import Persistance.PersistanceExceptions.PersistanceException;
+import Persistance.PurchaseSQLDAO;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.List;
 
@@ -64,8 +66,15 @@ public class CryptoManager{
         }
     }
 
-    public void deleteCrypto(String cryptoName) {
-
+    public void deleteCrypto(String cryptoName) throws BusinessExeption {
+        try {
+            CryptoDAO cryptoDA0 = new CryptoSQLDAO();
+            cryptoDA0.deleteCrypto(cryptoName);
+            //TODO: NOTIFICAR AL USUARIO Y TODO ESO
+            new WalletManager().warnUsersCryptoDeleted(cryptoName);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
     }
 
     public String addCryptoFromFiles(List<File> files)  throws BusinessExeption {
@@ -94,4 +103,6 @@ public class CryptoManager{
         }
         return cryptoNames;
     }
+
+
 }
