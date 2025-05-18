@@ -12,11 +12,7 @@ import java.sql.SQLException;
 
 public class UserSQLDAO implements UserDAO{
 
-    public boolean registerUser(User user) throws PersistanceException {
-        if (user == null || user.getUsername() == null || user.getMail() == null || user.getPassword() == null) {
-            throw new IllegalArgumentException("User and its fields must not be null");
-        }
-
+    public void registerUser(User user) throws PersistanceException {
         String query = "INSERT INTO user (user_name, email, password, balance, cryptoDeleted) VALUES (?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -35,7 +31,9 @@ public class UserSQLDAO implements UserDAO{
             stmt.setBoolean(5, false);
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to create user");
+            }
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Failed to create user");
         } finally {
@@ -70,25 +68,12 @@ public class UserSQLDAO implements UserDAO{
                 throw new DBDataNotFound("No user found with username or email: " + value);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // It's often better to handle logging or further exception handling here
+           throw new DBConnectionNotReached("Failed to get user " + e.getMessage());
         }
 
         return user;
     }
 
-    //TODO: ESTA FUNCIÓN PARA QUÉ??
-    public boolean validateAdmin(String password) throws PersistanceException {
-        String query = "SELECT * FROM user WHERE role = ? AND password = ?";
-
-        try (PreparedStatement stmt = SQLConnector.getInstance().getConnection().prepareStatement(query)) {
-            stmt.setString(1, "admin");
-            stmt.setString(2, password);
-            ResultSet result = stmt.executeQuery();
-            return result.next();
-        } catch (SQLException e) {
-            throw new DBConnectionNotReached("Error accessing the database" + e.getMessage());
-        }
-    }
 
 
     public boolean validateUser(String identifier, String password) throws PersistanceException{
@@ -125,7 +110,7 @@ public class UserSQLDAO implements UserDAO{
 
     }
 
-    public boolean removeUser (String identifier)  throws PersistanceException{
+    public void removeUser (String identifier)  throws PersistanceException{
         String query = "DELETE FROM user WHERE user_name = ? OR email = ?";
         try {
             Connection conn = SQLConnector.getInstance().getConnection();
@@ -133,7 +118,9 @@ public class UserSQLDAO implements UserDAO{
             stmt.setString(1, identifier);
             stmt.setString(2, identifier);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to remove user");
+            }
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Error deleting user " + e.getMessage());
         }
@@ -149,7 +136,9 @@ public class UserSQLDAO implements UserDAO{
             stmt.setString(3, identifier);
             //TODO: Tirar excepcion si no se ha afectado a ninguna columna
             int rowsAffected = stmt.executeUpdate();
-            //return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to update crypto");
+            }
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());
         }

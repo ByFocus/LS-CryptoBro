@@ -8,15 +8,15 @@ import java.io.File;
 import java.util.List;
 
 public interface CryptoDAO {
-    boolean createCrypto(Crypto crypto) throws PersistanceException;
-    boolean updateCrypto(Crypto crypto) throws PersistanceException;
+    void createCrypto(Crypto crypto) throws PersistanceException;
+    void updateCrypto(Crypto crypto) throws PersistanceException;
     List<Crypto> getAllCryptos() throws PersistanceException;
     Crypto getCryptoByName(String name) throws PersistanceException;
     void deleteCrypto(String cryptoname) throws PersistanceException;
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
     List<Crypto> getCryptoByCategory (String category) throws PersistanceException;
     List<String> getCategories () throws PersistanceException;
-    public void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException;
+    void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException;
 
     String addCryptosFromFile(File file) throws PersistanceException;
 }

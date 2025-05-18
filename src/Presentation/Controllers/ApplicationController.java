@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
 import Business.Entities.User;
 import Business.MarketManager;
@@ -55,7 +56,7 @@ public class ApplicationController implements EventListener{
                         try {
                             cryptoInfoFrame = new CryptoInfo(cryptoManager.getCryptoByName(String.valueOf(appFrame.getTable().getValueAt(row, column))));
                             cryptoInfoFrame.setVisible(true);
-                        } catch (PersistanceException ex) {
+                        } catch (BusinessExeption ex) {
                             throw new RuntimeException(ex);
                         }
                     }

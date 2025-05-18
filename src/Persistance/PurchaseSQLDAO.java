@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PurchaseSQLDAO implements PurchaseDAO{
 
-    public boolean addPurchase(User user, Purchase purchase)  throws PersistanceException {
+    public void addPurchase(User user, Purchase purchase)  throws PersistanceException {
 
         String query = "INSERT INTO bought (user_name, crypto_name, number) VALUES (?, ?, ?, ?)";
         Connection conn = null;
@@ -21,7 +21,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -30,7 +30,9 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             stmt.setDouble(3, purchase.getUnits());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to add purchase");
+            }
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Failed to add purchase to database " + e.getMessage());
         } finally {
@@ -44,9 +46,6 @@ public class PurchaseSQLDAO implements PurchaseDAO{
     }
 
     public List<String> getUsernamesByCryptoName(String cryptoName)  throws PersistanceException{
-        if (cryptoName == null) {
-            throw new IllegalArgumentException("Crypto name must not be null");
-        }
 
         List<String> usernames = new ArrayList<>();
         String query = "SELECT DISTINCT user_name FROM purchase WHERE crypto_name = ?";
@@ -82,10 +81,6 @@ public class PurchaseSQLDAO implements PurchaseDAO{
     }
 
     public List<Purchase> getPurchasesByUserName(String user)  throws PersistanceException{
-        if (user == null) {
-            throw new IllegalArgumentException("Username must not be null!");
-        }
-
         List<Purchase> purchases = new ArrayList<>();
         String query = "SELECT DISTINCT * FROM purchase WHERE user_name = ?";
         CryptoDAO cryptoDAO = new CryptoSQLDAO();

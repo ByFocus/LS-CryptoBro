@@ -19,7 +19,11 @@ public class AdminTab extends JPanel {
     private final String DROP_FILES_TEXT = "Arrastra y suelta tus fichebros aquí";
     private final String ADD_CRYPTO_BUTTON_TEXT = "AÑADIR CRYPTO";
 
+    private final String SELECT_DELETE_CRYPTO_TEXT = "Selecciona la cryptomoneda que quieres eliminar...";
+    private final String DELETE_CRYPTO_BUTTON_TEXT = "BORRAR CRYPTO";
+
     public static final String ADD_CRYPTO_COMMAND = "ADD CRYPTO";
+    public static final String DEL_CRYPTO_COMMAND = "DELETE CRYPTO";
 
 
     private EventListener listener;
@@ -31,16 +35,13 @@ public class AdminTab extends JPanel {
 
     private JPanel deletePanel;
     private List<File> lastFilesUpload;
-    private List<String> cryptoNames = new ArrayList<>();
+    private JButton deleteButton;
+    private JComboBox<String> cryptoComboBox;
 
 
-    public AdminTab() {
-        cryptoNames.add("one");
-        cryptoNames.add("two");
-        cryptoNames.add("three");
-        cryptoNames.add("four");
-        cryptoNames.add("five");
-        configureTab();
+
+    public AdminTab(String[] names) {
+        configureTab(names);
         //this.setTransferHandler(new FileDrooperHandler());
     }
 
@@ -60,29 +61,50 @@ public class AdminTab extends JPanel {
         // no serà null porque solo se llama cuando es notificado el listener
     }
 
-    private void configureTab() {
+    private void configureTab(String[] names) {
         this.setLayout(new GridBagLayout());
         setBackground(new Color(70, 129, 137));
 
-        configureAddPanel();
 
+        //configura panel de añadir crypto
+        configureAddPanel();
+        //configura proporciones del panel
         GridBagConstraints proportions = new GridBagConstraints();
         proportions.fill = GridBagConstraints.BOTH;
         proportions.gridx = 0;
         proportions.gridy = 0;
         proportions.weighty = 0.60;
         proportions.weightx = 1.0;
-
+        //añade panel
         add(addPanel, proportions);
 
-        deletePanel = new JPanel();
-        deletePanel.setBackground(new Color(70, 129, 137));
-
+        //configura panel de borrar crypto
+        configureDeletePanel(names);
+        //modifica proporciones del panel
         proportions.gridy = 1;
         proportions.weighty = 0.40;
+        //añade panel
         add(deletePanel, proportions);
     }
+    private void configureDeletePanel(String[] names) {
+        deletePanel = new JPanel();
+        deletePanel.setBackground(new Color(70, 129, 137));
+        deletePanel.setLayout(new BoxLayout(deletePanel, BoxLayout.Y_AXIS));
 
+        JLabel deleteCryptoLabel = new JLabel(SELECT_DELETE_CRYPTO_TEXT);
+        deleteCryptoLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        deleteCryptoLabel.setForeground(Color.BLACK);
+        deleteCryptoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        cryptoComboBox = new JComboBox<>(names);
+        cryptoComboBox.setMaximumSize(new Dimension(100, 5));
+        deletePanel.add(getVerticalGlue(0,10));
+        deletePanel.add(deleteCryptoLabel);
+        deletePanel.add(getVerticalGlue(0,10));
+        deletePanel.add(cryptoComboBox);
+        deletePanel.add(getVerticalGlue(0,10));
+    }
     private void configureAddPanel() {
         addPanel = new JPanel();
         addPanel.setBackground(new Color(120, 129, 0));
@@ -145,7 +167,7 @@ public class AdminTab extends JPanel {
 
         JPanel addButtonPanel = new JPanel();
         addButtonPanel.add(addButton);
-        addButtonPanel.setPreferredSize(new Dimension(120, 80));
+        addButtonPanel.setPreferredSize(new Dimension(120, 30));
         addButtonPanel.setOpaque(false);
         addButtonPanel.setBorder(BorderFactory.createEmptyBorder(10,10,70,10));
 
@@ -170,11 +192,13 @@ public class AdminTab extends JPanel {
 
     public void registerController(ActionListener newListener) {
         addButton.addActionListener(newListener);
+        //deleteButton.addActionListener(newListener);
 
     }
-    public void resetTab() {
+    public void resetTab(String[] cryptoNames) {
         filesNamesArea.setText("");
         howManyFilesLabel.setText("0" + NUMB_FILES_TEXT_PLR);
         lastFilesUpload = null;
+        cryptoComboBox = new JComboBox<String>(cryptoNames);
     }
 }
