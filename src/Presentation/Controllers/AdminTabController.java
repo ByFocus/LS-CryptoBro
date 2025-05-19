@@ -4,6 +4,7 @@ import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.DataPersistanceError;
 import Business.CryptoManager;
 import Business.Entities.Crypto;
+import Business.Entities.Market;
 import Business.EventType;
 import Business.MarketManager;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -73,6 +74,7 @@ public class AdminTabController implements ActionListener, EventListener {
                         MarketManager.getMarketManager().restartMarket();
                         MessageDisplayer.displayInformativeMessage(cryptoToDel + " ha sucumbido a la selección natural\n(Ha sido eliminada)");
                         adminTab.resetTab(cryptoManager.getAllCryptoNames());
+                        MarketTabController.getInstance().updateMarketTab();
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }

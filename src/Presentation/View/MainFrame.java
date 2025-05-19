@@ -2,6 +2,7 @@ package Presentation.View;
 
 import Business.Entities.Crypto;
 import Presentation.Controllers.AdminTabController;
+import Presentation.Controllers.MarketTabController;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
@@ -60,8 +61,9 @@ public class MainFrame extends JFrame {
     }
 
     //Pestañas con las acciones
-    public void configureTabs(List<Crypto> cryptoList, boolean admin) {
-        marketPanel = new MarketTab(cryptoList);
+    public void configureTabs(boolean admin) {
+        MarketTabController.getInstance().updateMarketTab();
+        marketPanel = MarketTabController.getInstance().getMarketTab();
 
         //MODIFICACIONES DE LAS CARACTERISTICAS DE UN TABBED PANE
         UIManager.put("TabbedPane.tabInsets", new Insets(5, 10, 5, 10));
