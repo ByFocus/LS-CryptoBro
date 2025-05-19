@@ -25,7 +25,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new RuntimeException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -40,14 +40,12 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new DBConnectionNotReached("Failed to create crypto");
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached(e.getMessage());
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+            throw new DBConnectionNotReached("Couldn't connect to database " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing statement: " + e.getMessage());
+                throw new DBConnectionNotReached("Couldn't close stmt " + e.getMessage());
             }
             // Note: Don't close conn here since it's managed by SQLConnector
         }
@@ -62,7 +60,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -70,16 +68,17 @@ public class CryptoSQLDAO implements CryptoDAO{
             stmt.setString(2, cryptoName);
 
             int rowsAffected = stmt.executeUpdate();
-            //return rowsAffected > 0;
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Couldn't update crypto");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to update crypto in database", e);
+            throw new DBDataNotFound("Failed to update crypto in database " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new RuntimeException("Error closing statement " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing statement " + e.getMessage());
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
     }
 //TODO: IGUAL NO SE NECESSITA
@@ -93,7 +92,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -107,12 +106,12 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new DBConnectionNotReached("Failed to update crypto");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to update crypto in database", e);
+            throw new DBConnectionNotReached("Failed to update crypto in database" + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new RuntimeException("Error closing statement " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing statement " + e.getMessage());
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
@@ -128,7 +127,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -165,7 +164,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try{
             conn = SQLConnector.getInstance().getConnection();
             if(conn == null){
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
             stmt = conn.prepareStatement(query);
             stmt.setString(1, cryptoname);
@@ -173,16 +172,16 @@ public class CryptoSQLDAO implements CryptoDAO{
             // Execute the update
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                System.out.println("No records were updated. Check if the crypto name exists.");
+                throw new DBDataNotFound("Couldn't find crypto");
             }
         } catch (SQLException e){
-            throw new RuntimeException("Failed to delete crypto in database", e);
+            throw new DBConnectionNotReached("Failed to delete crypto in database" + e.getMessage());
         } finally{
             if(stmt != null){
                 try {
                     stmt.close();
                 } catch (SQLException e){
-                    System.err.println("Error closing statement: " + e.getMessage());
+                    throw new DBConnectionNotReached("Error closing resources");
                 }
             }
         }
@@ -198,7 +197,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -215,14 +214,13 @@ public class CryptoSQLDAO implements CryptoDAO{
                 cryptoList.add(crypto);
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching all cryptocurrency: " + e.getMessage());
-            throw new RuntimeException("Failed to retrieve cryptos from database", e);
+            throw new DBDataNotFound("Failed to retrieve cryptos from database " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing resources");
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
@@ -240,7 +238,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
 
             stmt = conn.prepareStatement(query);
@@ -260,14 +258,13 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new DBDataNotFound("No crypto found with name: " + name);
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching crypto by name: " + e.getMessage());
-            throw new RuntimeException("Failed to get crypto by name from database", e);
+            throw new DBDataNotFound("Failed to get crypto by name from database " + e.getMessage());
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                System.err.println("Error closing resources: " + e.getMessage());
+                throw new DBConnectionNotReached("Error closing resources");
             }
             // Note: Don't close conn here as it's managed by SQLConnector
         }
