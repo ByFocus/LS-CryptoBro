@@ -22,7 +22,7 @@ public class Bot extends Thread {
         while (running) { //TODO: A lo mejor es preferible tener un booleano
             try {
                 boolean buy = new Random().nextBoolean();
-                new CryptoManager().botMakeTransaction(cryptoName, buy);
+                CryptoManager.getCryptoManager().botMakeTransaction(cryptoName, buy);
                 Thread.sleep(buyingPeriod);
             } catch (InterruptedException _) {
                 //
