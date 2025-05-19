@@ -41,6 +41,9 @@ public class MarketTab extends JPanel {
         ((CryptoTableModel) cryptoTabla.getModel()).fireTableDataChanged();
     }
 
+    public void test() {
+    }
+
     public JTable getTablaData() {
         return cryptoTabla;
     }

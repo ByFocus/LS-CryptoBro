@@ -1,19 +1,21 @@
 package Presentation.View.Tabs;
 
+import Business.Entities.Purchase;
 import Presentation.View.Tables.SellColumnRender;
 import Presentation.View.Tables.WalletTableModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class WalletTab extends JPanel {
     private JTable cartera;
 
-    public WalletTab() {
+    public WalletTab(List<Purchase> compras) {
         this.setLayout(new BorderLayout());
         setBackground(new Color(70, 129, 137));
 
-        WalletTableModel modelo = new WalletTableModel();
+        WalletTableModel modelo = new WalletTableModel(compras);
         cartera = new JTable(modelo);
 
         cartera.setRowHeight(75);

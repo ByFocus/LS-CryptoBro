@@ -12,11 +12,18 @@ import javax.print.attribute.standard.RequestingUserName;
 import java.util.List;
 
 public class WalletManager {
-
      static String NOT_ENOUGH_BALANCE = "Bro, no tienes suficiente dinero, conoce tu lugar";
 
-    public WalletManager() {
+     public static WalletManager instance;
 
+    public WalletManager() {
+    }
+
+    public static WalletManager getInstance() {
+        if (instance == null) {
+            instance = new WalletManager();
+        }
+        return instance;
     }
     public void addTransaction(User user, Crypto crypto, int units) {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {

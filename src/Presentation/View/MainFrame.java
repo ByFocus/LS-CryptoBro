@@ -3,6 +3,7 @@ package Presentation.View;
 import Business.Entities.Crypto;
 import Presentation.Controllers.AdminTabController;
 import Presentation.Controllers.MarketTabController;
+import Presentation.Controllers.WalletTabController;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
@@ -11,39 +12,42 @@ import java.util.List;
 
 public class MainFrame extends JFrame {
     //Constantes con titulos, enlaces a fots y textos
-    public static final String userProfileImgURL = "imgs/usuario.png";
-    public static final String iconImgURL = "imgs/icono.png";
+    private static final String userProfileImgURL = "imgs/usuario.png";
+    private static final String iconImgURL = "imgs/icono.png";
 
-    public static final String FONT = "Arial";
+    private static final String FONT = "Arial";
 
-    public static final String FRAME_TITLE = "CryptoBro!";
+    private static final String FRAME_TITLE = "CryptoBro!";
 
-    public static final String WALLET_TAB_TITLE = "Wallet";
-    public static final String MARKET_TAB_TITLE = "Market";
-    public static final String ADMIN_TAB_TITLE = "Admin";
+    private static final String WALLET_TAB_TITLE = "Wallet";
+    private static final String MARKET_TAB_TITLE = "Market";
+    private static final String ADMIN_TAB_TITLE = "Admin";
 
-    public static final String BALANCE_LABEL = "Balance: ";
-    public static final String PROFIT_LABEL = "Profit: ";
+    private static final String BALANCE_LABEL = "Balance: ";
+    private static final String PROFIT_LABEL = "     Profit: ";
 
     //Atributos
     private JPanel userPanel;
     private final JLabel userNameLabel;
     private final JLabel balanceCountLabel;
+    private final JLabel gainsCountLabel;
 
     private WalletTab walletPanel;
     private MarketTab marketPanel;
     private AdminTab adminPanel;
 
-    public MainFrame(String identifier, String balance) {
+    public MainFrame(String identifier, String balance, String gains) {
         configureFrame();
         userNameLabel = new JLabel(identifier);
         balanceCountLabel = new JLabel(balance);
+        gainsCountLabel = new JLabel(gains);
+
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
     }
 
     public static MainFrame configureApp(String userName, String balance) {
-        MainFrame userFrame = new MainFrame(userName, balance);
+        MainFrame userFrame = new MainFrame(userName, balance, "0");
         userFrame.getContentPane().add(userFrame.configureProfile(), BorderLayout.NORTH);
         return userFrame;
     }
@@ -79,7 +83,7 @@ public class MainFrame extends JFrame {
             mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
         }
         else {
-            walletPanel = new WalletTab();
+            walletPanel = WalletTabController.getInstance().getWalletTab();
             walletPanel.setBackground(new Color(157, 190, 187));
             mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
         }
@@ -112,6 +116,11 @@ public class MainFrame extends JFrame {
         profitLabel.setForeground(Color.WHITE);
         profitLabel.setVerticalAlignment(JLabel.CENTER);
         balancePanel.add(profitLabel);
+
+        gainsCountLabel.setFont(new Font(FONT, Font.PLAIN, 18));
+        gainsCountLabel.setForeground(Color.WHITE);
+        gainsCountLabel.setVerticalAlignment(JLabel.CENTER);
+        balancePanel.add(gainsCountLabel);
 
         userMenu.add(balancePanel, BorderLayout.WEST);
 

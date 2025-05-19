@@ -1,17 +1,23 @@
 package Presentation.View.Tables;
 
+import Business.Entities.Crypto;
+import Business.Entities.Purchase;
+
 import javax.swing.table.AbstractTableModel;
+import java.util.List;
 
 public class WalletTableModel extends AbstractTableModel {
 
     private final String[] columnas = {"Crypto", "Unidades", "Precio de compra", "Balance", "Vender"};
+    private List<Purchase> compras;
 
-    public WalletTableModel() {
+    public WalletTableModel(List<Purchase> compras) {
+        this.compras = compras;
     }
 
     @Override
     public int getRowCount() {
-        return 5;
+        return compras.size();
     }
 
     @Override
@@ -21,14 +27,24 @@ public class WalletTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (columnIndex) {
-            case 0: return "1";
-            case 1: return "2";
-            case 2: return "3";
-            case 3: return "4";
-            case 4: return "Vender";
-            default: return null;
+        if (rowIndex <= compras.size()) {
+            Purchase compra = compras.get(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return compra.getCrypto();
+                case 1:
+                    return compra.getUnits();
+                case 2:
+                    return compra.getPriceUnit();
+                case 3:
+                    return "-";
+                case 4:
+                    return "Vender";
+                default:
+                    return null;
+            }
         }
+        return null;
     }
 
     @Override
