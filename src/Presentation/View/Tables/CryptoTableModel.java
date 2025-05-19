@@ -29,7 +29,7 @@ public class CryptoTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (rowIndex <= cryptos.size()) {
+        if (rowIndex < cryptos.size()) {
             Crypto crypto = cryptos.get(rowIndex);
             switch (columnIndex) {
                 case 0: return crypto.getName();
