@@ -99,11 +99,25 @@ public class AdminTab extends JPanel {
 
         cryptoComboBox = new JComboBox<>(names);
         cryptoComboBox.setMaximumSize(new Dimension(100, 5));
+
+        deleteButton = new JButton(DELETE_CRYPTO_BUTTON_TEXT);
+        deleteButton.setBackground(new Color(0, 51, 204)); // Dark blue background
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setActionCommand(DEL_CRYPTO_COMMAND);
+
+        JPanel deleteButtonPanel = new JPanel();
+        deleteButtonPanel.add(deleteButton);
+        deleteButtonPanel.setPreferredSize(new Dimension(120, 30));
+        deleteButtonPanel.setOpaque(false);
+        deleteButtonPanel.setBorder(BorderFactory.createEmptyBorder(10,10,70,10));
+
         deletePanel.add(getVerticalGlue(0,10));
         deletePanel.add(deleteCryptoLabel);
-        deletePanel.add(getVerticalGlue(0,10));
+        deletePanel.add(getVerticalGlue(0,5));
         deletePanel.add(cryptoComboBox);
         deletePanel.add(getVerticalGlue(0,10));
+        deletePanel.add(deleteButtonPanel);
+        deletePanel.add(getVerticalGlue(0, 10));
     }
     private void configureAddPanel() {
         addPanel = new JPanel();
@@ -192,13 +206,24 @@ public class AdminTab extends JPanel {
 
     public void registerController(ActionListener newListener) {
         addButton.addActionListener(newListener);
-        //deleteButton.addActionListener(newListener);
+        deleteButton.addActionListener(newListener);
 
     }
     public void resetTab(String[] cryptoNames) {
         filesNamesArea.setText("");
         howManyFilesLabel.setText("0" + NUMB_FILES_TEXT_PLR);
         lastFilesUpload = null;
-        cryptoComboBox = new JComboBox<String>(cryptoNames);
+        cryptoComboBox.removeAllItems();
+        for (String cryptoName : cryptoNames) {
+            cryptoComboBox.addItem(cryptoName);
+        }
+    }
+
+    public String getSelectedCryto() {
+        try {
+            return cryptoComboBox.getSelectedItem().toString();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 }

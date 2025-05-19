@@ -4,6 +4,7 @@ import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
+import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
@@ -102,5 +103,37 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         }
 
         return purchases;
+    }
+
+    public double sellAllPurchasesFromCrypto(String cryptoName, String userName) throws PersistanceException{
+        String queryUnits = "SELECT SUM(number) FROM purchase WHERE crypto_name = ? AND user_name = ?";
+        String queryDelete = "DELETE FROM purchase WHERE crypto_name = ? AND user_name = ?";
+        double benefits;
+
+        try (
+                Connection conn = SQLConnector.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(queryUnits)
+        ) {
+            stmt.setString(1, cryptoName);
+            stmt.setString(2, userName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // aquí tenemos el número de unidades, ahora hay que venderlas
+                    benefits = rs.getDouble(1);
+                    try (PreparedStatement deleteStmt = conn.prepareStatement(queryDelete)) {
+                        deleteStmt.setString(1, cryptoName);
+                        deleteStmt.setString(2, userName);
+                        deleteStmt.executeUpdate();
+                        benefits = benefits * (new CryptoSQLDAO().getCryptoCurrentPrice(cryptoName));
+
+                    }
+                } else {
+                    throw new DBDataNotFound("Purchase not found");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
+        }
+        return benefits;
     }
 }
