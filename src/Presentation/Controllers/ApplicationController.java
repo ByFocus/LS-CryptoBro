@@ -2,7 +2,6 @@ package Presentation.Controllers;
 
 import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
-import Business.Entities.User;
 import Business.MarketManager;
 import Business.EventType;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -22,6 +21,7 @@ public class ApplicationController implements EventListener{
 
     private ApplicationController() {
         //todo esto no, lo ponemos en lo otro
+        MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
 
     }
 
@@ -36,8 +36,7 @@ public class ApplicationController implements EventListener{
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
         appFrame = new MainFrame(userName, balance);
 
-        CryptoManager cryptoManager = CryptoManager.getCryptoManager();
-        appFrame.configureTabs(cryptoManager.getAllCryptos(), admin);
+        appFrame.configureTabs(admin);
 
         appFrame.registerController().addMouseListener(new MouseAdapter() {
             @Override
@@ -54,6 +53,7 @@ public class ApplicationController implements EventListener{
                     int column = appFrame.getTable().getSelectedColumn();
                     if (row != -1 && column == 0) {
                         try {
+                            CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                             cryptoInfoFrame = new CryptoInfo(cryptoManager.getCryptoByName(String.valueOf(appFrame.getTable().getValueAt(row, column))));
                             cryptoInfoFrame.setVisible(true);
                         } catch (BusinessExeption ex) {
@@ -80,7 +80,7 @@ public class ApplicationController implements EventListener{
     @Override
     public void update(EventType context) {
         switch (context) {
-            case EventType.CRYPTO_PRICE_CHANGED:
+            case EventType.CRYPTO_VALUES_CHANGED:
                 break;
             case EventType.USER_BALANCE_CHANGED:
                 //TODO: Como saber cuanto es el nuevo balance si no tenemos referencia directa al usuario

@@ -70,7 +70,7 @@ public class CryptoManager{
         try {
             CryptoDAO cryptoDA0 = new CryptoSQLDAO();
             cryptoDA0.deleteCrypto(cryptoName);
-            //TODO: NOTIFICAR AL USUARIO Y TODO ESO
+            MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             new WalletManager().warnUsersCryptoDeleted(cryptoName);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
@@ -89,6 +89,7 @@ public class CryptoManager{
                     log.append(err.getMessage());
                 }
                 log.append("\n");
+                MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             }
             return log.toString();
         } catch (Exception e) {
