@@ -62,9 +62,6 @@ public class MainFrame extends JFrame {
 
     //Pestañas con las acciones
     public void configureTabs(boolean admin) {
-        MarketTabController.getInstance().updateMarketTab();
-        marketPanel = MarketTabController.getInstance().getMarketTab();
-
         //MODIFICACIONES DE LAS CARACTERISTICAS DE UN TABBED PANE
         UIManager.put("TabbedPane.tabInsets", new Insets(5, 10, 5, 10));
         UIManager.put("TabbedPane.tabAreaInsets", new Insets(0, 0, 0, 0));
@@ -72,6 +69,7 @@ public class MainFrame extends JFrame {
         UIManager.put("TabbedPane.labelShift", 0);
         UIManager.put("TabbedPane.tabAreaBackground", new Color(28, 36, 52));
 
+        marketPanel = MarketTabController.getInstance().getMarketTab();
         JTabbedPane mainPanel = new JTabbedPane();
 
         mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);

@@ -35,8 +35,8 @@ public class MarketTab extends JPanel {
     }
 
     public void loadCryptoData(List<Crypto> cryptoList) {
-        CryptoTableModel modelo = new CryptoTableModel(cryptoList);
-        cryptoTabla = new JTable(modelo);
+        ((CryptoTableModel) cryptoTabla.getModel()).setData(cryptoList);
+        ((CryptoTableModel) cryptoTabla.getModel()).fireTableDataChanged();
     }
 
     public JTable getTablaData() {

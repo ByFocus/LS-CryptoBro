@@ -53,6 +53,7 @@ public class CryptoManager{
             CryptoDAO cryptoDA0 =new CryptoSQLDAO();
             double newPrice = cryptoDA0.getCryptoCurrentPrice(cryptoName)*priceMultiplier;
             cryptoDA0.updateCryptoPrice(cryptoName, newPrice);
+            MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
@@ -89,8 +90,8 @@ public class CryptoManager{
                     log.append(err.getMessage());
                 }
                 log.append("\n");
-                MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             }
+            MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             return log.toString();
         } catch (Exception e) {
             throw new RuntimeException(e);
