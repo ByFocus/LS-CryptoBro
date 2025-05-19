@@ -149,7 +149,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication(userName, String.valueOf(user.getBalance()), false);
+                    ApplicationController.getInstance().newApplication(user.getUsername(), String.valueOf(user.getBalance()), false);
                     userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword(), false);
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {
@@ -171,7 +171,8 @@ public class AccountViewController implements ActionListener, EventListener {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
         if (option == JOptionPane.YES_OPTION) {
-            //TODO: BORRAR EL USUARIO DE VERDAD
+            AccountManager.getInstance().delateCurrentUser();
+            userLogOut();
         }
         else {
             MessageDisplayer.displayInformativeMessage(ERASE_CANCELATION);
