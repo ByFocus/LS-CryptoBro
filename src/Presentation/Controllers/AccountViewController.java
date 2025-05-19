@@ -171,7 +171,8 @@ public class AccountViewController implements ActionListener, EventListener {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
         if (option == JOptionPane.YES_OPTION) {
-            //TODO: BORRAR EL USUARIO DE VERDAD
+            AccountManager.getInstance().delateCurrentUser();
+            userLogOut();
         }
         else {
             MessageDisplayer.displayInformativeMessage(ERASE_CANCELATION);
