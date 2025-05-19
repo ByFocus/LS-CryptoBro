@@ -5,6 +5,7 @@ import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.CryptoDeleted;
 import Business.Entities.User;
 import Business.EventType;
+import Business.WalletManager;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
@@ -126,7 +127,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", true);
+                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "0", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", "BRO", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
@@ -149,8 +150,10 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication(user.getUsername(), String.valueOf(user.getBalance()), false);
-                    userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword(), false);
+                    double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
+
+                    ApplicationController.getInstance().newApplication(user.getUsername(), String.valueOf(user.getBalance()), String.valueOf(gains) ,false);
+                    userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword() ,false);
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());

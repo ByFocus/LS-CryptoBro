@@ -32,9 +32,9 @@ public class ApplicationController implements EventListener {
         return instance;
     }
 
-    public void newApplication(String identifier, String balance, boolean admin) throws PersistanceException {
+    public void newApplication(String identifier, String balance, String gains, boolean admin) throws PersistanceException {
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
-        appFrame = new MainFrame(identifier, balance);
+        appFrame = new MainFrame(identifier, balance, gains);
 
         appFrame.configureTabs(admin);
 
