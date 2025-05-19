@@ -13,6 +13,10 @@ public class CryptoTableModel extends AbstractTableModel {
         this.cryptos = cryptos;
     }
 
+    public void setData(List<Crypto> cryptos) {
+        this.cryptos.clear();
+        this.cryptos.addAll(cryptos);
+    }
     @Override
     public int getRowCount() {
         return cryptos.size();

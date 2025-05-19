@@ -56,7 +56,6 @@ public class AdminTabController implements ActionListener, EventListener {
                     CryptoManager cryptoManager = new CryptoManager();
                     MessageDisplayer.displayInformativeMessage(cryptoManager.addCryptoFromFiles(files));
                     MarketManager.getMarketManager().restartMarket();
-                    MarketManager.getMarketManager().notify(EventType.NEW_CRYPTOS);
                     adminTab.resetTab(cryptoManager.getAllCryptoNames());
                 }else {
                     MessageDisplayer.displayError("Brother, no has añadido ningun fichebro!");

@@ -13,7 +13,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ApplicationController implements EventListener{
+public class ApplicationController implements EventListener {
     private static ApplicationController instance;
 
     private MainFrame appFrame;
@@ -81,6 +81,7 @@ public class ApplicationController implements EventListener{
     public void update(EventType context) {
         switch (context) {
             case EventType.CRYPTO_VALUES_CHANGED:
+                // se tiene que mirar si las ganancias del user han cambiado
                 break;
             case EventType.USER_BALANCE_CHANGED:
                 //TODO: Como saber cuanto es el nuevo balance si no tenemos referencia directa al usuario

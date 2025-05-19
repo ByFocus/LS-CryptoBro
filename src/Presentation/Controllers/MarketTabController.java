@@ -29,17 +29,21 @@ public class MarketTabController implements EventListener, ActionListener {
     }
 
     public MarketTab getMarketTab() {
+        if (marketTab == null) {
+            List<Crypto> cryptos = new CryptoManager().getAllCryptos();
+            marketTab = new MarketTab(cryptos);
+        }
         return marketTab;
     }
 
     public void updateMarketTab() {
         List<Crypto> cryptos = new CryptoManager().getAllCryptos();
-        if (marketTab == null) {
+        if (marketTab == null)    {
             marketTab = new MarketTab(cryptos);
         } else {
             marketTab.loadCryptoData(cryptos);
-        }
 
+        }
     }
 
 
@@ -47,7 +51,6 @@ public class MarketTabController implements EventListener, ActionListener {
     public void update(EventType context) {
         switch (context) {
             case CRYPTO_VALUES_CHANGED:
-                System.out.println("Crypto values changed");
                 updateMarketTab();
                 break;
         }

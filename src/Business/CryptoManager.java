@@ -89,8 +89,8 @@ public class CryptoManager{
                     log.append(err.getMessage());
                 }
                 log.append("\n");
-                MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             }
+            MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             return log.toString();
         } catch (Exception e) {
             throw new RuntimeException(e);
