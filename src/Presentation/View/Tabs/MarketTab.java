@@ -24,6 +24,8 @@ public class MarketTab extends JPanel {
         cryptoTabla.setForeground(new Color(255, 255, 255));
         cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
         cryptoTabla.getColumnModel().getColumn(0).setCellRenderer(new CryptoNameRender());
+        cryptoTabla.getColumnModel().getColumn(3).setCellRenderer(new CryptoNameRender());
+        cryptoTabla.getColumnModel().getColumn(4).setCellRenderer(new CryptoNameRender());
 
         cryptoTabla.setRowSelectionAllowed(false);
         cryptoTabla.setCellSelectionEnabled(true);

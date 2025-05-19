@@ -14,6 +14,15 @@ public class CryptoNameRender extends DefaultTableCellRenderer {
             c.setBackground(new Color(157, 190, 187));
             c.setForeground(new Color(28, 36, 52));
             c.setFont(new Font("Arial", Font.BOLD, 18));
+        }else if (column == 3 || column == 4) {
+            if (value != null) {
+                String text = (String) value;
+                if (text.contains("+")) {
+                    c.setForeground(Color.GREEN);
+                } else {
+                    c.setForeground(Color.RED);
+                }
+            }
         } else {
             c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());

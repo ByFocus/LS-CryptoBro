@@ -31,12 +31,15 @@ public class CryptoTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < cryptos.size()) {
             Crypto crypto = cryptos.get(rowIndex);
+            Double marketGap = crypto.calculateMarketGap();
+            char sign = marketGap > 0? '+': ' ';
+
             switch (columnIndex) {
                 case 0: return crypto.getName();
                 case 1: return crypto.getCategory();
                 case 2: return crypto.getCurrentPrice();
-                case 3: return "-";
-                case 4: return "%";
+                case 3: return String.format("%c%.8f",sign, marketGap);
+                case 4: return String.format("%c%.2f%%",sign, crypto.calculateMarketGap()*100);
                 default: return null;
             }
         }
