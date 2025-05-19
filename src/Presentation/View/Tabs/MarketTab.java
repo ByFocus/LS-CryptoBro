@@ -10,14 +10,13 @@ import java.util.List;
 
 public class MarketTab extends JPanel {
     private JTable cryptoTabla;
-    private CryptoTableModel modelo;
 
 
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
         setBackground(new Color(70, 129, 137));
 
-        modelo = new CryptoTableModel(cryptoList);
+        CryptoTableModel modelo = new CryptoTableModel(cryptoList);
         cryptoTabla = new JTable(modelo);
 
         cryptoTabla.setRowHeight(75);
@@ -36,8 +35,8 @@ public class MarketTab extends JPanel {
     }
 
     public void loadCryptoData(List<Crypto> cryptoList) {
-        modelo.setData(cryptoList);
-        modelo.fireTableDataChanged();
+        ((CryptoTableModel) cryptoTabla.getModel()).setData(cryptoList);
+        ((CryptoTableModel) cryptoTabla.getModel()).fireTableDataChanged();
     }
 
     public JTable getTablaData() {
