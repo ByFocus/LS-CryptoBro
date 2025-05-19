@@ -34,23 +34,19 @@ public class SQLConnector {
         try {
             Connection connection = getConnection();  // Ensure valid connection
             if (connection == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
             stmt = connection.createStatement();
             rs = stmt.executeQuery(query);
             return rs;  // Caller must close ResultSet and Statement
         } catch (SQLException e) {
-            System.err.println("Query: " + query);
-            System.err.println("Error selecting data --> " + e.getSQLState() + " (" + e.getMessage() + ")");
-            throw new RuntimeException("Failed to execute select query", e);
+            throw new DBConnectionNotReached("Failed to execute select query " + e.getMessage());
         }
-        // Note: No finally block to close stmt here, as it would close the ResultSet prematurely
     }
 
     public void connect() throws DBConnectionNotReached {
         try {
             conn = DriverManager.getConnection(url, username, password);
-            //System.out.println("Successfully connected to database: " + url); TODO: PARA QUÉ???
         } catch (SQLException e) {
             String message = "Couldn't connect to --> " + url + " (" + e.getMessage() + ")";
             throw new DBConnectionNotReached(message);
@@ -68,14 +64,13 @@ public class SQLConnector {
         }
     }
 
-    public void disconnect() {
+    public void disconnect() throws DBConnectionNotReached {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Database connection closed");
             }
         } catch (SQLException e) {
-            System.err.println("Problem when closing the connection --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new DBConnectionNotReached("Problem when closing the connection.");
         }
     }
 }

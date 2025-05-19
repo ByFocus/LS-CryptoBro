@@ -149,7 +149,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication(userName, String.valueOf(user.getBalance()), false);
+                    ApplicationController.getInstance().newApplication(user.getUsername(), String.valueOf(user.getBalance()), false);
                     userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword(), false);
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {

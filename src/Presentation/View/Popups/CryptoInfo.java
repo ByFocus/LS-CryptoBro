@@ -6,7 +6,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CryptoInfo extends JFrame {
+    public static final String BUY_CRYPTO = "BUY_CRYPTO";
+
     public static final String iconImgURL = "imgs/icono.png";
+
+    public static final String TITLE = "Crypto Infromation";
+
+    public static final String FONT = "Arial";
+
 
     private final JLabel cryptoNameLabel;
 
@@ -25,9 +32,9 @@ public class CryptoInfo extends JFrame {
     }
 
     private void configureFrame(){
-        setTitle("CryptoName");
+        setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
-        setSize(800, 500);
+        setSize(750, 450);
         getContentPane().setBackground(new Color(244, 233, 205));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -39,7 +46,7 @@ public class CryptoInfo extends JFrame {
     private void configureCryptoInfo(){
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        cryptoNameLabel.setFont(new Font("Arial", Font.BOLD, 38));
+        cryptoNameLabel.setFont(new Font(FONT, Font.BOLD, 38));
         cryptoNameLabel.setForeground(new Color(3, 25, 38));
         cryptoNameLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -54,10 +61,9 @@ public class CryptoInfo extends JFrame {
         JPanel panelContador = new JPanel(new FlowLayout());
 
         botonMenos = new JButton("-");
-        botonMas = new JButton("+");
-        cantidadLabel = new JTextField("0", 3);
-        cantidadLabel.setHorizontalAlignment(JTextField.CENTER);
-        cantidadLabel.setEditable(false);
+        botonMenos.setFont(new Font(FONT,Font.PLAIN,18));
+        botonMenos.setBackground(new Color(70, 129, 137, 255));
+        botonMenos.setForeground(Color.WHITE);
 
         botonMenos.addActionListener(e -> {
             if (cantidad > 0) {
@@ -66,24 +72,38 @@ public class CryptoInfo extends JFrame {
             }
         });
 
+        botonMas = new JButton("+");
+        botonMas.setFont(new Font(FONT,Font.PLAIN,18));
+        botonMas.setBackground(new Color(70, 129, 137, 255));
+        botonMas.setForeground(Color.WHITE);
+
         botonMas.addActionListener(e -> {
             cantidad++;
             cantidadLabel.setText(String.valueOf(cantidad));
         });
 
+        cantidadLabel = new JTextField("0", 3);
+        cantidadLabel.setFont(new Font(FONT,Font.PLAIN,18));
+        cantidadLabel.setHorizontalAlignment(JTextField.CENTER);
+        cantidadLabel.setEditable(false);
+
         panelContador.add(botonMenos);
         panelContador.add(cantidadLabel);
         panelContador.add(botonMas);
+
         panelContador.setOpaque(false);
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
-
         add(panelContador, BorderLayout.CENTER);
 
         JPanel buyButtonPanel = new JPanel(new FlowLayout());
         buyButtonPanel.setOpaque(false);
 
         buyButton = new JButton("Comprar");
+        buyButton.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
+        buyButton.setBackground(new Color(28, 36, 52, 255));
+        buyButton.setForeground(Color.WHITE);
+        buyButton.setActionCommand(BUY_CRYPTO);
         buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buyButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         buyButtonPanel.add(buyButton);

@@ -34,9 +34,9 @@ public class MainFrame extends JFrame {
     private MarketTab marketPanel;
     private AdminTab adminPanel;
 
-    public MainFrame(String userName, String balance) {
+    public MainFrame(String identifier, String balance) {
         configureFrame();
-        userNameLabel = new JLabel(userName);
+        userNameLabel = new JLabel(identifier);
         balanceCountLabel = new JLabel(balance);
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
