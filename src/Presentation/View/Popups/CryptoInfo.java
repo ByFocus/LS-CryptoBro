@@ -1,6 +1,7 @@
 package Presentation.View.Popups;
 
 import Business.Entities.Crypto;
+import Presentation.View.Buttons.RoundedButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +20,8 @@ public class CryptoInfo extends JFrame {
 
     private int cantidad = 0;
     private JTextField cantidadLabel;
-    private JButton botonMenos;
-    private JButton botonMas;
+    private RoundedButton botonMenos;
+    private RoundedButton botonMas;
     private JButton buyButton;
 
     public CryptoInfo(Crypto crypto){
@@ -60,11 +61,24 @@ public class CryptoInfo extends JFrame {
 
         JPanel panelContador = new JPanel(new FlowLayout());
 
-        botonMenos = new JButton("-");
+        RoundedButton boton5Menos = new RoundedButton("-5", 15);
+        boton5Menos.setFont(new Font(FONT,Font.PLAIN,16));
+        boton5Menos.setBackground(new Color(70, 129, 167, 255));
+        boton5Menos.setForeground(Color.WHITE);
+        boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+        boton5Menos.addActionListener(e -> {
+            cantidad -= 5;
+            if (cantidad <= 0) {
+                cantidad = 0;
+            }
+            cantidadLabel.setText(String.valueOf(cantidad));
+        });
+
+        botonMenos = new RoundedButton("-", 15);
         botonMenos.setFont(new Font(FONT,Font.PLAIN,18));
         botonMenos.setBackground(new Color(70, 129, 137, 255));
         botonMenos.setForeground(Color.WHITE);
-
+        botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         botonMenos.addActionListener(e -> {
             if (cantidad > 0) {
                 cantidad--;
@@ -72,24 +86,37 @@ public class CryptoInfo extends JFrame {
             }
         });
 
-        botonMas = new JButton("+");
+        botonMas = new RoundedButton("+", 15);
         botonMas.setFont(new Font(FONT,Font.PLAIN,18));
         botonMas.setBackground(new Color(70, 129, 137, 255));
         botonMas.setForeground(Color.WHITE);
-
+        botonMas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         botonMas.addActionListener(e -> {
             cantidad++;
             cantidadLabel.setText(String.valueOf(cantidad));
         });
 
+        RoundedButton boton5Mas = new RoundedButton("+5", 15);
+        boton5Mas.setFont(new Font(FONT,Font.PLAIN,16));
+        boton5Mas.setBackground(new Color(70, 129, 167, 255));
+        boton5Mas.setForeground(Color.WHITE);
+        boton5Mas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+        boton5Mas.addActionListener(e -> {
+            cantidad += 5;
+            cantidadLabel.setText(String.valueOf(cantidad));
+        });
+
+
         cantidadLabel = new JTextField("0", 3);
         cantidadLabel.setFont(new Font(FONT,Font.PLAIN,18));
         cantidadLabel.setHorizontalAlignment(JTextField.CENTER);
-        cantidadLabel.setEditable(false);
+        cantidadLabel.setEditable(true);
 
+        panelContador.add(boton5Menos);
         panelContador.add(botonMenos);
         panelContador.add(cantidadLabel);
         panelContador.add(botonMas);
+        panelContador.add(boton5Mas);
 
         panelContador.setOpaque(false);
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);

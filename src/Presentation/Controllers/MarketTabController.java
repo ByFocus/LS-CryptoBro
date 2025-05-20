@@ -51,6 +51,7 @@ public class MarketTabController implements EventListener, ActionListener {
     public void update(EventType context) {
         switch (context) {
             case CRYPTO_VALUES_CHANGED:
+                System.out.println("Value changed\n");
                 updateMarketTab();
                 break;
         }
