@@ -1,4 +1,4 @@
-# CryptoBro
+# CryptoBro 🤑💲💵💰
 
 CryptoBro is a Java-based application designed to control and visualize a complete cryptocurrency network. The interface displays real-time cryptocurrency values, manages multiple users' wallets, and handles each user's buying and selling operations. In short, it simulates the functionality of a full-featured cryptocurrency exchange along with its associated infrastructure.
 
