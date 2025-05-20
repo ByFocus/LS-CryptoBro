@@ -93,9 +93,10 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             stmt.setString(1, user);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Crypto crypto = cryptoDAO.getCryptoByName(rs.getString("crypto_name"));
+                    String name = rs.getString("crypto_name");
                     int number = rs.getInt("number"); // assuming "number" is int, change type if needed
-                    purchases.add(new Purchase(crypto, number, crypto.getCurrentPrice()));
+                    //String prince = rs.getString("")
+                    purchases.add(new Purchase(name, number,0));
                 }
             }
         } catch (SQLException e) {

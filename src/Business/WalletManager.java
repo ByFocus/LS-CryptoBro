@@ -28,7 +28,7 @@ public class WalletManager {
     public void addTransaction(User user, Crypto crypto, int units) {
         if (crypto.getCurrentPrice() * units >= user.getBalance()) {
             try{
-                Purchase p = new Purchase(crypto, units, crypto.getCurrentPrice());
+                Purchase p = new Purchase(crypto.getName(), units, crypto.getCurrentPrice());
             //user.addPurchase(p); no es nnecesario, solo actualizarlo en la base de datos, eso si
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
             purchaseDAO.addPurchase(user, p);
