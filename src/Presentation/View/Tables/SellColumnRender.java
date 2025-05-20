@@ -14,7 +14,17 @@ public class SellColumnRender extends DefaultTableCellRenderer {
             c.setBackground(new Color(244, 233, 205));
             c.setForeground(Color.BLACK);
             c.setFont(new Font("Arial", Font.BOLD, 18));
-        } else {
+        } else if (column == 3) {
+            if (value != null) {
+                String text = (String) value;
+                if (text.contains("+")) {
+                    c.setForeground(Color.GREEN);
+                } else {
+                    c.setForeground(Color.RED);
+                }
+            }
+        }
+        else {
             c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
         }

@@ -1,7 +1,9 @@
 package Presentation.View.Tables;
 
+import Business.CryptoManager;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
+import Persistance.CryptoSQLDAO;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -40,6 +42,11 @@ public class WalletTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex <= compras.size()) {
             Purchase compra = compras.get(rowIndex);
+            CryptoManager cm = new CryptoManager();
+            Crypto crypto = cm.getCryptoByName(compra.getCrypto());
+            double benefit = crypto.getCurrentPrice()*compra.getUnits() - compra.getPriceUnit()*compra.getUnits();
+            char sign = benefit > 0? '+': ' ';
+
             switch (columnIndex) {
                 case 0:
                     return compra.getCrypto();
@@ -48,7 +55,7 @@ public class WalletTableModel extends AbstractTableModel {
                 case 2:
                     return compra.getPriceUnit();
                 case 3:
-                    return "-";
+                    return String.format("%c%.8f",sign, benefit);
                 case 4:
                     return "Vender";
                 default:
