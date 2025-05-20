@@ -127,7 +127,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "BRO", true);
+                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITO", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", "BRO", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
@@ -142,12 +142,6 @@ public class AccountViewController implements ActionListener, EventListener {
                 try  {
                     startView.reset();
                     User user =AccountManager.getInstance().loginUser(userName, password);
-                    try {
-                        AccountManager.getInstance().checkCurrentUserWarning();
-                    } catch (CryptoDeleted e){
-                        MessageDisplayer.displayWarning(e.getMessage());
-                    }
-
                     startView.dispose();
 
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
@@ -155,6 +149,13 @@ public class AccountViewController implements ActionListener, EventListener {
                     ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.4f",gains) ,false);
                     userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()), user.getPassword() ,false);
                     userView.registerController(this);
+
+                    try {
+                        AccountManager.getInstance().checkCurrentUserWarning();
+                    } catch (CryptoDeleted e){
+                        MessageDisplayer.displayWarning(e.getMessage());
+                    }
+
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
                 } catch (PersistanceException e) {
@@ -167,6 +168,7 @@ public class AccountViewController implements ActionListener, EventListener {
     private void userLogOut() {
         userView.dispose();
         ApplicationController.getInstance().close();
+        AccountManager.getInstance().logout();
         startView.setVisible(true);
     }
 

@@ -1,6 +1,7 @@
 package Presentation.Controllers;
 
 import Business.AccountManager;
+import Business.BusinessExceptions.NoCurrentUser;
 import Business.MarketManager;
 import Business.EventType;
 import Business.WalletManager;
@@ -61,10 +62,14 @@ public class ApplicationController implements EventListener {
     public void update(EventType context) {
         switch (context) {
             case EventType.CRYPTO_VALUES_CHANGED:
-                if (appFrame != null) {
-                    String userName = AccountManager.getInstance().getCurrentUserName();
-                    double estimatedGains = WalletManager.getInstance().calculateEstimatedGainsByUserName(userName);
-                    appFrame.setEstimatedGains(estimatedGains);
+                try {
+                    if (appFrame != null) {
+                        String userName = AccountManager.getInstance().getCurrentUserName();
+                        double estimatedGains = WalletManager.getInstance().calculateEstimatedGainsByUserName(userName);
+                        appFrame.setEstimatedGains(estimatedGains);
+                    }
+                } catch (NoCurrentUser _) {
+                    //si está el admin no debe actualizarse
                 }
                 break;
             case EventType.USER_BALANCE_CHANGED:

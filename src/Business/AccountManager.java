@@ -197,4 +197,8 @@ public class AccountManager {
             throw new DataPersistanceError(e.getMessage());
         }
     }
+
+    public void logout() {
+        currentUser = null;
+    }
 }
