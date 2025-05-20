@@ -10,7 +10,7 @@ public class AccountManager {
     private final String EXISTENT_MAIL_ERROR = "Bro, este correo ya está en uso!";
     private final String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
     private final String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
-    private final String CRYPTO_DELETED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías comprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
+    private final String CRYPTO_DELETED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías\ncomprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
     private final String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";
     private final String PASSWORD_CAPTIAL_LETTERS = "Hermano, el Block Mayus se puede activar también. Debes utilizar una mayúscula!";
     private final String PASSWORD_LOWE_CASE = "Bro, no todo es gritar, pon alguna minúscula también.";

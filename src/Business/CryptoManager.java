@@ -69,10 +69,10 @@ public class CryptoManager{
 
     public void deleteCrypto(String cryptoName) throws BusinessExeption {
         try {
+            new WalletManager().warnUsersCryptoDeleted(cryptoName);
             CryptoDAO cryptoDA0 = new CryptoSQLDAO();
             cryptoDA0.deleteCrypto(cryptoName);
             MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
-            new WalletManager().warnUsersCryptoDeleted(cryptoName);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
