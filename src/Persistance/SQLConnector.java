@@ -53,7 +53,7 @@ public class SQLConnector {
         }
     }
 
-    public Connection getConnection() throws DBConnectionNotReached {
+    public synchronized Connection getConnection() throws DBConnectionNotReached {
         try {
             if (conn == null || conn.isClosed()) {
                 connect();  // Reconnect if connection is null or closed

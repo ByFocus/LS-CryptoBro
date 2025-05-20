@@ -5,8 +5,8 @@ public class Purchase {
     private int units;
     private double priceUnit;
 
-    public Purchase(Crypto crypto, int units, double priceUnit) {
-        this.crypto = crypto.getName();
+    public Purchase(String cryptoName, int units, double priceUnit) {
+        this.crypto = cryptoName;
         this.units = units;
         this.priceUnit = priceUnit;
     }
