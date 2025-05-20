@@ -151,7 +151,7 @@ public class MainFrame extends JFrame {
         marketPanel.loadCryptoData(cryptoList);
     }
 
-    public void setBalance(String balance) {
-        balanceCountLabel.setText(balance);
+    public void setBalance(double balance) {
+        balanceCountLabel.setText(String.format("%.2f", balance));
     }
 }

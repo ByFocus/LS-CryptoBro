@@ -8,7 +8,6 @@ import Persistance.PersistanceExceptions.PersistanceException;
 import Persistance.PurchaseDAO;
 import Persistance.PurchaseSQLDAO;
 
-import javax.print.attribute.standard.RequestingUserName;
 import java.util.List;
 
 public class WalletManager {
@@ -26,15 +25,14 @@ public class WalletManager {
         return instance;
     }
     public void addTransaction(User user, Crypto crypto, int units) {
-        if (crypto.getCurrentPrice() * units >= user.getBalance()) {
+        double cost = crypto.getCurrentPrice() * units;
+        if (cost <= user.getBalance()) {
             try{
                 Purchase p = new Purchase(crypto.getName(), units, crypto.getCurrentPrice());
-            //user.addPurchase(p); no es nnecesario, solo actualizarlo en la base de datos, eso si
-            PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
-            purchaseDAO.addPurchase(user, p);
-            //TODO: falta actualizar el balance del usuario
-            //TODO: falta notificar que se ha cambiado el balance
-            //TODO: falta notificar que ha cambiado el precio de una crypto, y cambiarlo llamando al add Transaction del Crypto
+                PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
+                purchaseDAO.addPurchase(user, p);
+                AccountManager.getInstance().updateUserBalance(-1*cost);
+                CryptoManager.getCryptoManager().makeTransaction(crypto.getName(), units);
             } catch (PersistanceException e) {
                 throw new DataPersistanceError(e.getMessage());
             }
@@ -64,7 +62,7 @@ public class WalletManager {
 
     public void notifyChangeInCryptoValue(String cryptoName) {
         try{
-            String currentUser = AccountManager.getInstance().getCurrentUser().getUsername();
+            String currentUser = AccountManager.getInstance().getCurrentUserName();
             List<String> usernames = new PurchaseSQLDAO().getUsernamesByCryptoName(cryptoName);
             if (usernames.contains(currentUser)) {
                 MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);

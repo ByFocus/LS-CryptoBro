@@ -5,6 +5,7 @@ import Presentation.View.Buttons.RoundedButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class CryptoInfo extends JFrame {
     public static final String BUY_CRYPTO = "BUY_CRYPTO";
@@ -18,8 +19,8 @@ public class CryptoInfo extends JFrame {
 
     private final JLabel cryptoNameLabel;
 
-    private int cantidad = 0;
-    private JTextField cantidadLabel;
+    private int amount = 0;
+    private JTextField amountLabel;
     private RoundedButton botonMenos;
     private RoundedButton botonMas;
     private JButton buyButton;
@@ -67,11 +68,11 @@ public class CryptoInfo extends JFrame {
         boton5Menos.setForeground(Color.WHITE);
         boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         boton5Menos.addActionListener(e -> {
-            cantidad -= 5;
-            if (cantidad <= 0) {
-                cantidad = 0;
+            amount -= 5;
+            if (amount <= 0) {
+                amount = 0;
             }
-            cantidadLabel.setText(String.valueOf(cantidad));
+            amountLabel.setText(String.valueOf(amount));
         });
 
         botonMenos = new RoundedButton("-", 15);
@@ -80,9 +81,9 @@ public class CryptoInfo extends JFrame {
         botonMenos.setForeground(Color.WHITE);
         botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         botonMenos.addActionListener(e -> {
-            if (cantidad > 0) {
-                cantidad--;
-                cantidadLabel.setText(String.valueOf(cantidad));
+            if (amount > 0) {
+                amount--;
+                amountLabel.setText(String.valueOf(amount));
             }
         });
 
@@ -92,8 +93,8 @@ public class CryptoInfo extends JFrame {
         botonMas.setForeground(Color.WHITE);
         botonMas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         botonMas.addActionListener(e -> {
-            cantidad++;
-            cantidadLabel.setText(String.valueOf(cantidad));
+            amount++;
+            amountLabel.setText(String.valueOf(amount));
         });
 
         RoundedButton boton5Mas = new RoundedButton("+5", 15);
@@ -102,19 +103,19 @@ public class CryptoInfo extends JFrame {
         boton5Mas.setForeground(Color.WHITE);
         boton5Mas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
         boton5Mas.addActionListener(e -> {
-            cantidad += 5;
-            cantidadLabel.setText(String.valueOf(cantidad));
+            amount += 5;
+            amountLabel.setText(String.valueOf(amount));
         });
 
 
-        cantidadLabel = new JTextField("0", 3);
-        cantidadLabel.setFont(new Font(FONT,Font.PLAIN,18));
-        cantidadLabel.setHorizontalAlignment(JTextField.CENTER);
-        cantidadLabel.setEditable(true);
+        amountLabel = new JTextField("0", 3);
+        amountLabel.setFont(new Font(FONT,Font.PLAIN,18));
+        amountLabel.setHorizontalAlignment(JTextField.CENTER);
+        amountLabel.setEditable(true);
 
         panelContador.add(boton5Menos);
         panelContador.add(botonMenos);
-        panelContador.add(cantidadLabel);
+        panelContador.add(amountLabel);
         panelContador.add(botonMas);
         panelContador.add(boton5Mas);
 
@@ -131,10 +132,27 @@ public class CryptoInfo extends JFrame {
         buyButton.setBackground(new Color(28, 36, 52, 255));
         buyButton.setForeground(Color.WHITE);
         buyButton.setActionCommand(BUY_CRYPTO);
+        buyButton.putClientProperty("parentCryptoInfo", this); //para que el controller pueda llamar al cryptoInfo
         buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         buyButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         buyButtonPanel.add(buyButton);
 
         add(buyButtonPanel, BorderLayout.SOUTH);
+    }
+    public void registerController(ActionListener listener) {
+        buyButton.addActionListener(listener);
+        //if (sellButton != null) sellButton.addListener(listener).
+    }
+
+    public int getAmountOfCrypto() {
+        return amount;
+    }
+
+    public String getCryptoName() {
+        return cryptoNameLabel.getText();
+    }
+    public void resetAmount() {
+        amount = 0;
+        amountLabel.setText(String.valueOf(amount));
     }
 }

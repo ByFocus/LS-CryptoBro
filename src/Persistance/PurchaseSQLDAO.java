@@ -15,7 +15,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
 
     public void addPurchase(User user, Purchase purchase)  throws PersistanceException {
 
-        String query = "INSERT INTO bought (user_name, crypto_name, number) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO purchase (user_name, crypto_name, number, buy_price) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -29,6 +29,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             stmt.setString(1, user.getUsername());
             stmt.setString(2, purchase.getCrypto());
             stmt.setDouble(3, purchase.getUnits());
+            stmt.setDouble(4, purchase.getPriceUnit());
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
@@ -99,8 +100,8 @@ public class PurchaseSQLDAO implements PurchaseDAO{
                 while (rs.next()) {
                     String name = rs.getString("crypto_name");
                     int number = rs.getInt("number"); // assuming "number" is int, change type if needed
-                    //String prince = rs.getString("")
-                    purchases.add(new Purchase(name, number,0));
+                    double price = rs.getDouble("buy_price");
+                    purchases.add(new Purchase(name, number,price));
                 }
 
         } catch (SQLException e) {

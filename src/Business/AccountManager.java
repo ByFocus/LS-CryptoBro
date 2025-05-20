@@ -22,15 +22,13 @@ public class AccountManager {
     private User currentUser;
     private static AccountManager instance;
 
+    private AccountManager() {}
+
     public static AccountManager getInstance() {
         if (instance == null) {
             instance = new AccountManager();
         }
         return instance;
-    }
-
-    void AccountManager() {
-
     }
 
     public void registerUser(String username, String mail, String password) throws BusinessExeption{
@@ -39,12 +37,12 @@ public class AccountManager {
         }
         try{
             UserDAO userDAO = new UserSQLDAO();
-            User newUser = userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
+            userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound _) {
             try {
                 UserDAO userDAO = new UserSQLDAO();
-                User newUser = userDAO.getUserByUsernameOrEmail(mail); //donde se crea esto?
+                userDAO.getUserByUsernameOrEmail(mail); //donde se crea esto?
                 throw new UserAuthentificationError(EXISTENT_MAIL_ERROR);
             } catch (DBDataNotFound _) {
                 checkPasswordIsValid(password);
@@ -84,7 +82,7 @@ public class AccountManager {
         }
     }
 
-    public void delateCurrentUser() throws BusinessExeption{
+    public void deleteCurrentUser() throws BusinessExeption{
         try {
             UserDAO userDAO = new UserSQLDAO();
             userDAO.removeUser(currentUser.getUsername());
@@ -94,18 +92,16 @@ public class AccountManager {
     }
 
     public void checkCurrentUserWarning() {
-        if (currentUser.getCryptoDeletedFlag()) {
-            currentUser.setCryptoDeletedFlag(false);
-            //TODO:se tiene que actualizar en la base de datos
            try {
-               UserDAO userDAO = new UserSQLDAO();
-               userDAO.updateCryptoDeletedFlag(currentUser.getUsername(), false);
-
+               if (currentUser.getCryptoDeletedFlag()) {
+                   //modificamos el valor de la base de datos (ya se le ha avisado)
+                   UserDAO userDAO = new UserSQLDAO();
+                   userDAO.updateCryptoDeletedFlag(currentUser.getUsername(), false);
+                   throw new CryptoDeleted(CRYPTO_DELETED_ERROR);
+               }
            } catch (PersistanceException e) {
                throw new DataPersistanceError(e.getMessage());
            }
-            throw new CryptoDeleted(CRYPTO_DELETED_ERROR);
-        }
     }
 
     public void adminAccess(String password) throws BusinessExeption {
@@ -166,13 +162,17 @@ public class AccountManager {
         }
     }
 
-    public User getCurrentUser() {
+    public String getCurrentUserName() {
         if (currentUser == null) {
             throw new NoCurrentUser("There is no current user");
         }
         else{
-            return currentUser;
+            return currentUser.getUsername();
         }
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 
 
@@ -183,6 +183,17 @@ public class AccountManager {
             userDAO.updateBalance(benefits, username);
             userDAO.updateCryptoDeletedFlag(user.getUsername(), true);
         } catch (PersistanceException e){
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
+
+    public void updateUserBalance(double change) {
+        try {
+            UserDAO userDAO = new UserSQLDAO();
+            userDAO.updateBalance(change, currentUser.getUsername());
+            currentUser.setBalance(currentUser.getBalance() + change);
+            MarketManager.getMarketManager().notify(EventType.USER_BALANCE_CHANGED);
+        } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
     }

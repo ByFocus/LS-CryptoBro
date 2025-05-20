@@ -3,6 +3,7 @@ package Persistance;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.PersistanceExceptions.DBModifyData;
 import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.Connection;
@@ -92,19 +93,31 @@ public class UserSQLDAO implements UserDAO{
     }
 
     public void updateBalance(double newPurchaseValue, String identifier) throws PersistanceException{
-        try{
+        String query = "UPDATE USER SET balance = ? WHERE user_name = ? OR email = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
             double oldBalance = getUserByUsernameOrEmail(identifier).getBalance();
-            String query = "UPDATE USER SET balance = ? WHERE name = ? OR email = ?";
-            Connection conn = SQLConnector.getInstance().getConnection();
-            try (PreparedStatement stmt = conn.prepareStatement(query)){
+            try{
+                conn = SQLConnector.getInstance().getConnection();
+                if (conn == null) {
+                    throw new DBConnectionNotReached("Could not reach DB!");
+                }
+
+                stmt = conn.prepareStatement(query);
                 stmt.setDouble(1, newPurchaseValue + oldBalance);
                 stmt.setString(2, identifier);
                 stmt.setString(3, identifier);
+                int rows = stmt.executeUpdate();
+                if (rows == 0) {
+                    throw new DBModifyData("No rows updated");
+                }
+
             }catch (SQLException e){
-                throw new DBDataNotFound("Error validating user credential " + e.getMessage());
+                throw new DBConnectionNotReached(e.getMessage());
             }
-        }catch (DBDataNotFound e){
-            throw new DBDataNotFound("Error user not found");
+        } catch (DBDataNotFound e) {
+            throw new DBDataNotFound("Couldn't update balance because user not retrieved from database");
         }
 
 

@@ -127,7 +127,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
 
-                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "0", true);
+                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "BRO", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", "BRO", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
@@ -152,8 +152,8 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
 
-                    ApplicationController.getInstance().newApplication(user.getUsername(), String.valueOf(user.getBalance()), String.valueOf(gains) ,false);
-                    userView = new UserPopUp(userName, user.getMail(), String.valueOf(user.getBalance()), user.getPassword() ,false);
+                    ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.6f",gains) ,false);
+                    userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()), user.getPassword() ,false);
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
@@ -174,7 +174,7 @@ public class AccountViewController implements ActionListener, EventListener {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
         if (option == JOptionPane.YES_OPTION) {
-            AccountManager.getInstance().delateCurrentUser();
+            AccountManager.getInstance().deleteCurrentUser();
             userLogOut();
         }
         else {

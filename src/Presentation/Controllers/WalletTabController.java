@@ -1,9 +1,7 @@
 package Presentation.Controllers;
 
 import Business.*;
-import Business.Entities.Crypto;
 import Business.Entities.Purchase;
-import Presentation.View.Tabs.MarketTab;
 import Presentation.View.Tabs.WalletTab;
 
 import java.awt.event.ActionEvent;
@@ -27,7 +25,7 @@ public class WalletTabController implements EventListener, ActionListener {
 
     public WalletTab getWalletTab() {
         if (walletTab == null) {
-            String user = AccountManager.getInstance().getCurrentUser().getUsername();
+            String user = AccountManager.getInstance().getCurrentUserName();
             List<Purchase> compras = new WalletManager().getWalletByUserName(user);
             walletTab = new WalletTab(compras);
         }

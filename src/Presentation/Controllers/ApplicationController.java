@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.AccountManager;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
 import Business.MarketManager;
@@ -45,24 +46,6 @@ public class ApplicationController implements EventListener {
             }
         });
 
-        appFrame.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    int row = appFrame.getTable().getSelectedRow();
-                    int column = appFrame.getTable().getSelectedColumn();
-                    if (row != -1 && column == 0) {
-                        try {
-                            CryptoManager cryptoManager = CryptoManager.getCryptoManager();
-                            cryptoInfoFrame = new CryptoInfo(cryptoManager.getCryptoByName(String.valueOf(appFrame.getTable().getValueAt(row, column))));
-                            cryptoInfoFrame.setVisible(true);
-                        } catch (BusinessExeption ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                }
-            }
-        });
 
         if (admin) {
 
@@ -84,8 +67,8 @@ public class ApplicationController implements EventListener {
                 // se tiene que mirar si las ganancias del user han cambiado
                 break;
             case EventType.USER_BALANCE_CHANGED:
-                //TODO: Como saber cuanto es el nuevo balance si no tenemos referencia directa al usuario
-                //appFrame.setBalance()
+                double balance = AccountManager.getInstance().getCurrentUser().getBalance();
+                appFrame.setBalance(balance);
                 //AccountViewController.getInstance().setBalance();
                 break;
             case EventType.NEW_HISTORICAL_VALUE:
