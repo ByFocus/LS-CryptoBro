@@ -84,27 +84,35 @@ public class PurchaseSQLDAO implements PurchaseDAO{
     public List<Purchase> getPurchasesByUserName(String user)  throws PersistanceException{
         List<Purchase> purchases = new ArrayList<>();
         String query = "SELECT DISTINCT * FROM purchase WHERE user_name = ?";
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try  {
             Connection conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
                 throw new DBConnectionNotReached("Database connection is null");
             }
-            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(query);
 
             stmt.setString(1, user);
-            try (ResultSet rs = stmt.executeQuery()) {
+            rs = stmt.executeQuery();
                 while (rs.next()) {
                     String name = rs.getString("crypto_name");
                     int number = rs.getInt("number"); // assuming "number" is int, change type if needed
                     //String prince = rs.getString("")
                     purchases.add(new Purchase(name, number,0));
                 }
-            }
+
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Error closing resources");
+            }
         }
-
         return purchases;
     }
 
@@ -112,14 +120,20 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         String queryUnits = "SELECT SUM(number) FROM purchase WHERE crypto_name = ? AND user_name = ?";
         String queryDelete = "DELETE FROM purchase WHERE crypto_name = ? AND user_name = ?";
         double benefits;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-        try (
-                Connection conn = SQLConnector.getInstance().getConnection();
-                PreparedStatement stmt = conn.prepareStatement(queryUnits)
-        ) {
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null");
+            }
+            stmt = conn.prepareStatement(queryUnits);
+
             stmt.setString(1, cryptoName);
             stmt.setString(2, userName);
-            try (ResultSet rs = stmt.executeQuery()) {
+            rs = stmt.executeQuery();
                 if (rs.next()) {
                     // aquí tenemos el número de unidades, ahora hay que venderlas
                     benefits = rs.getDouble(1);
@@ -133,9 +147,16 @@ public class PurchaseSQLDAO implements PurchaseDAO{
                 } else {
                     throw new DBDataNotFound("Purchase not found");
                 }
-            }
+
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
+        }finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Error closing resources");
+            }
         }
         return benefits;
     }
