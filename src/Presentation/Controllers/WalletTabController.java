@@ -19,32 +19,35 @@ public class WalletTabController implements EventListener, ActionListener {
     public static WalletTabController getInstance() {
         if (instance == null) {
             instance = new WalletTabController();
+            MarketManager.getMarketManager().subscribe(instance, EventType.USER_ESTIMATED_GAINS_CHANGED); // si la crypto que tiene el user cambia esto pasa
+            MarketManager.getMarketManager().subscribe(instance, EventType.USER_BALANCE_CHANGED); //si el balance cambia, el
         }
         return instance;
     }
 
     public WalletTab getWalletTab() {
-        if (walletTab == null) {
-            String user = AccountManager.getInstance().getCurrentUserName();
-            List<Purchase> compras = new WalletManager().getWalletByUserName(user);
-            walletTab = new WalletTab(compras);
-        }
+        updateWalletTab();
         return walletTab;
     }
-/*
-    public void updateMarketTab() {
-        List<Crypto> cryptos = new CryptoManager().getAllCryptos();
-        if (marketTab == null)    {
-            marketTab = new MarketTab(cryptos);
-        } else {
-            marketTab.loadCryptoData(cryptos);
 
+    private void updateWalletTab() {
+        String user = AccountManager.getInstance().getCurrentUserName();
+        List<Purchase> compras = new WalletManager().getWalletByUserName(user);
+        if (walletTab == null) {
+            walletTab = new WalletTab(compras);
+        } else {
+            walletTab.loadPurchasesData(compras);
         }
     }
-*/
+
     @Override
     public void update(EventType context) {
-
+        switch (context) {
+            case EventType.USER_BALANCE_CHANGED:
+            case EventType.USER_ESTIMATED_GAINS_CHANGED:
+                updateWalletTab();
+                break;
+        }
     }
 
     @Override

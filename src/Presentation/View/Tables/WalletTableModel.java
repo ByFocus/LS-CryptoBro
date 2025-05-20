@@ -3,6 +3,7 @@ package Presentation.View.Tables;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
@@ -13,6 +14,16 @@ public class WalletTableModel extends AbstractTableModel {
 
     public WalletTableModel(List<Purchase> compras) {
         this.compras = compras;
+    }
+
+    public void setData(List<Purchase> compras) {
+        SwingUtilities.invokeLater(() -> {
+            synchronized (this) {
+                this.compras.clear();
+                this.compras.addAll(compras);
+                fireTableDataChanged();
+            }
+        });
     }
 
     @Override
