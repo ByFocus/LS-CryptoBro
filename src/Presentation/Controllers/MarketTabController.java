@@ -89,14 +89,19 @@ public class MarketTabController implements EventListener, ActionListener {
                 JButton sourceButton = (JButton) e.getSource();
                 CryptoInfo cryptoInfo = (CryptoInfo) sourceButton.getClientProperty("parentCryptoInfo");
                 int units = cryptoInfo.getAmountOfCrypto();
-                String cryptoName = cryptoInfo.getCryptoName();
-                try {
-                    buyCrypto(cryptoName, units);
-                    MessageDisplayer.displayInformativeMessage("Has comprado " + units + " " + cryptoName + "!\n Así se hace brother, tú pa lante como los de Alicante");
-                } catch (BusinessExeption ex) {
-                    MessageDisplayer.displayError(ex.getMessage());
+                if (units > 0) {
+                    String cryptoName = cryptoInfo.getCryptoName();
+                    try {
+                        buyCrypto(cryptoName, units);
+                        MessageDisplayer.displayInformativeMessage("Has comprado " + units + " " + cryptoName + "!\n Así se hace brother, tú pa lante como los de Alicante");
+                    } catch (BusinessExeption ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+                    cryptoInfo.resetAmount();
+                } else {
+                    MessageDisplayer.displayError("Brooooo, como vas a comprar 0?\nDe hecho, ¿qué es el ZerO?, tremenda rallada");
                 }
-                cryptoInfo.resetAmount();
+
                 break;
         }
     }

@@ -9,10 +9,10 @@ public class CryptoNameRender extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
+        setHorizontalAlignment(SwingConstants.CENTER);
         if (column == 0) {
             c.setBackground(new Color(157, 190, 187));
-            c.setForeground(new Color(28, 36, 52));
+            c.setForeground(new Color(3, 25, 38));
             c.setFont(new Font("Arial", Font.BOLD, 18));
         }else if (column == 3 || column == 4) {
             if (value != null) {
