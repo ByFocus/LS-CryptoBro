@@ -84,12 +84,14 @@ public class PurchaseSQLDAO implements PurchaseDAO{
     public List<Purchase> getPurchasesByUserName(String user)  throws PersistanceException{
         List<Purchase> purchases = new ArrayList<>();
         String query = "SELECT DISTINCT * FROM purchase WHERE user_name = ?";
-        CryptoDAO cryptoDAO = new CryptoSQLDAO();
 
-        try (
-                Connection conn = SQLConnector.getInstance().getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)
-        ) {
+        try  {
+            Connection conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new DBConnectionNotReached("Database connection is null");
+            }
+            PreparedStatement stmt = conn.prepareStatement(query);
+
             stmt.setString(1, user);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

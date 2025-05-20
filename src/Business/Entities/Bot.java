@@ -1,6 +1,8 @@
 package Business.Entities;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
+import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.Random;
 
@@ -22,8 +24,13 @@ public class Bot extends Thread {
         while (running) { //TODO: A lo mejor es preferible tener un booleano
             try {
                 boolean buy = new Random().nextBoolean();
-                CryptoManager.getCryptoManager().botMakeTransaction(cryptoName, buy);
-                Thread.sleep(buyingPeriod);
+                try {
+                    CryptoManager.getCryptoManager().botMakeTransaction(cryptoName, buy);
+                    Thread.sleep(buyingPeriod);
+                } catch (BusinessExeption _) {
+
+                }
+
             } catch (InterruptedException _) {
                 //
             }
