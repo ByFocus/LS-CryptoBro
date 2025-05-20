@@ -348,7 +348,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         for (Crypto crypto: cryptos) {
             try {
                 getCryptoByName(crypto.getName());
-                error.append(crypto.getName() + " ya existe. ");
+                error.append("\t\t" + crypto.getName() + " ya existe.\n");
             }
             catch (DBDataNotFound _) {
                 // si no es troba está bé;
@@ -358,7 +358,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
         log.append("Se han añadido " + cryptoCount + " cryptos.\n");
         if (!error.isEmpty()) {
-            log.append("\t\t[" + error.toString() + "]");
+            log.append(error.toString());
         }
         return log.toString();
     }
