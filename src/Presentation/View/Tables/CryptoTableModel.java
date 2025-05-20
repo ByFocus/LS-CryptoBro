@@ -43,7 +43,7 @@ public class CryptoTableModel extends AbstractTableModel {
             switch (columnIndex) {
                 case 0: return crypto.getName();
                 case 1: return crypto.getCategory();
-                case 2: return crypto.getCurrentPrice();
+                case 2: return String.format("%.8f",crypto.getCurrentPrice());
                 case 3: return String.format("%c%.8f",sign, marketGap);
                 case 4: return String.format("%c%.2f%%",sign, crypto.calculateMarketGap()*100);
                 default: return null;
