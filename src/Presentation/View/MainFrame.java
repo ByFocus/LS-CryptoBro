@@ -40,7 +40,14 @@ public class MainFrame extends JFrame {
         configureFrame();
         userNameLabel = new JLabel(identifier);
         balanceCountLabel = new JLabel(balance);
-        gainsCountLabel = new JLabel(gains);
+        gainsCountLabel = new JLabel();
+        if (gains.contains("-")) {
+            gainsCountLabel.setForeground(Color.RED);
+        } else {
+            gainsCountLabel.setForeground(Color.GREEN);
+            gains = "+"+gains;
+        }
+        gainsCountLabel.setText(gains);
 
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -140,7 +147,7 @@ public class MainFrame extends JFrame {
         return userMenu;
     }
 
-    public JPanel registerController() {
+    public JPanel getUserPanel() {
         return userPanel;
     }
 
@@ -153,5 +160,17 @@ public class MainFrame extends JFrame {
 
     public void setBalance(double balance) {
         balanceCountLabel.setText(String.format("%.2f", balance));
+    }
+
+    public void setEstimatedGains(double estimatedGains) {
+        String gainsText;
+        if (estimatedGains < 0) {
+            gainsCountLabel.setForeground(Color.RED);
+            gainsText = String.format("%.4f", estimatedGains);
+        } else {
+            gainsCountLabel.setForeground(Color.GREEN);
+            gainsText = "+"+String.format("%.4f", estimatedGains);
+        }
+        gainsCountLabel.setText(gainsText);
     }
 }

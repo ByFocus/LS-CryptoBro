@@ -152,7 +152,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
 
-                    ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.6f",gains) ,false);
+                    ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.4f",gains) ,false);
                     userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()), user.getPassword() ,false);
                     userView.registerController(this);
                 } catch (BusinessExeption e1) {

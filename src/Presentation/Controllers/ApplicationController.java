@@ -1,16 +1,13 @@
 package Presentation.Controllers;
 
 import Business.AccountManager;
-import Business.BusinessExceptions.BusinessExeption;
-import Business.CryptoManager;
 import Business.MarketManager;
 import Business.EventType;
+import Business.WalletManager;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.MainFrame;
 import Presentation.View.Popups.CryptoInfo;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -39,7 +36,7 @@ public class ApplicationController implements EventListener {
 
         appFrame.configureTabs(admin);
 
-        appFrame.registerController().addMouseListener(new MouseAdapter() {
+        appFrame.getUserPanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 AccountViewController.getInstance().checkUserProfile();
@@ -64,12 +61,15 @@ public class ApplicationController implements EventListener {
     public void update(EventType context) {
         switch (context) {
             case EventType.CRYPTO_VALUES_CHANGED:
-                // se tiene que mirar si las ganancias del user han cambiado
+                if (appFrame != null) {
+                    String userName = AccountManager.getInstance().getCurrentUserName();
+                    double estimatedGains = WalletManager.getInstance().calculateEstimatedGainsByUserName(userName);
+                    appFrame.setEstimatedGains(estimatedGains);
+                }
                 break;
             case EventType.USER_BALANCE_CHANGED:
                 double balance = AccountManager.getInstance().getCurrentUser().getBalance();
                 appFrame.setBalance(balance);
-                //AccountViewController.getInstance().setBalance();
                 break;
             case EventType.NEW_HISTORICAL_VALUE:
                 //RSI_NewHistorical(): demana l'historic corresponent i li passa a la view, pq actualitzi el gràfic
