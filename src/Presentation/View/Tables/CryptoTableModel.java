@@ -2,6 +2,7 @@ package Presentation.View.Tables;
 
 import Business.Entities.Crypto;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
@@ -14,8 +15,13 @@ public class CryptoTableModel extends AbstractTableModel {
     }
 
     public synchronized void setData(List<Crypto> cryptos) {
-        this.cryptos.clear();
-        this.cryptos.addAll(cryptos);
+        SwingUtilities.invokeLater(() -> {
+            synchronized (this) {
+                this.cryptos.clear();
+                this.cryptos.addAll(cryptos);
+                fireTableDataChanged();
+            }
+        });
     }
     @Override
     public int getRowCount() {

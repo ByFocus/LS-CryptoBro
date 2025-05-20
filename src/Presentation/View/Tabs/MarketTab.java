@@ -40,7 +40,6 @@ public class MarketTab extends JPanel {
         //this utility prevents and updates this in a safe way, because swing components are not thread-safe
         SwingUtilities.invokeLater(() -> {
             ((CryptoTableModel) cryptoTabla.getModel()).setData(cryptoList);
-            ((CryptoTableModel) cryptoTabla.getModel()).fireTableDataChanged();
         });
     }
 
