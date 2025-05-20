@@ -23,6 +23,7 @@ public class WalletTab extends JPanel {
         walletTable.setForeground(new Color(244, 233, 205));
         walletTable.setFont(new Font("Arial", Font.PLAIN, 18));
         walletTable.getColumnModel().getColumn(4).setCellRenderer(new SellColumnRender());
+        walletTable.getColumnModel().getColumn(3).setCellRenderer(new SellColumnRender());
 
         walletTable.setRowSelectionAllowed(false);
         walletTable.setCellSelectionEnabled(true);

@@ -53,7 +53,7 @@ public class WalletTableModel extends AbstractTableModel {
                 case 1:
                     return compra.getUnits();
                 case 2:
-                    return compra.getPriceUnit();
+                    return String.format("%.8f", compra.getPriceUnit());
                 case 3:
                     return String.format("%c%.8f",sign, benefit);
                 case 4:
