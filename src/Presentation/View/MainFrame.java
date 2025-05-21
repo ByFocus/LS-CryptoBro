@@ -55,11 +55,6 @@ public class MainFrame extends JFrame {
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
     }
 
-    public static MainFrame configureApp(String userName, String balance) {
-        MainFrame userFrame = new MainFrame(userName, balance, "0");
-        userFrame.getContentPane().add(userFrame.configureProfile(), BorderLayout.NORTH);
-        return userFrame;
-    }
 
     private void configureFrame() {
         pack();

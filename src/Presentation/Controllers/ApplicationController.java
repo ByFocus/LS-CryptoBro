@@ -19,7 +19,6 @@ public class ApplicationController implements EventListener {
     private CryptoInfo cryptoInfoFrame;
 
     private ApplicationController() {
-        //todo esto no, lo ponemos en lo otro
         MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
 
     }
@@ -48,7 +47,7 @@ public class ApplicationController implements EventListener {
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
-
+        market.subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
         appFrame.setVisible(true);
     }
 
@@ -69,9 +68,6 @@ public class ApplicationController implements EventListener {
             case EventType.USER_BALANCE_CHANGED:
                 double balance = AccountManager.getInstance().getCurrentUser().getBalance();
                 appFrame.setBalance(balance);
-                break;
-            case EventType.NEW_HISTORICAL_VALUE:
-                //RSI_NewHistorical(): demana l'historic corresponent i li passa a la view, pq actualitzi el gràfic
                 break;
         }
     }
