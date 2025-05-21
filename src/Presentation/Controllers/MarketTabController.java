@@ -62,7 +62,7 @@ public class MarketTabController implements EventListener, ActionListener {
     }
 
     public void displayCryptoInfo(Crypto crypto) {
-        cryptoInfo = new CryptoInfo(crypto.getName());
+        cryptoInfo = new CryptoInfo(crypto.getName(), 0);
         cryptoInfo.getGrafica().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
         cryptoInfo.registerController(this);
         cryptoInfo.setVisible(true);

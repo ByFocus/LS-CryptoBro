@@ -11,12 +11,19 @@ import java.awt.event.ActionListener;
 public class CryptoInfo extends JFrame {
     public static final String BUY_CRYPTO = "BUY_CRYPTO";
 
+    public static final String SELL_CRYPTO = "SELL_CRYPTO";
+
     public static final String iconImgURL = "imgs/icono.png";
 
     public static final String TITLE = "Crypto Infromation";
 
     public static final String FONT = "Arial";
 
+    public static final int MODE_BUY_CRYPTO = 0;
+
+    public static final int MODE_SELL_CRYPTO = 1;
+
+    public static final int MODE_ADMIN = 2;
 
     private final JLabel cryptoNameLabel;
 
@@ -27,13 +34,14 @@ public class CryptoInfo extends JFrame {
     private RoundedButton botonMenos;
     private RoundedButton botonMas;
     private JButton buyButton;
+    private JButton sellButton;
 
-    public CryptoInfo(String cryptoName){
+    public CryptoInfo(String cryptoName, int mode){
         configureFrame();
 
         cryptoNameLabel = new JLabel(cryptoName);
 
-        configureCryptoInfo();
+        configureCryptoInfo(mode);
     }
 
     private void configureFrame(){
@@ -48,7 +56,7 @@ public class CryptoInfo extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    private void configureCryptoInfo(){
+    private void configureCryptoInfo(int mode){
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD, 38));
@@ -126,24 +134,59 @@ public class CryptoInfo extends JFrame {
         panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
         add(panelContador, BorderLayout.CENTER);
 
-        JPanel buyButtonPanel = new JPanel(new FlowLayout());
-        buyButtonPanel.setOpaque(false);
-
-        buyButton = new JButton("Comprar");
-        buyButton.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
-        buyButton.setBackground(new Color(28, 36, 52, 255));
-        buyButton.setForeground(Color.WHITE);
-        buyButton.setActionCommand(BUY_CRYPTO);
-        buyButton.putClientProperty("parentCryptoInfo", this); //para que el controller pueda llamar al cryptoInfo
-        buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buyButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-        buyButtonPanel.add(buyButton);
-
-        add(buyButtonPanel, BorderLayout.SOUTH);
+        addButton(mode);
     }
+
+    public void addButton(int option) {
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setOpaque(false);
+
+        switch (option) {
+            case MODE_BUY_CRYPTO:
+                buyButton = new JButton("Comprar");
+                styleButton(buyButton);
+                buyButton.setActionCommand(BUY_CRYPTO);
+                buyButton.putClientProperty("parentCryptoInfo", this);
+                buttonPanel.add(buyButton);
+                break;
+            case MODE_SELL_CRYPTO:
+                sellButton = new JButton("Vender");
+                styleButton(sellButton);
+                sellButton.setActionCommand(SELL_CRYPTO);
+                sellButton.putClientProperty("parentCryptoInfo", this);
+                buttonPanel.add(sellButton);
+                break;
+            case MODE_ADMIN:
+                buyButton = new JButton("Comprar");
+                sellButton = new JButton("Vender");
+
+                styleButton(buyButton);
+                styleButton(sellButton);
+
+                buyButton.setActionCommand(BUY_CRYPTO);
+                sellButton.setActionCommand(SELL_CRYPTO);
+
+                buyButton.putClientProperty("parentCryptoInfo", this);
+                sellButton.putClientProperty("parentCryptoInfo", this);
+
+                buttonPanel.add(buyButton);
+                buttonPanel.add(sellButton);
+                break;
+        }
+
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
+        button.setBackground(new Color(28, 36, 52));
+        button.setForeground(Color.WHITE);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
+
     public void registerController(ActionListener listener) {
-        buyButton.addActionListener(listener);
-        //if (sellButton != null) sellButton.addListener(listener).
+        if (sellButton != null) sellButton.addActionListener(listener);
+        if (buyButton != null) buyButton.addActionListener(listener);
     }
 
     public int getAmountOfCrypto() {
