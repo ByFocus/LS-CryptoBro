@@ -63,4 +63,5 @@ public class MarketTab extends JPanel {
     public JTable getTablaData() {
         return cryptoTabla;
     }
+
 }

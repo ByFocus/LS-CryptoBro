@@ -81,7 +81,7 @@ public class MainFrame extends JFrame {
         UIManager.put("TabbedPane.labelShift", 0);
         UIManager.put("TabbedPane.tabAreaBackground", new Color(28, 36, 52));
 
-        marketPanel = MarketTabController.getInstance().getMarketTab();
+        marketPanel = MarketTabController.getInstance().getMarketTab(admin);
         JTabbedPane mainPanel = new JTabbedPane();
 
         mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
@@ -174,5 +174,10 @@ public class MainFrame extends JFrame {
             gainsText = "+"+String.format("%.4f", estimatedGains);
         }
         gainsCountLabel.setText(gainsText);
+    }
+
+    public void close() {
+        MarketTabController.getInstance().close();
+        this.dispose();
     }
 }

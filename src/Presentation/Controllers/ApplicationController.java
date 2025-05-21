@@ -83,6 +83,6 @@ public class ApplicationController implements EventListener {
     }
 
     public void close() {
-        appFrame.dispose();
+        appFrame.close();
     }
 }

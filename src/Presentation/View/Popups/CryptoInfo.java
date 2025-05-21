@@ -168,7 +168,7 @@ public class CryptoInfo extends JFrame {
 
                 buyButton.putClientProperty("parentCryptoInfo", this);
                 sellButton.putClientProperty("parentCryptoInfo", this);
-
+                System.out.println("hola");
                 buttonPanel.add(buyButton);
                 buttonPanel.add(sellButton);
                 break;

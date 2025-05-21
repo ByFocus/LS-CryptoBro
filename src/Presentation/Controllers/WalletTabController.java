@@ -42,7 +42,7 @@ public class WalletTabController implements EventListener, ActionListener {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                         String cryptoName = String.valueOf(walletTab.getTablaData().getValueAt(row, 0));
-                        displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName));
+                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  CryptoInfo.MODE_SELL_CRYPTO);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
@@ -70,12 +70,6 @@ public class WalletTabController implements EventListener, ActionListener {
                 updateWalletTab();
                 break;
         }
-    }
-
-    public void displayCryptoInfo(Crypto crypto) {
-        CryptoInfo cryptoInfo = new CryptoInfo(crypto.getName(), 1);
-        cryptoInfo.registerController(this);
-        cryptoInfo.setVisible(true);
     }
 
     @Override
