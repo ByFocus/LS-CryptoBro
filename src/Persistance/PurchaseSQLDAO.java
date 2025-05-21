@@ -5,6 +5,7 @@ import Business.Entities.Purchase;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
+import Persistance.PersistanceExceptions.DBModifyData;
 import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
@@ -165,6 +166,9 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         try{
             buyId = getBuyId(purchase, username);
              newUnits = purchase.getUnits() - unitsToSubstract;
+             if (newUnits < 0) {
+                 throw new DBModifyData("Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.");
+             }
         }catch (PersistanceException ex){
             throw ex;
         }
