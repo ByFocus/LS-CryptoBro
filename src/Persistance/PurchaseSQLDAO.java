@@ -161,11 +161,10 @@ public class PurchaseSQLDAO implements PurchaseDAO{
 
     public void substractUnits(Purchase purchase, String username, int unitsToSubstract) throws PersistanceException{
         String query = "UPDATE PURCHASE SET number = ? WHERE buy_id = ?";
-        int newUnits;
+        int newUnits = purchase.getUnits() - unitsToSubstract;
         int buyId;
         try{
             buyId = getBuyId(purchase, username);
-             newUnits = purchase.getUnits() - unitsToSubstract;
              if (newUnits < 0) {
                  throw new DBModifyData("Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.");
              }
@@ -184,6 +183,9 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());
         }
+        if (newUnits == 0) {
+            deletePurchaseById(buyId);
+        }
     }
 
     public double sellAllPurchasesFromCrypto(String cryptoName, String userName) throws PersistanceException{
@@ -197,7 +199,7 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new DBConnectionNotReached("Database connection is null");
             }
             stmt = conn.prepareStatement(queryUnits);
 
@@ -229,5 +231,34 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             }
         }
         return benefits;
+    }
+
+    private void deletePurchaseById(int id) throws PersistanceException{
+        String query = "DELETE FROM purchase WHERE buy_id = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new DBConnectionNotReached("Database connection is null");
+            }
+            stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1, id);
+            int rows = stmt.executeUpdate();
+
+            if (rows == 0) {
+                throw new DBDataNotFound("Purchase not found");
+            }
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached("Error al ejecutar la query");
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Error closing resources");
+            }
+        }
     }
 }
