@@ -82,6 +82,30 @@ public class AccountManager {
         }
     }
 
+    public void changePassword(String newPwd, String oldPwd){
+        try{
+            UserDAO userDAO = new UserSQLDAO();
+            try{
+                checkPasswordIsValid(newPwd);
+            }catch (UserAuthentificationError ex){
+                throw new UserAuthentificationError(ex.getMessage());
+            }
+            if(userDAO.validateUser(currentUser.getUsername(), oldPwd)){
+                try{
+                    userDAO.updatePassword(currentUser.getUsername(), newPwd);
+                }catch (PersistanceException e){
+                    throw new DataPersistanceError(e.getMessage());
+                }
+            }else{
+                throw new UserAuthentificationError(INCORRECT_PASSWORD_ERROR);
+            }
+        } catch(DBDataNotFound e) {
+            throw new UserAuthentificationError(INEXISTENT_USER_ERROR);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
+
     public void deleteCurrentUser() throws BusinessExeption{
         try {
             UserDAO userDAO = new UserSQLDAO();

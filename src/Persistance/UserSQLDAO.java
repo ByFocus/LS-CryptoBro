@@ -150,7 +150,23 @@ public class UserSQLDAO implements UserDAO{
             //TODO: Tirar excepcion si no se ha afectado a ninguna columna
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to update crypto");
+                throw new DBConnectionNotReached("Failed to update user");
+            }
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached(e.getMessage());
+        }
+    }
+    public void updatePassword(String identifier, String password) throws PersistanceException{
+        String query = "UPDATE USER SET password = ? WHERE user_name = ? OR email = ?";
+        try {
+            Connection conn = SQLConnector.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, password);
+            stmt.setString(2, identifier);
+            stmt.setString(3, identifier);
+            int rowsAffected = stmt.executeUpdate();
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to update user");
             }
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());

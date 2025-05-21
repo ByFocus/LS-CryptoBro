@@ -3,6 +3,7 @@ package Presentation.Controllers;
 import Business.AccountManager;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.CryptoDeleted;
+import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 import Business.EventType;
 import Business.WalletManager;
@@ -76,6 +77,29 @@ public class AccountViewController implements ActionListener, EventListener {
             case UserPopUp.USER_ERASE_ACCOUNT:
                 userEraseAccount();
                 break;
+            case UserPopUp.USER_CHANGE_PASSWORD:
+                userView.showChangePasswordDialog(this);
+                break;
+            case UserPopUp.CHANGE_PASSWORD_OK:
+                String oldPwd = new String(userView.getOldPwdField().getPassword());
+                String newPwd = new String(userView.getNewPwdField().getPassword());
+                String confirmPwd = new String(userView.getConfirmPwdField().getPassword());
+
+                if (!newPwd.equals(confirmPwd)) {
+                    JOptionPane.showMessageDialog(userView, "Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try{
+                        AccountManager.getInstance().changePassword(newPwd, oldPwd);
+                        MessageDisplayer.displayInformativeMessage("Bro se te ha cambiado la contraseña, más te vale recordarla!");
+                        userView.getChangePwdDialog().dispose();
+
+                    } catch (UserAuthentificationError ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+
+                }
+                break;
+
         }
     }
 
@@ -128,7 +152,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     startView.dispose();
 
                     ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITO", true);
-                    userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", "BRO", true);
+                    userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
@@ -147,7 +171,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
 
                     ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.4f",gains) ,false);
-                    userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()), user.getPassword() ,false);
+                    userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()),false);
                     userView.registerController(this);
 
                     try {

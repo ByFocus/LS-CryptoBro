@@ -2,6 +2,7 @@ package Presentation.View.Popups;
 
 import Presentation.View.Panels.RoundedPanel;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -9,6 +10,8 @@ public class UserPopUp extends JFrame {
     // Event constants
     public static final String USER_LOGOUT = "USER_LOGOUT";
     public static final String USER_ERASE_ACCOUNT = "USER_ERASE_ACCOUNT";
+    public static final String USER_CHANGE_PASSWORD = "USER_CHANGE_PASSWORD";
+    public static final String CHANGE_PASSWORD_OK = "CHANGE_PASSWORD_OK";
 
     // Fonts and resources
     public static final String FONT_TITLE = "Open Sans";
@@ -20,19 +23,22 @@ public class UserPopUp extends JFrame {
     private final JLabel userNameLabel;
     private final JLabel userEmailLabel;
     private JLabel userBalanceLabel;
-    private final JLabel userPasswordLabel;
+
+    private JPasswordField oldPwdField;
+    private JPasswordField newPwdField;
+    private JPasswordField confirmPwdField;
 
     private JButton logOutButton;
     private JButton deleteAccountButton;
     private JButton changePasswordButton;
+    private JDialog changePwdDialog;
 
-    public UserPopUp(String userName, String userEmail, String userBalance, String userPassword, boolean admin) {
+    public UserPopUp(String userName, String userEmail, String userBalance, boolean admin) {
         configureFrame();
 
         this.userNameLabel = new JLabel(userName);
         this.userBalanceLabel = new JLabel("Balance: " + userBalance);
         this.userEmailLabel = new JLabel("Email: " + userEmail);
-        this.userPasswordLabel = new JLabel("Password: " + userPassword);
 
         configureUserProfile();
         configureActions(admin);
@@ -113,13 +119,59 @@ public class UserPopUp extends JFrame {
             changePasswordButton.setFont(new Font(FONT_TEXT, Font.BOLD, 21));
             changePasswordButton.setBackground(new Color(70, 129, 137));
             changePasswordButton.setForeground(Color.WHITE);
-            // You may want to set a different action command for this button
-            changePasswordButton.setActionCommand("USER_CHANGE_PASSWORD");
+            changePasswordButton.setActionCommand(USER_CHANGE_PASSWORD);
             actionPanel.add(changePasswordButton);
         }
 
         getContentPane().add(actionPanel);
     }
+
+    public void showChangePasswordDialog(ActionListener controller) {
+        changePwdDialog = new JDialog(this, "Change Password", true);
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        oldPwdField = new JPasswordField();
+        newPwdField = new JPasswordField();
+        confirmPwdField = new JPasswordField();
+
+        panel.add(new JLabel("Old Password:"));
+        panel.add(oldPwdField);
+        panel.add(new JLabel("New Password:"));
+        panel.add(newPwdField);
+        panel.add(new JLabel("Confirm New Password:"));
+        panel.add(confirmPwdField);
+
+        // Create a wrapper panel with padding
+        JPanel paddedPanel = new JPanel(new BorderLayout());
+        paddedPanel.setBorder(new EmptyBorder(30, 40, 30, 40)); // top, left, bottom, right
+        paddedPanel.add(panel, BorderLayout.CENTER);
+
+        JButton okButton = new JButton("OK");
+        okButton.setActionCommand(CHANGE_PASSWORD_OK);
+        okButton.addActionListener(controller);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(e -> changePwdDialog.dispose());
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+
+        changePwdDialog.getContentPane().add(paddedPanel, BorderLayout.CENTER);
+        changePwdDialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        changePwdDialog.pack();
+        changePwdDialog.setLocationRelativeTo(this);
+        changePwdDialog.setVisible(true);
+    }
+
+
+    // Getters (no recursion error!)
+    public JPasswordField getOldPwdField() { return oldPwdField; }
+    public JPasswordField getNewPwdField() { return newPwdField; }
+    public JPasswordField getConfirmPwdField() { return confirmPwdField; }
+    public JDialog getChangePwdDialog() { return changePwdDialog; }
+
+
+
 
     private void configureFrame() {
         setTitle(FRAME_TITLE);
