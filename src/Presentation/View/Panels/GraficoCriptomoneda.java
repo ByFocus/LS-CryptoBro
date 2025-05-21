@@ -84,16 +84,19 @@ public class GraficoCriptomoneda extends JPanel {
 
     public void setMuestras(LinkedList<Double> valores) {
         Date ahora = new Date();
-
-        for (int i = 0; i < valores.size(); i++) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(ahora);
-            calendar.add(Calendar.SECOND, (valores.size() - i) * -5);
-            Muestra muestra = new Muestra(valores.get(i), calendar.getTime());
-            actualizarDatos(muestra);
-            repaint();
+        if (valores != null) {
+            SwingUtilities.invokeLater(() -> {
+                muestras.clear();
+                for (int i = 0; i < valores.size(); i++) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(ahora);
+                    calendar.add(Calendar.SECOND, (valores.size() - i) * -5);
+                    Muestra muestra = new Muestra(valores.get(i), calendar.getTime());
+                    actualizarDatos(muestra);
+                    repaint();
+                }
+            });
         }
-
     }
 
     @Override

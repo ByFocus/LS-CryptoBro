@@ -48,7 +48,7 @@ public class CryptoInfo extends JFrame {
         setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
         setSize(750, 450);
-        getContentPane().setBackground(new Color(244, 233, 205));
+        getContentPane().setBackground(new Color(28,36,52,255));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setLocationRelativeTo(null);
@@ -60,7 +60,7 @@ public class CryptoInfo extends JFrame {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD, 38));
-        cryptoNameLabel.setForeground(new Color(3, 25, 38));
+        cryptoNameLabel.setForeground(new Color(244, 233, 205));
         cryptoNameLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(cryptoNameLabel);
@@ -179,8 +179,8 @@ public class CryptoInfo extends JFrame {
 
     private void styleButton(JButton button) {
         button.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
-        button.setBackground(new Color(28, 36, 52));
-        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(244, 233, 205));
+        button.setForeground(new Color(28,36,52,255));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
