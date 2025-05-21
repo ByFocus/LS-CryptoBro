@@ -117,6 +117,71 @@ public class PurchaseSQLDAO implements PurchaseDAO{
         return purchases;
     }
 
+    private int getBuyId(Purchase purchase, String username) throws PersistanceException{
+        int buyId = -1;
+        String query = "SELECT buy_id FROM purchase WHERE crypto_name = ? AND user_name = ? AND number = ? AND buy_price = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new SQLException("Database connection is null");
+            }
+
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, purchase.getCrypto());
+            stmt.setString(2, username);
+            stmt.setInt(3, purchase.getUnits());
+            stmt.setDouble(4, purchase.getPriceUnit());
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                buyId = rs.getInt("buy_id");
+            }
+            if(buyId == -1) {
+                throw new DBDataNotFound("Purchase not found!");
+            }
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached("Failed to get usernames by crypto name " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
+            }
+            // Note: Don't close conn here as it's managed by SQLConnector
+        }
+        return buyId;
+    }
+
+
+    public void substractUnits(Purchase purchase, String username, int unitsToSubstract) throws PersistanceException{
+        String query = "UPDATE PURCHASE SET number = ? WHERE buy_id = ?";
+        int newUnits;
+        int buyId;
+        try{
+            buyId = getBuyId(purchase, username);
+             newUnits = purchase.getUnits() - unitsToSubstract;
+        }catch (PersistanceException ex){
+            throw ex;
+        }
+        try {
+            Connection conn = SQLConnector.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, newUnits);
+            stmt.setInt(2, buyId);
+            int rowsAffected = stmt.executeUpdate();
+            if(rowsAffected == 0){
+                throw new DBConnectionNotReached("Failed to update purchase");
+            }
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached(e.getMessage());
+        }
+    }
+
     public double sellAllPurchasesFromCrypto(String cryptoName, String userName) throws PersistanceException{
         String queryUnits = "SELECT SUM(number) FROM purchase WHERE crypto_name = ? AND user_name = ?";
         String queryDelete = "DELETE FROM purchase WHERE crypto_name = ? AND user_name = ?";

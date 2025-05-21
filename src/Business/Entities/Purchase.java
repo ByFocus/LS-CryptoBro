@@ -12,6 +12,6 @@ public class Purchase {
     }
 
     public String getCrypto() { return crypto; }
-    public double getUnits() { return units; }
+    public int getUnits() { return units; }
     public double getPriceUnit() { return priceUnit; }
 }
