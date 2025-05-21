@@ -47,7 +47,7 @@ public class CryptoManager{
         new WalletManager().notifyChangeInCryptoValue(cryptoName);
     }
 
-    public void makeTransaction(String cryptoName, int units) throws BusinessExeption {
+    public synchronized void makeTransaction(String cryptoName, int units) throws BusinessExeption {
         try {
             double priceMultiplier = (units>0? 1.01 : 0.99);
             CryptoDAO cryptoDA0 =new CryptoSQLDAO();
