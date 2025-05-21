@@ -29,8 +29,8 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         return instance;
     }
 
-    public void displayCryptoInfo(Crypto crypto, int mode) {
-        CryptoInfo cryptoInfo =new CryptoInfo(crypto.getName(),mode);
+    public void displayCryptoInfo(Crypto crypto, int mode, int row) {
+        CryptoInfo cryptoInfo =new CryptoInfo(crypto.getName(),mode, row);
         cryptoInfo.getGrafica().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
         cryptoInfo.registerController(this);
         cryptoInfo.addWindowListener(new java.awt.event.WindowAdapter() {

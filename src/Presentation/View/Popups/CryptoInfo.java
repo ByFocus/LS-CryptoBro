@@ -29,12 +29,13 @@ public class CryptoInfo extends JFrame {
     private GraficoCriptomoneda grafica;
 
     private int amount = 0;
+    private int assignedRow;
     private JTextField amountLabel;
     private JButton functionButton;
 
-    public CryptoInfo(String cryptoName, int mode){
+    public CryptoInfo(String cryptoName, int mode, int row){
         configureFrame();
-
+        assignedRow = row;
         cryptoNameLabel = new JLabel(cryptoName);
 
         configureCryptoInfo(mode);
@@ -191,6 +192,10 @@ public class CryptoInfo extends JFrame {
 
     public GraficoCriptomoneda getGrafica() {
         return grafica;
+    }
+
+    public int getRow(){
+        return assignedRow;
     }
 
     public void resetAmount() {

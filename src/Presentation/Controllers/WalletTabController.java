@@ -42,7 +42,7 @@ public class WalletTabController implements EventListener, ActionListener {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                         String cryptoName = String.valueOf(walletTab.getTablaData().getValueAt(row, 0));
-                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  CryptoInfo.MODE_SELL_CRYPTO);
+                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  CryptoInfo.MODE_SELL_CRYPTO, row);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }

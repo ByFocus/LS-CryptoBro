@@ -56,7 +56,7 @@ public class MarketTabController implements EventListener, ActionListener {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                         String cryptoName = String.valueOf(marketTab.getTablaData().getValueAt(row, col));
-                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  admin ? CryptoInfo.MODE_ADMIN : CryptoInfo.MODE_BUY_CRYPTO);
+                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  admin ? CryptoInfo.MODE_ADMIN : CryptoInfo.MODE_BUY_CRYPTO, row);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
