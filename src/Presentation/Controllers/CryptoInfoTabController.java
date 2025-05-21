@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CryptoInfoTabController implements EventListener, ActionListener {
@@ -57,6 +58,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                 for (CryptoInfo cryptoInfo : cryptoInfos) {
                     cryptoInfo.getGrafica().setMuestras(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(cryptoInfo.getCryptoName()));
                 }
+                break;
         }
     }
 
