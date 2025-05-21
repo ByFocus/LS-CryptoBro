@@ -90,11 +90,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
             case CryptoInfo.SELL_CRYPTO:
                 JButton sellButton = (JButton) e.getSource();
                 CryptoInfo sellCryptoInfo = (CryptoInfo) sellButton.getClientProperty("parentCryptoInfo");
-                int sellUnits = sellCryptoInfo.getAmountOfCrypto();
+                int sellUnits = Integer.parseInt(sellCryptoInfo.getAmountLabel());
 
                 if (sellUnits > 0) {
-                    String cryptoName = sellCryptoInfo.getCryptoName();
                     try {
+                        Purchase purchase = WalletTabController.getInstance().getPurchaseByRow(cryptoInfo.getRow());
                         sellCrypto(purchase, sellUnits);
                         MessageDisplayer.displayInformativeMessage("Has vendido " + sellUnits + " " + cryptoName + "!\n !Así se hace brother, de aquí a la luna!");
                     } catch (BusinessExeption ex) {

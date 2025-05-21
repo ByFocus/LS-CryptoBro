@@ -6,6 +6,7 @@ import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;
+import Presentation.View.Tables.WalletTableModel;
 import Presentation.View.Tabs.WalletTab;
 
 import java.awt.event.ActionEvent;
@@ -75,5 +76,9 @@ public class WalletTabController implements EventListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public Purchase getPurchaseByRow(int row) {
+        return ((WalletTableModel)walletTab.getTablaData().getModel()).getPurchaseAtRow(row);
     }
 }

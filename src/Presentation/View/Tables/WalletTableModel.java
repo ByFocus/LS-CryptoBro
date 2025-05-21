@@ -69,6 +69,10 @@ public class WalletTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         return columnas[column];
     }
+
+    public Purchase getPurchaseAtRow(int row) {
+        return compras.get(row);
+    }
     
 }
 
