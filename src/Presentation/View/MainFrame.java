@@ -135,7 +135,7 @@ public class MainFrame extends JFrame {
         // Panel del Usuario
         userPanel = new RoundedPanel(20);
         userPanel.setBackground(new Color(244, 233, 205));
-        userPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        userPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         userNameLabel.setFont(new Font(FONT, Font.BOLD, 18));
         userNameLabel.setForeground(new Color(3, 25, 38));
