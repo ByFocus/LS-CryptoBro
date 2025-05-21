@@ -56,7 +56,9 @@ public class CryptoTableModel extends AbstractTableModel {
 
         // Cambia toda la tabla
         if (structureChanged) {
-            fireTableStructureChanged();
+            SwingUtilities.invokeLater(() -> {
+                fireTableStructureChanged();
+            });
         }
     }
 
@@ -93,6 +95,13 @@ public class CryptoTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int column) {
         return columnas[column];
+    }
+
+    public void clear() {
+        cryptos.clear();
+        SwingUtilities.invokeLater(() -> {
+            fireTableDataChanged();
+        });
     }
 }
 

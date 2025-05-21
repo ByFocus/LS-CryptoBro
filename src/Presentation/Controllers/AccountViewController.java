@@ -124,11 +124,6 @@ public class AccountViewController implements ActionListener, EventListener {
             try {
                 AccountManager am = AccountManager.getInstance();
                 am.registerUser(userName, email, password);
-                //User user =AccountManager.getInstance().loginUser(userName, password);
-                //TODO: SE TIENE QUE USAR EL USUARIO o igual que se logee
-                //startView.reset();
-                //startView.dispose();
-                //ApplicationController.getInstance().userConfirmed(false);
                 switchToLoginView();
                 MessageDisplayer.displayInformativeMessage(REGISTER_SUCCESFUL);
             } catch (BusinessExeption e1) {
@@ -150,7 +145,6 @@ public class AccountViewController implements ActionListener, EventListener {
                     AccountManager.getInstance().adminAccess(password);
 
                     startView.dispose();
-
                     ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITO", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", true);
                     userView.registerController(this);
@@ -192,6 +186,8 @@ public class AccountViewController implements ActionListener, EventListener {
     private void userLogOut() {
         userView.dispose();
         ApplicationController.getInstance().close();
+        CryptoInfoTabController.getInstance().close();
+        MarketTabController.getInstance().close();
         AccountManager.getInstance().logout();
         startView.setVisible(true);
     }

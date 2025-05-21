@@ -4,6 +4,7 @@ import Business.*;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.Entities.Crypto;
 import Business.Entities.User;
+import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;
 
@@ -11,7 +12,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CryptoInfoTabController implements EventListener, ActionListener {
@@ -64,13 +64,14 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JButton sourceButton = (JButton) e.getSource();
+        CryptoInfo cryptoInfo = (CryptoInfo) sourceButton.getClientProperty("parentCryptoInfo");
+        String cryptoName = cryptoInfo.getCryptoName();
+
         switch (e.getActionCommand()) {
             case CryptoInfo.BUY_CRYPTO:
-                JButton sourceButton = (JButton) e.getSource();
-                CryptoInfo cryptoInfo = (CryptoInfo) sourceButton.getClientProperty("parentCryptoInfo");
-                int units = cryptoInfo.getAmountOfCrypto();
+                int units = Integer.parseInt(cryptoInfo.getAmountLabel());
                 if (units > 0) {
-                    String cryptoName = cryptoInfo.getCryptoName();
                     try {
                         buyCrypto(cryptoName, units);
                         MessageDisplayer.displayInformativeMessage("Has comprado " + units + " " + cryptoName + "!\n Así se hace brother, tú pa lante como los de Alicante");
@@ -83,6 +84,27 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                 }
 
                 break;
+
+            case CryptoInfo.CHANGE_PRICE:
+                try {
+                    String amount = cryptoInfo.getAmountLabel();
+                    double price = Double.parseDouble(amount);
+                    if (price > 0) {
+                        CryptoManager.getCryptoManager().updateCryptoPrice(cryptoName, price);
+                        MessageDisplayer.displayInformativeMessage("Eres Dios, ahora " + cryptoName + " vale " + String.format("%.4f", price));
+                    } else {
+                        MessageDisplayer.displayError("Hermano, reales positivos, anda");
+                    }
+                } catch (NumberFormatException ex) {
+                    if (cryptoInfo.getAmountLabel().contains(",")) {
+                        MessageDisplayer.displayError("Si quieres poner decimales usa el punto (.)");
+                    } else {
+                        MessageDisplayer.displayError("Tú no has visto un número en tu vida");
+                    }
+                } catch (BusinessExeption ex2) {
+                    MessageDisplayer.displayError(ex2.getMessage());
+                }
+                break;
         }
     }
 
@@ -94,4 +116,12 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         walletManager.addTransaction(user, crypto, units);
     }
 
+    public void close() {
+        for (CryptoInfo cryptoInfo : cryptoInfos) {
+            cryptoInfo.dispose();
+        }
+        cryptoInfos.clear();
+        cryptoInfos = null;
+        instance = null;
+    }
 }

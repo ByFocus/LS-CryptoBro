@@ -33,6 +33,7 @@ public class MainFrame extends JFrame {
     private final JLabel balanceCountLabel;
     private final JLabel gainsCountLabel;
 
+    private JTabbedPane mainPanel;
     private WalletTab walletPanel;
     private MarketTab marketPanel;
     private AdminTab adminPanel;
@@ -82,7 +83,7 @@ public class MainFrame extends JFrame {
         UIManager.put("TabbedPane.tabAreaBackground", new Color(28, 36, 52));
 
         marketPanel = MarketTabController.getInstance().getMarketTab(admin);
-        JTabbedPane mainPanel = new JTabbedPane();
+        mainPanel = new JTabbedPane();
 
         mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
         if (admin) {
@@ -177,7 +178,23 @@ public class MainFrame extends JFrame {
     }
 
     public void close() {
-        MarketTabController.getInstance().close();
+        int index = mainPanel.indexOfComponent(marketPanel);
+        mainPanel.removeTabAt(index);
+        marketPanel = null;
+
+        if (walletPanel != null) {
+            index = mainPanel.indexOfComponent(walletPanel);
+            mainPanel.removeTabAt(index);
+            walletPanel = null;
+        }
+
+        if (adminPanel != null) {
+            index = mainPanel.indexOfComponent(adminPanel);
+            mainPanel.removeTabAt(index);
+            adminPanel = null;
+        }
+
+        mainPanel = null;
         this.dispose();
     }
 }

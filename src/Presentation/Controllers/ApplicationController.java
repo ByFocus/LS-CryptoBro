@@ -45,12 +45,6 @@ public class ApplicationController implements EventListener {
         });
 
 
-        if (admin) {
-
-        } else {
-            //Controller wallet
-        }
-
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
@@ -83,6 +77,9 @@ public class ApplicationController implements EventListener {
     }
 
     public void close() {
+        MarketManager.getMarketManager().unsubscribe(this, EventType.CRYPTO_VALUES_CHANGED);
+        MarketManager.getMarketManager().unsubscribe(this, EventType.USER_BALANCE_CHANGED);
         appFrame.close();
+        appFrame = null;
     }
 }

@@ -78,7 +78,7 @@ public class CryptoInfo extends JFrame {
             boton5Menos.setFont(new Font(FONT, Font.PLAIN, 16));
             boton5Menos.setBackground(new Color(70, 129, 167, 255));
             boton5Menos.setForeground(Color.WHITE);
-            boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 18, 5, 13));
             boton5Menos.addActionListener(e -> {
                 amount -= 5;
                 if (amount <= 0) {
@@ -91,7 +91,7 @@ public class CryptoInfo extends JFrame {
             botonMenos.setFont(new Font(FONT, Font.PLAIN, 18));
             botonMenos.setBackground(new Color(70, 129, 137, 255));
             botonMenos.setForeground(Color.WHITE);
-            botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 13));
             botonMenos.addActionListener(e -> {
                 if (amount > 0) {
                     amount--;
@@ -178,8 +178,8 @@ public class CryptoInfo extends JFrame {
         if (functionButton != null) functionButton.addActionListener(listener);
     }
 
-    public int getAmountOfCrypto() {
-        return amount;
+    public String getAmountLabel() {
+        return amountLabel.getText();
     }
 
     public String getCryptoName() {

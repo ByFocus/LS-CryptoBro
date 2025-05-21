@@ -107,4 +107,13 @@ public class CryptoManager{
     }
 
 
+    public void updateCryptoPrice(String cryptoName, double price) {
+        try {
+            CryptoDAO cryptoDA0 = new CryptoSQLDAO();
+            cryptoDA0.updateCryptoPrice(cryptoName, price);
+            MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
 }

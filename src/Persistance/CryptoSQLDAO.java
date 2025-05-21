@@ -51,7 +51,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
     }
 
-    public void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException{
+    public synchronized void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException{
 
         String query = "UPDATE cryptocurrency SET current_value = ? WHERE name = ?";
         Connection conn = null;

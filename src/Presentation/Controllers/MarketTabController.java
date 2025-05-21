@@ -94,5 +94,6 @@ public class MarketTabController implements EventListener, ActionListener {
     public void close() {
         MarketManager.getMarketManager().unsubscribe(this, EventType.CRYPTO_VALUES_CHANGED);
         marketTab = null;
+        instance = null;
     }
 }
