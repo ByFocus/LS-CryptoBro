@@ -1,11 +1,17 @@
 package Presentation.Controllers;
 
 import Business.*;
+import Business.BusinessExceptions.BusinessExeption;
+import Business.Entities.Crypto;
 import Business.Entities.Purchase;
+import Presentation.View.Popups.CryptoInfo;
+import Presentation.View.Popups.MessageDisplayer;
 import Presentation.View.Tabs.WalletTab;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class WalletTabController implements EventListener, ActionListener {
@@ -27,6 +33,22 @@ public class WalletTabController implements EventListener, ActionListener {
 
     public WalletTab getWalletTab() {
         updateWalletTab();
+        walletTab.getTablaData().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = walletTab.getTablaData().getSelectedRow();
+                int col = walletTab.getTablaData().getSelectedColumn();
+                if (row != -1 && col == 4) {
+                    try {
+                        CryptoManager cryptoManager = CryptoManager.getCryptoManager();
+                        String cryptoName = String.valueOf(walletTab.getTablaData().getValueAt(row, 0));
+                        displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName));
+                    } catch (BusinessExeption ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+                }
+            }
+        });
         return walletTab;
     }
 
@@ -48,6 +70,12 @@ public class WalletTabController implements EventListener, ActionListener {
                 updateWalletTab();
                 break;
         }
+    }
+
+    public void displayCryptoInfo(Crypto crypto) {
+        CryptoInfo cryptoInfo = new CryptoInfo(crypto.getName(), 1);
+        cryptoInfo.registerController(this);
+        cryptoInfo.setVisible(true);
     }
 
     @Override
