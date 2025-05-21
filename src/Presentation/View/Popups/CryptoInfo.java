@@ -68,62 +68,64 @@ public class CryptoInfo extends JFrame {
 
         JPanel panelContador = new JPanel(new FlowLayout());
 
-        RoundedButton boton5Menos = new RoundedButton("-5", 15);
-        boton5Menos.setFont(new Font(FONT,Font.PLAIN,16));
-        boton5Menos.setBackground(new Color(70, 129, 167, 255));
-        boton5Menos.setForeground(Color.WHITE);
-        boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
-        boton5Menos.addActionListener(e -> {
-            amount -= 5;
-            if (amount <= 0) {
-                amount = 0;
-            }
-            amountLabel.setText(String.valueOf(amount));
-        });
-
-        RoundedButton botonMenos = new RoundedButton("-", 15);
-        botonMenos.setFont(new Font(FONT,Font.PLAIN,18));
-        botonMenos.setBackground(new Color(70, 129, 137, 255));
-        botonMenos.setForeground(Color.WHITE);
-        botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
-        botonMenos.addActionListener(e -> {
-            if (amount > 0) {
-                amount--;
-                amountLabel.setText(String.valueOf(amount));
-            }
-        });
-
-        RoundedButton botonMas = new RoundedButton("+", 15);
-        botonMas.setFont(new Font(FONT,Font.PLAIN,18));
-        botonMas.setBackground(new Color(70, 129, 137, 255));
-        botonMas.setForeground(Color.WHITE);
-        botonMas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
-        botonMas.addActionListener(e -> {
-            amount++;
-            amountLabel.setText(String.valueOf(amount));
-        });
-
-        RoundedButton boton5Mas = new RoundedButton("+5", 15);
-        boton5Mas.setFont(new Font(FONT,Font.PLAIN,16));
-        boton5Mas.setBackground(new Color(70, 129, 167, 255));
-        boton5Mas.setForeground(Color.WHITE);
-        boton5Mas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
-        boton5Mas.addActionListener(e -> {
-            amount += 5;
-            amountLabel.setText(String.valueOf(amount));
-        });
-
-
         amountLabel = new JTextField("0", 3);
         amountLabel.setFont(new Font(FONT,Font.PLAIN,18));
         amountLabel.setHorizontalAlignment(JTextField.CENTER);
         amountLabel.setEditable(false);
 
-        panelContador.add(boton5Menos);
-        panelContador.add(botonMenos);
-        panelContador.add(amountLabel);
-        panelContador.add(botonMas);
-        panelContador.add(boton5Mas);
+        if (mode != MODE_ADMIN) {
+            RoundedButton boton5Menos = new RoundedButton("-5", 15);
+            boton5Menos.setFont(new Font(FONT, Font.PLAIN, 16));
+            boton5Menos.setBackground(new Color(70, 129, 167, 255));
+            boton5Menos.setForeground(Color.WHITE);
+            boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            boton5Menos.addActionListener(e -> {
+                amount -= 5;
+                if (amount <= 0) {
+                    amount = 0;
+                }
+                amountLabel.setText(String.valueOf(amount));
+            });
+
+            RoundedButton botonMenos = new RoundedButton("-", 15);
+            botonMenos.setFont(new Font(FONT, Font.PLAIN, 18));
+            botonMenos.setBackground(new Color(70, 129, 137, 255));
+            botonMenos.setForeground(Color.WHITE);
+            botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            botonMenos.addActionListener(e -> {
+                if (amount > 0) {
+                    amount--;
+                    amountLabel.setText(String.valueOf(amount));
+                }
+            });
+
+            RoundedButton botonMas = new RoundedButton("+", 15);
+            botonMas.setFont(new Font(FONT, Font.PLAIN, 18));
+            botonMas.setBackground(new Color(70, 129, 137, 255));
+            botonMas.setForeground(Color.WHITE);
+            botonMas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            botonMas.addActionListener(e -> {
+                amount++;
+                amountLabel.setText(String.valueOf(amount));
+            });
+
+            RoundedButton boton5Mas = new RoundedButton("+5", 15);
+            boton5Mas.setFont(new Font(FONT, Font.PLAIN, 16));
+            boton5Mas.setBackground(new Color(70, 129, 167, 255));
+            boton5Mas.setForeground(Color.WHITE);
+            boton5Mas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
+            boton5Mas.addActionListener(e -> {
+                amount += 5;
+                amountLabel.setText(String.valueOf(amount));
+            });
+            panelContador.add(boton5Menos);
+            panelContador.add(botonMenos);
+            panelContador.add(amountLabel);
+            panelContador.add(botonMas);
+            panelContador.add(boton5Mas);
+        } else {
+            panelContador.add(amountLabel);
+        }
 
         panelContador.setOpaque(false);
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);
