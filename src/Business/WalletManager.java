@@ -29,9 +29,10 @@ public class WalletManager {
         try{
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
             CryptoManager cryptoManager = new CryptoManager();
-            double benfit = units * cryptoManager.getCryptoByName(purchase.getCrypto()).getCurrentPrice();
+            double benefit = units * cryptoManager.getCryptoByName(purchase.getCrypto()).getCurrentPrice();
             purchaseDAO.substractUnits(purchase, user.getUsername(), units);
-            AccountManager.getInstance().updateUserBalance(benfit);
+            AccountManager.getInstance().updateUserBalance(benefit);
+            CryptoManager.getCryptoManager().makeTransaction(purchase.getCrypto(), units); // modifica el precio de la crypto
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }

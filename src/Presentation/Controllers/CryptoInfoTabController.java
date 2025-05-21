@@ -137,15 +137,12 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         User user = AccountManager.getInstance().getCurrentUser();
         Crypto crypto = CryptoManager.getCryptoManager().getCryptoByName(cryptoName);
         walletManager.addTransaction(user, crypto, units);
-        CryptoManager.getCryptoManager().makeTransaction(cryptoName, units); //modifica el precio de la crypto
     }
 
     private void sellCrypto(Purchase purchase, int units) throws BusinessExeption {
         WalletManager walletManager = WalletManager.getInstance();
         User user = AccountManager.getInstance().getCurrentUser();
         walletManager.removeTransaction(user, purchase, units);
-        CryptoManager.getCryptoManager().makeTransaction(purchase.getCrypto(), units); // modifica el precio de la crypto
-
     }
 
     public void close() {
