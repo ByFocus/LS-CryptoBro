@@ -14,15 +14,53 @@ public class CryptoTableModel extends AbstractTableModel {
         this.cryptos = cryptos;
     }
 
+    /*
     public synchronized void setData(List<Crypto> cryptos) {
-        SwingUtilities.invokeLater(() -> {
-            synchronized (this) {
-                this.cryptos.clear();
-                this.cryptos.addAll(cryptos);
-                fireTableDataChanged();
+        boolean numCryptosChanged = getRowCount() != cryptos.size();
+        this.cryptos.clear();
+        this.cryptos.addAll(cryptos);
+        if (numCryptosChanged) {
+           fireTableDataChanged();
+        } else {
+           fireTableRowsUpdated();
+        }
+    }*/
+
+    public synchronized void setData(List<Crypto> newCryptos) {
+        // miramos si ha cambiado el número de cryptos
+        boolean structureChanged = (newCryptos.size() != cryptos.size());
+
+        // cambia la crypto
+        for (int i = 0; i < Math.min(cryptos.size(), newCryptos.size()); i++) {
+            Crypto existing = cryptos.get(i);
+            Crypto updated = newCryptos.get(i);
+
+            // si los datos no han cambiado no hace falta repintar
+            if (!existing.equals(updated)) {
+                cryptos.set(i, updated);
             }
-        });
+            fireTableRowsUpdated(i, i); // Notify UI to repaint this row
+        }
+
+        // solo se modifican las filas si cambia el número de criptos
+        if (newCryptos.size() > cryptos.size()) {
+            for (int i = cryptos.size(); i < newCryptos.size(); i++) {
+                cryptos.add(newCryptos.get(i));
+                fireTableRowsInserted(i, i); // añade una fila
+            }
+        } else if (newCryptos.size() < cryptos.size()) {
+            int oldSize = cryptos.size();
+            cryptos.subList(newCryptos.size(), oldSize).clear();
+            fireTableRowsDeleted(newCryptos.size(), oldSize - 1); // quita una
+        }
+
+        // Cambia toda la tabla
+        if (structureChanged) {
+            fireTableStructureChanged();
+        }
     }
+
+
     @Override
     public int getRowCount() {
         return cryptos.size();
@@ -37,7 +75,7 @@ public class CryptoTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < cryptos.size()) {
             Crypto crypto = cryptos.get(rowIndex);
-            Double marketGap = crypto.calculateMarketGap();
+            double marketGap = crypto.calculateMarketGap();
             char sign = marketGap > 0? '+': ' ';
 
             switch (columnIndex) {

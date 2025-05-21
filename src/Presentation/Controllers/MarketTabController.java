@@ -37,24 +37,28 @@ public class MarketTabController implements EventListener, ActionListener {
         if (marketTab == null) {
             List<Crypto> cryptos = new CryptoManager().getAllCryptos();
             marketTab = new MarketTab(cryptos);
-            marketTab.getTablaData().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    int row = marketTab.getTablaData().getSelectedRow();
-                    int col = marketTab.getTablaData().getSelectedColumn();
-                    if (row != -1 && col == 0) {
-                        try {
-                            CryptoManager cryptoManager = CryptoManager.getCryptoManager();
-                            String cryptoName = String.valueOf(marketTab.getTablaData().getValueAt(row, col));
-                            displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName));
-                        } catch (BusinessExeption ex) {
-                            MessageDisplayer.displayError(ex.getMessage());
-                        }
-                    }
-                }
-            });
+            attachTableMouseListener();
         }
         return marketTab;
+    }
+
+    private void attachTableMouseListener() {
+        marketTab.getTablaData().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = marketTab.getTablaData().getSelectedRow();
+                int col = marketTab.getTablaData().getSelectedColumn();
+                if (row != -1 && col == 0) {
+                    try {
+                        CryptoManager cryptoManager = CryptoManager.getCryptoManager();
+                        String cryptoName = String.valueOf(marketTab.getTablaData().getValueAt(row, col));
+                        displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName));
+                    } catch (BusinessExeption ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     public void displayCryptoInfo(Crypto crypto) {
@@ -79,7 +83,6 @@ public class MarketTabController implements EventListener, ActionListener {
     public void update(EventType context) {
         switch (context) {
             case EventType.CRYPTO_VALUES_CHANGED:
-                //System.out.println("Value changed\n");
                 updateMarketTab();
                 break;
             case EventType.NEW_HISTORICAL_VALUE:
