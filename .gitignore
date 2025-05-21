@@ -32,6 +32,7 @@ bin/
 /out/
 Crypto.iml
 LS-CryptoBro.iml
+LS-CryptoBro2.iml
 /data/config.json
 config.json
 data/config.json
