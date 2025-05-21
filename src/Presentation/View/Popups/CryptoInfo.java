@@ -131,8 +131,11 @@ public class CryptoInfo extends JFrame {
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
         add(panelContador, BorderLayout.CENTER);
-
         addFunctionButton(mode);
+        Component glue = Box.createVerticalGlue();
+        glue.setMinimumSize(new Dimension(0, 30));
+        add(glue);
+
     }
 
     public void addFunctionButton(int option) {
