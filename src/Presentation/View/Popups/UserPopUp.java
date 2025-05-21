@@ -36,6 +36,7 @@ public class UserPopUp extends JFrame {
 
         configureUserProfile();
         configureActions(admin);
+        setLocationRelativeTo(null);
     }
 
     private void configureUserProfile(){
