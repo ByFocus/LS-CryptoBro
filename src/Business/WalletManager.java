@@ -24,6 +24,19 @@ public class WalletManager {
         }
         return instance;
     }
+
+    public void removeTransaction(User user, Purchase purchase, int units){
+        try{
+            PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
+            CryptoManager cryptoManager = new CryptoManager();
+            double benfit = units * cryptoManager.getCryptoByName(purchase.getCrypto()).getCurrentPrice();
+            purchaseDAO.substractUnits(purchase, user.getUsername(), units);
+            AccountManager.getInstance().updateUserBalance(benfit);
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
+
     public void addTransaction(User user, Crypto crypto, int units) {
         double cost = crypto.getCurrentPrice() * units;
         if (cost <= user.getBalance()) {

@@ -1,6 +1,8 @@
 package Presentation.View.Tabs;
 
+import Business.Entities.Crypto;
 import Business.Entities.Purchase;
+import Presentation.View.Tables.CryptoTableModel;
 import Presentation.View.Tables.SellColumnRender;
 import Presentation.View.Tables.WalletTableModel;
 
@@ -33,6 +35,11 @@ public class WalletTab extends JPanel {
         JScrollPane scroll = new JScrollPane(walletTable);
         add(scroll);
     }
+
+    /*public void loadPurchaseData(List<Purchase> compras) {
+        ((CryptoTableModel) cartera.getModel()).setData(compras);
+        ((CryptoTableModel) cartera.getModel()).fireTableDataChanged();
+    }*/
 
     public JTable getTablaData() {
         return walletTable;

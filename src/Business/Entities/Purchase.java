@@ -14,4 +14,5 @@ public class Purchase {
     public String getCrypto() { return crypto; }
     public int getUnits() { return units; }
     public double getPriceUnit() { return priceUnit; }
+    public void decreaseUnits(int units) { this.units -= units; }
 }

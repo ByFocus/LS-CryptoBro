@@ -3,15 +3,18 @@ package Presentation.Controllers;
 import Business.*;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.Entities.Crypto;
+import Business.Entities.Purchase;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;
+import Presentation.View.Tables.WalletTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CryptoInfoTabController implements EventListener, ActionListener {
@@ -84,6 +87,26 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                 }
 
                 break;
+            case CryptoInfo.SELL_CRYPTO:
+                JButton sellButton = (JButton) e.getSource();
+                CryptoInfo sellCryptoInfo = (CryptoInfo) sellButton.getClientProperty("parentCryptoInfo");
+                int sellUnits = sellCryptoInfo.getAmountOfCrypto();
+
+                if (sellUnits > 0) {
+                    String cryptoName = sellCryptoInfo.getCryptoName();
+                    try {
+                        sellCrypto(purchase, sellUnits);
+                        MessageDisplayer.displayInformativeMessage("Has vendido " + sellUnits + " " + cryptoName + "!\n !Así se hace brother, de aquí a la luna!");
+                    } catch (BusinessExeption ex) {
+                        MessageDisplayer.displayError(ex.getMessage());
+                    }
+
+                    sellCryptoInfo.resetAmount();
+
+                } else {
+                    MessageDisplayer.displayError("¿Vender 0? ¿Brother, seguro que eso es rentable?");
+                }
+                break;
 
             case CryptoInfo.CHANGE_PRICE:
                 try {
@@ -114,6 +137,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         User user = AccountManager.getInstance().getCurrentUser();
         Crypto crypto = CryptoManager.getCryptoManager().getCryptoByName(cryptoName);
         walletManager.addTransaction(user, crypto, units);
+    }
+
+    private void sellCrypto(Purchase purchase, int units) throws BusinessExeption {
+        WalletManager walletManager = WalletManager.getInstance();
+        User user = AccountManager.getInstance().getCurrentUser();
+        walletManager.removeTransaction(user, purchase, units);
+
     }
 
     public void close() {
