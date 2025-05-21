@@ -26,12 +26,14 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
                 if (root.isJsonArray()) {
                     JsonArray objects = root.getAsJsonArray();
                     for (JsonElement element : objects) {
-                        cryptoList.add(gson.fromJson(element, Crypto.class));
+                        Crypto crypto = parseCryptoFromJson(element.getAsJsonObject());
+                        cryptoList.add(crypto);
                     }
                 } else if (root.isJsonObject()) {
-                    cryptoList.add(gson.fromJson(root, Crypto.class));
+                    Crypto crypto = parseCryptoFromJson(root.getAsJsonObject());
+                    cryptoList.add(crypto);
                 } else {
-                    throw new FileTypeException("JSON file must contain an object or an array of objects.");
+                    throw new FileTypeException("Este fichero está vacío :0");
                 }
 
             } catch (IOException e) {
@@ -41,6 +43,54 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
             throw new FileTypeException("El fichero debe ser JSON, ¡esfuerzáte más BRO!");
         }
         return cryptoList;
+    }
+
+    private Crypto parseCryptoFromJson(JsonObject obj) throws FileTypeException {
+        String name = obj.has("name") ? obj.get("name").getAsString() : null;
+        String category = obj.has("category") ? obj.get("category").getAsString() : null;
+
+        if (name == null || category == null) {
+            throw new FileTypeException("Los tipos del dato no son correctos");
+        }
+
+        // Parse initialPrice
+        double initialPrice = 0;
+        if (obj.has("initial-price") && !obj.get("initial-price").isJsonNull()) {
+            try {
+                initialPrice = obj.get("initial-price").getAsDouble();
+            } catch (Exception e) {
+                throw new FileTypeException("Los tipos del dato no son correctos");
+            }
+        }
+
+        // Parse currentPrice (Puede estar vacío)
+        double currentPrice;
+        if (obj.has("current-price") && !obj.get("current-price").isJsonNull() && !obj.get("current-price").getAsString().isEmpty()) {
+            try {
+                currentPrice = obj.get("current-price").getAsDouble();
+            } catch (Exception e) {
+                throw new FileTypeException("Los tipos del dato no son correctos");
+            }
+        } else {
+            currentPrice = initialPrice;
+        }
+
+        // Parse volatility
+        int volatility = 0;
+        if (obj.has("volatility") && !obj.get("volatility").isJsonNull()) {
+            try {
+                volatility = obj.get("volatility").getAsInt();
+            } catch (Exception e) {
+                throw new FileTypeException("Los tipos del dato no son correctos");
+            }
+        }
+
+        // Validation
+        if (currentPrice <= 0 || initialPrice <= 0) {
+            throw new FileTypeException("Los precios tienen que ser mayores a 0, melonª");
+        }
+
+        return new Crypto(name, category, currentPrice, initialPrice, volatility);
     }
 
 }
