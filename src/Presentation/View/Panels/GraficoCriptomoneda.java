@@ -171,7 +171,11 @@ public class GraficoCriptomoneda extends JPanel {
 
         // Dibujar la línea del gráfico
         if (muestras.size() > 1) {
-            g2d.setColor(new Color(50, 205, 50)); // Verde
+            if (muestras.getLast().getPrecio() >= muestras.getFirst().getPrecio()) {
+                g2d.setColor(new Color(50, 205, 50)); // Verde
+            } else {
+                g2d.setColor(new Color(205, 50, 50)); // Verde
+            }
             g2d.setStroke(new BasicStroke(2.0f));
 
             int[] xPuntos = new int[muestras.size()];
