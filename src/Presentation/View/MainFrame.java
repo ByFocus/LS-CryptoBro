@@ -4,6 +4,7 @@ import Business.Entities.Crypto;
 import Presentation.Controllers.AdminTabController;
 import Presentation.Controllers.MarketTabController;
 import Presentation.Controllers.WalletTabController;
+import Presentation.View.Panels.RoundedPanel;
 import Presentation.View.Tabs.*;
 
 import javax.swing.*;
@@ -132,8 +133,9 @@ public class MainFrame extends JFrame {
         userMenu.add(balancePanel, BorderLayout.WEST);
 
         // Panel del Usuario
-        userPanel = new JPanel();
+        userPanel = new RoundedPanel(20);
         userPanel.setBackground(new Color(244, 233, 205));
+        userPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         userNameLabel.setFont(new Font(FONT, Font.BOLD, 18));
         userNameLabel.setForeground(new Color(3, 25, 38));
