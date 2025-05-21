@@ -48,6 +48,7 @@ public class WalletManager {
             throw new DataPersistanceError(e.getMessage());
         }
     }
+
     public double calculateEstimatedGainsByUserName(String userName) {
 
        // esto no es yas List <Purchase> purchases = user.getPurchases();

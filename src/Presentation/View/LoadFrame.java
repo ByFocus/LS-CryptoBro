@@ -19,7 +19,7 @@ public class LoadFrame extends JFrame {
         progressBar = new JProgressBar();
         progressBar.setMinimum(0);
         progressBar.setMaximum(100);
-        progressBar.setStringPainted(true); // Muestra el porcentaje en la barra
+        progressBar.setStringPainted(true); // Business.Entities.Muestra el porcentaje en la barra
         add(progressBar, BorderLayout.SOUTH);
 
         // Configurar tamaño y posición de la ventana

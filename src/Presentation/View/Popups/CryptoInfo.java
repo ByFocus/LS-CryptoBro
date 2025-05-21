@@ -2,6 +2,7 @@ package Presentation.View.Popups;
 
 import Business.Entities.Crypto;
 import Presentation.View.Buttons.RoundedButton;
+import Presentation.View.Panels.GraficoCriptomoneda;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,16 +20,18 @@ public class CryptoInfo extends JFrame {
 
     private final JLabel cryptoNameLabel;
 
+    private GraficoCriptomoneda grafica;
+
     private int amount = 0;
     private JTextField amountLabel;
     private RoundedButton botonMenos;
     private RoundedButton botonMas;
     private JButton buyButton;
 
-    public CryptoInfo(Crypto crypto){
+    public CryptoInfo(String cryptoName){
         configureFrame();
 
-        cryptoNameLabel = new JLabel(crypto.getName());
+        cryptoNameLabel = new JLabel(cryptoName);
 
         configureCryptoInfo();
     }
@@ -54,11 +57,10 @@ public class CryptoInfo extends JFrame {
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(cryptoNameLabel);
 
-        Image userProfileImg = new ImageIcon("imgs/follador.png").getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
-        userProfile.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
-        userProfile.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(userProfile);
+        grafica = new GraficoCriptomoneda();
+        grafica.setPreferredSize(new Dimension(getWidth(), getHeight()));
+        grafica.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+        add(grafica);
 
         JPanel panelContador = new JPanel(new FlowLayout());
 
@@ -151,6 +153,11 @@ public class CryptoInfo extends JFrame {
     public String getCryptoName() {
         return cryptoNameLabel.getText();
     }
+
+    public GraficoCriptomoneda getGrafica() {
+        return grafica;
+    }
+
     public void resetAmount() {
         amount = 0;
         amountLabel.setText(String.valueOf(amount));

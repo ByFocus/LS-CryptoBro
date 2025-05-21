@@ -42,12 +42,12 @@ public class CryptoManager{
         }
     }
 
-    public void botMakeTransaction(String cryptoName, boolean buy){
+    public synchronized void botMakeTransaction(String cryptoName, boolean buy){
         makeTransaction(cryptoName, buy? 1: -1);
         new WalletManager().notifyChangeInCryptoValue(cryptoName);
     }
 
-    public synchronized void makeTransaction(String cryptoName, int units) throws BusinessExeption {
+    public void makeTransaction(String cryptoName, int units) throws BusinessExeption {
         try {
             double priceMultiplier = (units>0? 1.01 : 0.99);
             CryptoDAO cryptoDA0 =new CryptoSQLDAO();

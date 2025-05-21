@@ -59,7 +59,7 @@ public class MarketManager  {
         }
     }
 
-    public Queue<Double> getHistoricalValuesByCryptoName(String cryptoName) {
+    public LinkedList<Double> getHistoricalValuesByCryptoName(String cryptoName) {
         return market.getHistoricalFromCrypto(cryptoName);
     }
 
