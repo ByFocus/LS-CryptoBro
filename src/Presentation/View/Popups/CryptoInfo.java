@@ -1,6 +1,5 @@
 package Presentation.View.Popups;
 
-import Business.Entities.Crypto;
 import Presentation.View.Buttons.RoundedButton;
 import Presentation.View.Panels.GraficoCriptomoneda;
 
@@ -10,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class CryptoInfo extends JFrame {
     public static final String BUY_CRYPTO = "BUY_CRYPTO";
-
+    public static final String CHANGE_PRICE = "CHANGE_PRICE";
     public static final String SELL_CRYPTO = "SELL_CRYPTO";
 
     public static final String iconImgURL = "imgs/icono.png";
@@ -31,10 +30,7 @@ public class CryptoInfo extends JFrame {
 
     private int amount = 0;
     private JTextField amountLabel;
-    private RoundedButton botonMenos;
-    private RoundedButton botonMas;
-    private JButton buyButton;
-    private JButton sellButton;
+    private JButton functionButton;
 
     public CryptoInfo(String cryptoName, int mode){
         configureFrame();
@@ -85,7 +81,7 @@ public class CryptoInfo extends JFrame {
             amountLabel.setText(String.valueOf(amount));
         });
 
-        botonMenos = new RoundedButton("-", 15);
+        RoundedButton botonMenos = new RoundedButton("-", 15);
         botonMenos.setFont(new Font(FONT,Font.PLAIN,18));
         botonMenos.setBackground(new Color(70, 129, 137, 255));
         botonMenos.setForeground(Color.WHITE);
@@ -97,7 +93,7 @@ public class CryptoInfo extends JFrame {
             }
         });
 
-        botonMas = new RoundedButton("+", 15);
+        RoundedButton botonMas = new RoundedButton("+", 15);
         botonMas.setFont(new Font(FONT,Font.PLAIN,18));
         botonMas.setBackground(new Color(70, 129, 137, 255));
         botonMas.setForeground(Color.WHITE);
@@ -121,7 +117,7 @@ public class CryptoInfo extends JFrame {
         amountLabel = new JTextField("0", 3);
         amountLabel.setFont(new Font(FONT,Font.PLAIN,18));
         amountLabel.setHorizontalAlignment(JTextField.CENTER);
-        amountLabel.setEditable(true);
+        amountLabel.setEditable(false);
 
         panelContador.add(boton5Menos);
         panelContador.add(botonMenos);
@@ -134,43 +130,35 @@ public class CryptoInfo extends JFrame {
         panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
         add(panelContador, BorderLayout.CENTER);
 
-        addButton(mode);
+        addFunctionButton(mode);
     }
 
-    public void addButton(int option) {
+    public void addFunctionButton(int option) {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setOpaque(false);
 
         switch (option) {
             case MODE_BUY_CRYPTO:
-                buyButton = new JButton("Comprar");
-                styleButton(buyButton);
-                buyButton.setActionCommand(BUY_CRYPTO);
-                buyButton.putClientProperty("parentCryptoInfo", this);
-                buttonPanel.add(buyButton);
+                functionButton = new JButton("Comprar");
+                styleButton(functionButton);
+                functionButton.setActionCommand(BUY_CRYPTO);
+                functionButton.putClientProperty("parentCryptoInfo", this);
+                buttonPanel.add(functionButton);
                 break;
             case MODE_SELL_CRYPTO:
-                sellButton = new JButton("Vender");
-                styleButton(sellButton);
-                sellButton.setActionCommand(SELL_CRYPTO);
-                sellButton.putClientProperty("parentCryptoInfo", this);
-                buttonPanel.add(sellButton);
+                functionButton = new JButton("Vender");
+                styleButton(functionButton);
+                functionButton.setActionCommand(SELL_CRYPTO);
+                functionButton.putClientProperty("parentCryptoInfo", this);
+                buttonPanel.add(functionButton);
                 break;
             case MODE_ADMIN:
-                buyButton = new JButton("Comprar");
-                sellButton = new JButton("Vender");
-
-                styleButton(buyButton);
-                styleButton(sellButton);
-
-                buyButton.setActionCommand(BUY_CRYPTO);
-                sellButton.setActionCommand(SELL_CRYPTO);
-
-                buyButton.putClientProperty("parentCryptoInfo", this);
-                sellButton.putClientProperty("parentCryptoInfo", this);
-                System.out.println("hola");
-                buttonPanel.add(buyButton);
-                buttonPanel.add(sellButton);
+                amountLabel.setEditable(true); // para que pueda introducir el valor
+                functionButton = new JButton("Cambiar Precio");
+                styleButton(functionButton);
+                functionButton.setActionCommand(CHANGE_PRICE);
+                functionButton.putClientProperty("parentCryptoInfo", this);
+                buttonPanel.add(functionButton);
                 break;
         }
 
@@ -185,8 +173,7 @@ public class CryptoInfo extends JFrame {
     }
 
     public void registerController(ActionListener listener) {
-        if (sellButton != null) sellButton.addActionListener(listener);
-        if (buyButton != null) buyButton.addActionListener(listener);
+        if (functionButton != null) functionButton.addActionListener(listener);
     }
 
     public int getAmountOfCrypto() {
