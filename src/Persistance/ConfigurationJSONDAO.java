@@ -1,14 +1,9 @@
 package Persistance;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 import Persistance.PersistanceExceptions.ConfigurationFileError;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.io.FileReader;
+import com.google.gson.*;
 
 /**
  * The type Configuration jsondao.
@@ -25,30 +20,11 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
      */
     public ConfigurationJSONDAO() throws ConfigurationFileError {
         try {
-            FileReader reader = new FileReader(FILE_NAME);
-        }catch (IOException e) {
-            //throw new ConfigurationFileError(CONFIG_ERROR);
-        }
-     }
-
-    /*private void loadConfiguration() throws ConfigurationFileError {
-        Gson gson = new Gson();
-        JsonParser parser = new JsonParser();
-
-        try (FileReader reader = new FileReader(FILE_NAME)) {
-            JsonObject jsonObject = parser.parse(reader).getAsJsonObject();
-
-            this.dbPort = jsonObject.get("db_port").getAsString();
-            this.dbIP = jsonObject.get("db_ip").getAsString();
-            this.dbName = jsonObject.get("db_name").getAsString();
-            this.dbUser = jsonObject.get("db_user").getAsString();
-            this.dbPass = jsonObject.get("db_pass").getAsString();
-            this.adminPass = jsonObject.get("admin_pass").getAsString();
-        }
-        catch (IOException e) {
+            new FileReader(FILE_NAME);
+        }catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
-    }*/
+     }
 
     public String getAdminPass() throws ConfigurationFileError {
         Gson gson = new Gson();
@@ -56,8 +32,27 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("admin_pass").getAsString();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
+        }
+    }
+
+    public void setAdminPass(String adminPass) throws ConfigurationFileError {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("db_port", getDBPort());
+        jsonObject.addProperty("db_ip", getDBIP());
+        jsonObject.addProperty("db_name", getDBName());
+        jsonObject.addProperty("db_user", getDBUser());
+        jsonObject.addProperty("db_pass", getDBPass());
+        jsonObject.addProperty("admin_pass", adminPass);
+        jsonObject.addProperty("polling_interval", getPollingInterval());
+        jsonObject.addProperty("maximum_data_points", getMaximumDataPoints());
+
+        try (FileWriter writer = new FileWriter(FILE_NAME)) {
+            gson.toJson(gson.fromJson(jsonObject, JsonObject.class), writer);
+        } catch (Exception e) {
+            throw new ConfigurationFileError(CONFIG_ERROR + e.getMessage());
         }
     }
 
@@ -67,7 +62,7 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("db_port").getAsInt();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
     }
@@ -78,7 +73,7 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("db_name").getAsString();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
     }
@@ -89,7 +84,7 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("db_user").getAsString();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
     }
@@ -100,19 +95,38 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("db_pass").getAsString();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
     }
 
     public String getDBIP() throws ConfigurationFileError {
         Gson gson = new Gson();
-        JsonParser parser = new JsonParser();
 
         try (FileReader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, JsonObject.class).get("db_ip").getAsString();
         }
-        catch (IOException e) {
+        catch (Exception e) {
+            throw new ConfigurationFileError(CONFIG_ERROR);
+        }
+    }
+
+    public double getPollingInterval() throws ConfigurationFileError {
+        Gson gson = new Gson();
+
+        try (FileReader reader = new FileReader(FILE_NAME)) {
+            return gson.fromJson(reader, JsonObject.class).get("polling_interval").getAsInt();
+        } catch (Exception e) {
+            throw new ConfigurationFileError(CONFIG_ERROR);
+        }
+    }
+
+    public int getMaximumDataPoints() throws ConfigurationFileError {
+        Gson gson = new Gson();
+
+        try (FileReader reader = new FileReader(FILE_NAME)) {
+            return gson.fromJson(reader, JsonObject.class).get("maximum_data_points").getAsInt();
+        } catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
     }

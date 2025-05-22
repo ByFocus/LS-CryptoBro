@@ -13,7 +13,7 @@ public interface ConfigurationDAO {
      * @return the admin pass
      * @throws ConfigurationFileError the configuration file error
      */
-    public String getAdminPass() throws ConfigurationFileError;
+    String getAdminPass() throws ConfigurationFileError;
 
     /**
      * Gets db port.
@@ -21,7 +21,7 @@ public interface ConfigurationDAO {
      * @return the db port
      * @throws ConfigurationFileError the configuration file error
      */
-    public int getDBPort() throws ConfigurationFileError;
+    int getDBPort() throws ConfigurationFileError;
 
     /**
      * Gets db name.
@@ -29,7 +29,7 @@ public interface ConfigurationDAO {
      * @return the db name
      * @throws ConfigurationFileError the configuration file error
      */
-    public String getDBName() throws ConfigurationFileError;
+    String getDBName() throws ConfigurationFileError;
 
     /**
      * Gets db user.
@@ -37,7 +37,7 @@ public interface ConfigurationDAO {
      * @return the db user
      * @throws ConfigurationFileError the configuration file error
      */
-    public String getDBUser() throws ConfigurationFileError;
+    String getDBUser() throws ConfigurationFileError;
 
     /**
      * Gets db pass.
@@ -45,7 +45,7 @@ public interface ConfigurationDAO {
      * @return the db pass
      * @throws ConfigurationFileError the configuration file error
      */
-    public String getDBPass() throws ConfigurationFileError;
+    String getDBPass() throws ConfigurationFileError;
 
     /**
      * Gets dbip.
@@ -53,5 +53,11 @@ public interface ConfigurationDAO {
      * @return the dbip
      * @throws ConfigurationFileError the configuration file error
      */
-    public String getDBIP() throws ConfigurationFileError;
+    String getDBIP() throws ConfigurationFileError;
+
+    double getPollingInterval() throws ConfigurationFileError;
+
+    int getMaximumDataPoints() throws ConfigurationFileError;
+
+    void setAdminPass(String adminPass) throws ConfigurationFileError;
 }
