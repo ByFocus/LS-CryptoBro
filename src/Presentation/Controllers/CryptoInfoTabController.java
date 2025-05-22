@@ -39,10 +39,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         cryptoInfo.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                cryptoInfos.remove(cryptoInfo);
-
-                if (cryptoInfos.isEmpty()) {
-                    MarketManager.getMarketManager().unsubscribe(CryptoInfoTabController.this, EventType.NEW_HISTORICAL_VALUE);
+                if (cryptoInfos != null) {
+                    cryptoInfos.remove(cryptoInfo);
+                    if (cryptoInfos.isEmpty()) {
+                        MarketManager.getMarketManager().unsubscribe(CryptoInfoTabController.this, EventType.NEW_HISTORICAL_VALUE);
+                    }
                 }
             }
         });
@@ -146,6 +147,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
     }
 
     public void close() {
+        MarketManager.getMarketManager().unsubscribe(this, EventType.NEW_HISTORICAL_VALUE);
         for (CryptoInfo cryptoInfo : cryptoInfos) {
             cryptoInfo.dispose();
         }

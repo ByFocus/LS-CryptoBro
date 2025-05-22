@@ -66,8 +66,14 @@ public class ApplicationController implements EventListener {
                 }
                 break;
             case EventType.USER_BALANCE_CHANGED:
-                double balance = AccountManager.getInstance().getCurrentUser().getBalance();
-                appFrame.setBalance(balance);
+                try {
+                    if (appFrame != null) {
+                        double balance = AccountManager.getInstance().getCurrentUser().getBalance();
+                        appFrame.setBalance(balance);
+                    }
+                } catch (NoCurrentUser _) {
+                    //si está el admin no debe actualizarse
+                }
                 break;
         }
     }

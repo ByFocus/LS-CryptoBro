@@ -81,7 +81,9 @@ public class MarketManager  {
         listSubscribers.add(eventListener);
     }
     public synchronized void unsubscribe(EventListener eventListener, EventType event) {
-        listeners.get(event).remove(eventListener);
+        if (listeners != null) {
+            listeners.get(event).remove(eventListener);
+        }
     }
 
 
