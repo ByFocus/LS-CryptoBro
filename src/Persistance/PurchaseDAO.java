@@ -1,6 +1,5 @@
 package Persistance;
 
-import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -57,4 +56,6 @@ public interface PurchaseDAO {
      * @throws PersistanceException the persistance exception
      */
     double sellAllPurchasesFromCrypto(String cryptoName, String userName) throws PersistanceException;
+
+    void deletePurchasesFromUser(String identifier) throws PersistanceException;
 }

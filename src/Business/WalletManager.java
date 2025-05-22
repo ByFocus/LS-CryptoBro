@@ -108,14 +108,11 @@ public class WalletManager {
      * @return the double
      */
     public double calculateEstimatedGainsByUserName(String userName) {
-
-       // esto no es yas List <Purchase> purchases = user.getPurchases();
         List<Purchase> purchases = getWalletByUserName(userName);
         double gains = 0;
         for (Purchase purchase : purchases) {
             gains+= purchase.getUnits() * (new CryptoManager().getCryptoCurrentPrice(purchase.getCrypto()) - purchase.getPriceUnit());
         }
-        //user.setEstimatedGains(gains);
         return gains;
     }
 
@@ -132,7 +129,7 @@ public class WalletManager {
                 MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
             }
         }
-        catch(BusinessExeption _){/*if there is no user*/}
+        catch(BusinessExeption _){/*if there is no user (it's the admin)*/}
         catch(PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
@@ -153,6 +150,15 @@ public class WalletManager {
                     AccountManager.getInstance().warnCryptoDeleted(benefits, user);
                 }
             }
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
+
+    public void deleteWalletFromUser(String userName) {
+        try {
+            PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
+            purchaseDAO.deletePurchasesFromUser(userName);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }

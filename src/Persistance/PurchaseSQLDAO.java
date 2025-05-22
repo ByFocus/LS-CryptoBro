@@ -264,4 +264,30 @@ public class PurchaseSQLDAO implements PurchaseDAO{
             }
         }
     }
+
+    public void deletePurchasesFromUser(String userName) throws PersistanceException{
+        String query = "DELETE FROM purchase WHERE user_name = ?";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = SQLConnector.getInstance().getConnection();
+            if (conn == null) {
+                throw new DBConnectionNotReached("Database connection is null");
+            }
+            stmt = conn.prepareStatement(query);
+
+            stmt.setString(1, userName);
+
+            int rows = stmt.executeUpdate();
+            // en aquest cas rows també potser 0, ja que el usuari pot no tenir purchases
+        } catch (SQLException e) {
+            throw new DBConnectionNotReached("Error al ejecutar la query");
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new DBConnectionNotReached("Error closing resources");
+            }
+        }
+    }
 }

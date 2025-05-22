@@ -147,6 +147,7 @@ public class AccountManager {
      */
     public void deleteCurrentUser() throws BusinessExeption{
         try {
+            WalletManager.getInstance().deleteWalletFromUser(currentUser.getUsername());
             UserDAO userDAO = new UserSQLDAO();
             userDAO.removeUser(currentUser.getUsername());
         } catch (PersistanceException e) {
