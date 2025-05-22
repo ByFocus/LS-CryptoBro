@@ -22,8 +22,6 @@ public class ApplicationController implements EventListener {
     private CryptoInfo cryptoInfoFrame;
 
     private ApplicationController() {
-        MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
-
     }
 
     /**
@@ -64,14 +62,13 @@ public class ApplicationController implements EventListener {
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
-        market.subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
         appFrame.setVisible(true);
     }
 
     @Override
     public void update(EventType context) {
         switch (context) {
-            case EventType.CRYPTO_VALUES_CHANGED:
+            case EventType.USER_ESTIMATED_GAINS_CHANGED:
                 try {
                     if (appFrame != null) {
                         String userName = AccountManager.getInstance().getCurrentUserName();
@@ -99,7 +96,7 @@ public class ApplicationController implements EventListener {
      * Close.
      */
     public void close() {
-        MarketManager.getMarketManager().unsubscribe(this, EventType.CRYPTO_VALUES_CHANGED);
+        MarketManager.getMarketManager().unsubscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
         MarketManager.getMarketManager().unsubscribe(this, EventType.USER_BALANCE_CHANGED);
         appFrame.close();
         appFrame = null;

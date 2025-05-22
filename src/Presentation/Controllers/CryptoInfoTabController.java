@@ -165,7 +165,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
      * Close.
      */
     public void close() {
-        MarketManager.getMarketManager().unsubscribe(this, EventType.NEW_HISTORICAL_VALUE);
+        try {
+            MarketManager.getMarketManager().unsubscribe(this, EventType.NEW_HISTORICAL_VALUE);
+        } catch (NullPointerException ex) {
+            // si salta esta excepción es porque no estaba el controller suscrito, ya que no había ninguna cryptoInfo abierta
+        }
         for (CryptoInfo cryptoInfo : cryptoInfos) {
             cryptoInfo.dispose();
         }
