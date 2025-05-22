@@ -113,7 +113,7 @@ public class AccountManager {
      * @param oldPwd the old pwd
      */
     public void changePassword(String newPwd, String oldPwd){
-        if(currentUser.getUsername() != null){
+        if(currentUser != null){
             try{
                 UserDAO userDAO = new UserSQLDAO();
                 try{
@@ -136,7 +136,13 @@ public class AccountManager {
                 throw new DataPersistanceError(e.getMessage());
             }
         }else{
-            //hay que cambiar el json!!!!
+            adminAccess(oldPwd);
+            try {
+                ConfigurationDAO confDAO = new ConfigurationJSONDAO();
+                confDAO.setAdminPass(newPwd);
+            } catch (PersistanceException e) {
+                throw new DataPersistanceError(e.getMessage());
+            }
         }
     }
 

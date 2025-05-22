@@ -152,11 +152,13 @@ public class AccountViewController implements ActionListener, EventListener {
     }
 
     private void loginUser() {
-        if(startView.getNameInput().isEmpty() || startView.getPasswordInput().isEmpty()) {
+        String userName = startView.getNameInput();
+        String password = startView.getPasswordInput();
+
+        if(userName.isEmpty() || password.isEmpty()) {
             MessageDisplayer.displayError(ERROR_EMPTY_FIELD);
         } else {
-            String userName = startView.getNameInput();
-            String password = startView.getPasswordInput();
+
 
             if (userName.equalsIgnoreCase("admin")) {
                 try {
@@ -169,10 +171,6 @@ public class AccountViewController implements ActionListener, EventListener {
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
-                }
-                //Esto me lo ha puesto solo el IntelIJ, se tiene q cambiar
-                catch (PersistanceException e) {
-                    throw new RuntimeException(e);
                 }
             }
             else {
@@ -195,8 +193,6 @@ public class AccountViewController implements ActionListener, EventListener {
 
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
-                } catch (PersistanceException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }
