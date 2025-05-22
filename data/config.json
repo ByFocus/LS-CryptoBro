@@ -1,5 +1,5 @@
 {
-  "db_port": "3308",
+  "db_port": "3306",
   "db_ip": "localhost",
   "db_name": "cryptobro_db",
   "db_user": "root",
