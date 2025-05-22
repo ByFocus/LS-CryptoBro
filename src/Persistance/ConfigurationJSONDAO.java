@@ -40,14 +40,14 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
     public void setAdminPass(String adminPass) throws ConfigurationFileError {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("db_port", getDBPort());
+        jsonObject.addProperty("db_port", String.valueOf(getDBPort()));
         jsonObject.addProperty("db_ip", getDBIP());
         jsonObject.addProperty("db_name", getDBName());
         jsonObject.addProperty("db_user", getDBUser());
         jsonObject.addProperty("db_pass", getDBPass());
         jsonObject.addProperty("admin_pass", adminPass);
-        jsonObject.addProperty("polling_interval", getPollingInterval());
-        jsonObject.addProperty("maximum_data_points", getMaximumDataPoints());
+        jsonObject.addProperty("polling_interval", String.valueOf(getPollingInterval()));
+        jsonObject.addProperty("maximum_data_points", String.valueOf(getMaximumDataPoints()));
 
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
             gson.toJson(gson.fromJson(jsonObject, JsonObject.class), writer);
