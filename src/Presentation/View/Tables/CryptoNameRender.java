@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+/**
+ * The type Crypto name render.
+ */
 public class CryptoNameRender extends DefaultTableCellRenderer {
 
     @Override

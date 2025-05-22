@@ -15,14 +15,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+/**
+ * The type Wallet tab controller.
+ */
 public class WalletTabController implements EventListener, ActionListener {
     private WalletTab walletTab;
     private static WalletTabController instance;
 
+    /**
+     * Instantiates a new Wallet tab controller.
+     */
     public WalletTabController() {
         MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static WalletTabController getInstance() {
         if (instance == null) {
             instance = new WalletTabController();
@@ -32,6 +43,11 @@ public class WalletTabController implements EventListener, ActionListener {
         return instance;
     }
 
+    /**
+     * Gets wallet tab.
+     *
+     * @return the wallet tab
+     */
     public WalletTab getWalletTab() {
         updateWalletTab();
         walletTab.getTablaData().addMouseListener(new MouseAdapter() {
@@ -78,6 +94,12 @@ public class WalletTabController implements EventListener, ActionListener {
 
     }
 
+    /**
+     * Gets purchase by row.
+     *
+     * @param row the row
+     * @return the purchase by row
+     */
     public Purchase getPurchaseByRow(int row) {
         return ((WalletTableModel)walletTab.getTablaData().getModel()).getPurchaseAtRow(row);
     }

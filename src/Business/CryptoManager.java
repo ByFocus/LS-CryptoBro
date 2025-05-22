@@ -12,18 +12,36 @@ import javax.swing.*;
 import java.io.File;
 import java.util.List;
 
+/**
+ * The type Crypto manager.
+ */
 public class CryptoManager{
     private static CryptoManager instance;
 
+    /**
+     * Instantiates a new Crypto manager.
+     */
     public CryptoManager(){
     }
 
+    /**
+     * Gets crypto manager.
+     *
+     * @return the crypto manager
+     */
     public static CryptoManager getCryptoManager() {
         if (instance == null) {
             instance = new CryptoManager();
         }
         return instance;
     }
+
+    /**
+     * Gets all cryptos.
+     *
+     * @return the all cryptos
+     * @throws BusinessExeption the business exeption
+     */
     public List<Crypto> getAllCryptos()  throws BusinessExeption{
         try {
             CryptoDAO cryptoDA0 = new CryptoSQLDAO();
@@ -33,6 +51,13 @@ public class CryptoManager{
         }
     }
 
+    /**
+     * Gets crypto by name.
+     *
+     * @param cryptoName the crypto name
+     * @return the crypto by name
+     * @throws BusinessExeption the business exeption
+     */
     public Crypto getCryptoByName(String cryptoName)  throws BusinessExeption{
         try {
             CryptoDAO cryptoDA0 =new CryptoSQLDAO();
@@ -42,11 +67,24 @@ public class CryptoManager{
         }
     }
 
+    /**
+     * Bot make transaction.
+     *
+     * @param cryptoName the crypto name
+     * @param buy        the buy
+     */
     public synchronized void botMakeTransaction(String cryptoName, boolean buy){
         makeTransaction(cryptoName, buy? 1: -1);
         new WalletManager().notifyChangeInCryptoValue(cryptoName);
     }
 
+    /**
+     * Make transaction.
+     *
+     * @param cryptoName the crypto name
+     * @param units      the units
+     * @throws BusinessExeption the business exeption
+     */
     public synchronized void makeTransaction(String cryptoName, int units) throws BusinessExeption {
         try {
             double priceMultiplier = (units>0? 1.01 : 0.99);
@@ -59,6 +97,13 @@ public class CryptoManager{
         }
     }
 
+    /**
+     * Gets crypto current price.
+     *
+     * @param cryptoName the crypto name
+     * @return the crypto current price
+     * @throws BusinessExeption the business exeption
+     */
     public double getCryptoCurrentPrice(String cryptoName) throws BusinessExeption {
         try {
             return new CryptoSQLDAO().getCryptoCurrentPrice(cryptoName);
@@ -67,6 +112,12 @@ public class CryptoManager{
         }
     }
 
+    /**
+     * Delete crypto.
+     *
+     * @param cryptoName the crypto name
+     * @throws BusinessExeption the business exeption
+     */
     public void deleteCrypto(String cryptoName) throws BusinessExeption {
         try {
             new WalletManager().warnUsersCryptoDeleted(cryptoName);
@@ -78,6 +129,13 @@ public class CryptoManager{
         }
     }
 
+    /**
+     * Add crypto from files string.
+     *
+     * @param files the files
+     * @return the string
+     * @throws BusinessExeption the business exeption
+     */
     public String addCryptoFromFiles(List<File> files)  throws BusinessExeption {
         try {
             CryptoDAO cryptoDAO = new CryptoSQLDAO();
@@ -97,6 +155,13 @@ public class CryptoManager{
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Get all crypto names string [ ].
+     *
+     * @return the string [ ]
+     * @throws BusinessExeption the business exeption
+     */
     public String[] getAllCryptoNames() throws BusinessExeption{
         List<Crypto> cryptos = getAllCryptos();
         String[] cryptoNames = new String[cryptos.size()];
@@ -107,6 +172,12 @@ public class CryptoManager{
     }
 
 
+    /**
+     * Update crypto price.
+     *
+     * @param cryptoName the crypto name
+     * @param price      the price
+     */
     public void updateCryptoPrice(String cryptoName, double price) {
         try {
             CryptoDAO cryptoDA0 = new CryptoSQLDAO();

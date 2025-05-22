@@ -6,10 +6,18 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
+/**
+ * The type Crypto table model.
+ */
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
     private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Varición %"};
 
+    /**
+     * Instantiates a new Crypto table model.
+     *
+     * @param cryptos the cryptos
+     */
     public CryptoTableModel(List<Crypto> cryptos) {
         this.cryptos = cryptos;
     }
@@ -26,6 +34,11 @@ public class CryptoTableModel extends AbstractTableModel {
         }
     }*/
 
+    /**
+     * Sets data.
+     *
+     * @param newCryptos the new cryptos
+     */
     public synchronized void setData(List<Crypto> newCryptos) {
         // miramos si ha cambiado el número de cryptos
         boolean structureChanged = (newCryptos.size() != cryptos.size());
@@ -97,6 +110,9 @@ public class CryptoTableModel extends AbstractTableModel {
         return columnas[column];
     }
 
+    /**
+     * Clear.
+     */
     public void clear() {
         cryptos.clear();
         SwingUtilities.invokeLater(() -> {

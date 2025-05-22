@@ -12,10 +12,18 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * The type Market tab.
+ */
 public class MarketTab extends JPanel {
     private JTable cryptoTabla;
 
 
+    /**
+     * Instantiates a new Market tab.
+     *
+     * @param cryptoList the crypto list
+     */
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
         setBackground(new Color(244, 233, 205));//new Color(70, 129, 137));
@@ -50,6 +58,11 @@ public class MarketTab extends JPanel {
 
     }
 
+    /**
+     * Load crypto data.
+     *
+     * @param cryptoList the crypto list
+     */
     public void loadCryptoData(List<Crypto> cryptoList) {
         //this utility prevents and updates this in a safe way, because swing components are not thread-safe
         SwingUtilities.invokeLater(() -> {
@@ -57,6 +70,11 @@ public class MarketTab extends JPanel {
         });
     }
 
+    /**
+     * Gets tabla data.
+     *
+     * @return the tabla data
+     */
     public JTable getTablaData() {
         return cryptoTabla;
     }

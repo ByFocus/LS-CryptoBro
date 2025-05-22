@@ -2,12 +2,18 @@ package Presentation.View;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Load frame.
+ */
 public class LoadFrame extends JFrame {
     private static final String logoImgURL = "imgs/CryptoBro.png";
     private static final String iconImgURL = "imgs/icono.png";
 
     private final JProgressBar progressBar;
 
+    /**
+     * Instantiates a new Load frame.
+     */
     public LoadFrame() {
         setLayout(new BorderLayout());
 
@@ -28,6 +34,11 @@ public class LoadFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Sets progress.
+     *
+     * @param progress the progress
+     */
     public void setProgress(int progress) {
         progressBar.setValue(progress);
     }

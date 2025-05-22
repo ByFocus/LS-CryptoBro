@@ -11,6 +11,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Crypto sqldao.
+ */
 public class CryptoSQLDAO implements CryptoDAO{
 
     private final String CRYPTO_FAILED = "Failed to create crypto entry";

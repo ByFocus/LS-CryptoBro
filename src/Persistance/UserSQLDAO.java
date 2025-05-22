@@ -11,6 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type User sqldao.
+ */
 public class UserSQLDAO implements UserDAO{
 
     public void registerUser(User user) throws PersistanceException {

@@ -13,7 +13,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Crypto file reading jsondao.
+ */
 public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
+    /**
+     * Instantiates a new Crypto file reading jsondao.
+     */
     public CryptoFileReadingJSONDAO() {}
 
     public List<Crypto> readCryptoFromFile(File file) throws FileTypeException {

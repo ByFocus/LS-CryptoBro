@@ -18,16 +18,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Market tab controller.
+ */
 public class MarketTabController implements EventListener, ActionListener {
     private static MarketTabController instance;
 
     private MarketTab marketTab;
 
 
+    /**
+     * Instantiates a new Market tab controller.
+     */
     public MarketTabController() {
         MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static MarketTabController getInstance() {
         if (instance == null) {
             instance = new MarketTabController();
@@ -36,7 +47,12 @@ public class MarketTabController implements EventListener, ActionListener {
     }
 
 
-
+    /**
+     * Gets market tab.
+     *
+     * @param admin the admin
+     * @return the market tab
+     */
     public MarketTab getMarketTab(boolean admin) {
         if (marketTab == null) {
             List<Crypto> cryptos = new CryptoManager().getAllCryptos();
@@ -65,6 +81,9 @@ public class MarketTabController implements EventListener, ActionListener {
         });
     }
 
+    /**
+     * Update market tab.
+     */
     public void updateMarketTab() {
         List<Crypto> cryptos = new CryptoManager().getAllCryptos();
         if (marketTab == null)    {
@@ -91,6 +110,9 @@ public class MarketTabController implements EventListener, ActionListener {
 
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         MarketManager.getMarketManager().unsubscribe(this, EventType.CRYPTO_VALUES_CHANGED);
         marketTab = null;

@@ -3,9 +3,17 @@ package Presentation.View.Panels;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Rounded panel.
+ */
 public class RoundedPanel extends JPanel {
     private int cornerRadius;
 
+    /**
+     * Instantiates a new Rounded panel.
+     *
+     * @param radius the radius
+     */
     public RoundedPanel(int radius) {
         super();
         this.cornerRadius = radius;

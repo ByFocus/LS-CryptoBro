@@ -7,21 +7,51 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Crypto info.
+ */
 public class CryptoInfo extends JFrame {
+    /**
+     * The constant BUY_CRYPTO.
+     */
     public static final String BUY_CRYPTO = "BUY_CRYPTO";
+    /**
+     * The constant CHANGE_PRICE.
+     */
     public static final String CHANGE_PRICE = "CHANGE_PRICE";
+    /**
+     * The constant SELL_CRYPTO.
+     */
     public static final String SELL_CRYPTO = "SELL_CRYPTO";
 
+    /**
+     * The constant iconImgURL.
+     */
     public static final String iconImgURL = "imgs/icono.png";
 
+    /**
+     * The constant TITLE.
+     */
     public static final String TITLE = "Crypto Infromation";
 
+    /**
+     * The constant FONT.
+     */
     public static final String FONT = "Arial";
 
+    /**
+     * The constant MODE_BUY_CRYPTO.
+     */
     public static final int MODE_BUY_CRYPTO = 0;
 
+    /**
+     * The constant MODE_SELL_CRYPTO.
+     */
     public static final int MODE_SELL_CRYPTO = 1;
 
+    /**
+     * The constant MODE_ADMIN.
+     */
     public static final int MODE_ADMIN = 2;
 
     private final JLabel cryptoNameLabel;
@@ -33,6 +63,13 @@ public class CryptoInfo extends JFrame {
     private JTextField amountLabel;
     private JButton functionButton;
 
+    /**
+     * Instantiates a new Crypto info.
+     *
+     * @param cryptoName the crypto name
+     * @param mode       the mode
+     * @param row        the row
+     */
     public CryptoInfo(String cryptoName, int mode, int row){
         configureFrame();
         assignedRow = row;
@@ -139,6 +176,11 @@ public class CryptoInfo extends JFrame {
 
     }
 
+    /**
+     * Add function button.
+     *
+     * @param option the option
+     */
     public void addFunctionButton(int option) {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setOpaque(false);
@@ -178,26 +220,54 @@ public class CryptoInfo extends JFrame {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
+    /**
+     * Register controller.
+     *
+     * @param listener the listener
+     */
     public void registerController(ActionListener listener) {
         if (functionButton != null) functionButton.addActionListener(listener);
     }
 
+    /**
+     * Gets amount label.
+     *
+     * @return the amount label
+     */
     public String getAmountLabel() {
         return amountLabel.getText();
     }
 
+    /**
+     * Gets crypto name.
+     *
+     * @return the crypto name
+     */
     public String getCryptoName() {
         return cryptoNameLabel.getText();
     }
 
+    /**
+     * Gets grafica.
+     *
+     * @return the grafica
+     */
     public GraficoCriptomoneda getGrafica() {
         return grafica;
     }
 
+    /**
+     * Get row int.
+     *
+     * @return the int
+     */
     public int getRow(){
         return assignedRow;
     }
 
+    /**
+     * Reset amount.
+     */
     public void resetAmount() {
         amount = 0;
         amountLabel.setText(String.valueOf(amount));

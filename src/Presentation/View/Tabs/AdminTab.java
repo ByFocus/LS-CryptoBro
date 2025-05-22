@@ -13,6 +13,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Admin tab.
+ */
 public class AdminTab extends JPanel {
     private final String NUMB_FILES_TEXT_SING = " fichebro seleccionado";
     private final String NUMB_FILES_TEXT_PLR = " fichebros seleccionados";
@@ -22,7 +25,13 @@ public class AdminTab extends JPanel {
     private final String SELECT_DELETE_CRYPTO_TEXT = "Selecciona la cryptomoneda que quieres eliminar...";
     private final String DELETE_CRYPTO_BUTTON_TEXT = "BORRAR CRYPTO";
 
+    /**
+     * The constant ADD_CRYPTO_COMMAND.
+     */
     public static final String ADD_CRYPTO_COMMAND = "ADD CRYPTO";
+    /**
+     * The constant DEL_CRYPTO_COMMAND.
+     */
     public static final String DEL_CRYPTO_COMMAND = "DELETE CRYPTO";
 
 
@@ -39,12 +48,21 @@ public class AdminTab extends JPanel {
     private JComboBox<String> cryptoComboBox;
 
 
-
+    /**
+     * Instantiates a new Admin tab.
+     *
+     * @param names the names
+     */
     public AdminTab(String[] names) {
         configureTab(names);
         //this.setTransferHandler(new FileDrooperHandler());
     }
 
+    /**
+     * Handle files drop.
+     *
+     * @param files the files
+     */
     public void handleFilesDrop(List<File> files) {
         lastFilesUpload = files;
         howManyFilesLabel.setText(files.size() + (files.size() == 1? NUMB_FILES_TEXT_SING: NUMB_FILES_TEXT_PLR));
@@ -56,6 +74,11 @@ public class AdminTab extends JPanel {
     }
 
 
+    /**
+     * Gets files dropped.
+     *
+     * @return the files dropped
+     */
     public List<File> getFilesDropped() {
         return lastFilesUpload;
         // no serà null porque solo se llama cuando es notificado el listener
@@ -204,11 +227,22 @@ public class AdminTab extends JPanel {
         return glue;
     }
 
+    /**
+     * Register controller.
+     *
+     * @param newListener the new listener
+     */
     public void registerController(ActionListener newListener) {
         addButton.addActionListener(newListener);
         deleteButton.addActionListener(newListener);
 
     }
+
+    /**
+     * Reset tab.
+     *
+     * @param cryptoNames the crypto names
+     */
     public void resetTab(String[] cryptoNames) {
         filesNamesArea.setText("");
         howManyFilesLabel.setText("0" + NUMB_FILES_TEXT_PLR);
@@ -219,6 +253,11 @@ public class AdminTab extends JPanel {
         }
     }
 
+    /**
+     * Gets selected cryto.
+     *
+     * @return the selected cryto
+     */
     public String getSelectedCryto() {
         try {
             return cryptoComboBox.getSelectedItem().toString();

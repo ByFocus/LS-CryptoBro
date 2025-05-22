@@ -10,11 +10,19 @@ import com.google.gson.JsonParser;
 
 import java.io.FileReader;
 
+/**
+ * The type Configuration jsondao.
+ */
 public class ConfigurationJSONDAO implements ConfigurationDAO {
 
     private final String FILE_NAME = "data/config.json";
     private final String CONFIG_ERROR = "Brother, hay un error con el fichero de configuracion.";
 
+    /**
+     * Instantiates a new Configuration jsondao.
+     *
+     * @throws ConfigurationFileError the configuration file error
+     */
     public ConfigurationJSONDAO() throws ConfigurationFileError {
         try {
             FileReader reader = new FileReader(FILE_NAME);

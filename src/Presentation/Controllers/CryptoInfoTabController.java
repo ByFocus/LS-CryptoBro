@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The type Crypto info tab controller.
+ */
 public class CryptoInfoTabController implements EventListener, ActionListener {
     private List<CryptoInfo> cryptoInfos;
     private static CryptoInfoTabController instance;
@@ -25,6 +28,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         cryptoInfos = new ArrayList<>();
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CryptoInfoTabController getInstance() {
         if (instance == null) {
             instance = new CryptoInfoTabController();
@@ -32,6 +40,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         return instance;
     }
 
+    /**
+     * Display crypto info.
+     *
+     * @param crypto the crypto
+     * @param mode   the mode
+     * @param row    the row
+     */
     public void displayCryptoInfo(Crypto crypto, int mode, int row) {
         CryptoInfo cryptoInfo =new CryptoInfo(crypto.getName(),mode, row);
         cryptoInfo.getGrafica().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
@@ -146,6 +161,9 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         walletManager.removeTransaction(user, purchase, units);
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         MarketManager.getMarketManager().unsubscribe(this, EventType.NEW_HISTORICAL_VALUE);
         for (CryptoInfo cryptoInfo : cryptoInfos) {

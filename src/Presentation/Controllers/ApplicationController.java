@@ -12,6 +12,9 @@ import Presentation.View.Popups.CryptoInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * The type Application controller.
+ */
 public class ApplicationController implements EventListener {
     private static ApplicationController instance;
 
@@ -23,6 +26,11 @@ public class ApplicationController implements EventListener {
 
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ApplicationController getInstance() {
         if (instance == null) {
             instance = new ApplicationController();
@@ -30,6 +38,15 @@ public class ApplicationController implements EventListener {
         return instance;
     }
 
+    /**
+     * New application.
+     *
+     * @param identifier the identifier
+     * @param balance    the balance
+     * @param gains      the gains
+     * @param admin      the admin
+     * @throws PersistanceException the persistance exception
+     */
     public void newApplication(String identifier, String balance, String gains, boolean admin) throws PersistanceException {
         // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
         appFrame = new MainFrame(identifier, balance, gains);
@@ -78,6 +95,9 @@ public class ApplicationController implements EventListener {
         }
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         MarketManager.getMarketManager().unsubscribe(this, EventType.CRYPTO_VALUES_CHANGED);
         MarketManager.getMarketManager().unsubscribe(this, EventType.USER_BALANCE_CHANGED);

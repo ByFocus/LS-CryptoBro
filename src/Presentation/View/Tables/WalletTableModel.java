@@ -9,15 +9,28 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
+/**
+ * The type Wallet table model.
+ */
 public class WalletTableModel extends AbstractTableModel {
 
     private final String[] columnas = {"Crypto", "Unidades", "Precio de compra", "Balance", "Vender"};
     private List<Purchase> compras;
 
+    /**
+     * Instantiates a new Wallet table model.
+     *
+     * @param compras the compras
+     */
     public WalletTableModel(List<Purchase> compras) {
         this.compras = compras;
     }
 
+    /**
+     * Sets data.
+     *
+     * @param compras the compras
+     */
     public void setData(List<Purchase> compras) {
         SwingUtilities.invokeLater(() -> {
             synchronized (this) {
@@ -70,6 +83,12 @@ public class WalletTableModel extends AbstractTableModel {
         return columnas[column];
     }
 
+    /**
+     * Gets purchase at row.
+     *
+     * @param row the row
+     * @return the purchase at row
+     */
     public Purchase getPurchaseAtRow(int row) {
         return compras.get(row);
     }

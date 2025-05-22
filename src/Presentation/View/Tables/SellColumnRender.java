@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+/**
+ * The type Sell column render.
+ */
 public class SellColumnRender extends DefaultTableCellRenderer {
 
     @Override

@@ -10,9 +10,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * The type Wallet tab.
+ */
 public class WalletTab extends JPanel {
     private JTable walletTable;
 
+    /**
+     * Instantiates a new Wallet tab.
+     *
+     * @param compras the compras
+     */
     public WalletTab(List<Purchase> compras) {
         this.setLayout(new BorderLayout());
         setBackground(new Color(70, 129, 137));
@@ -41,10 +49,20 @@ public class WalletTab extends JPanel {
         ((CryptoTableModel) cartera.getModel()).fireTableDataChanged();
     }*/
 
+    /**
+     * Gets tabla data.
+     *
+     * @return the tabla data
+     */
     public JTable getTablaData() {
         return walletTable;
     }
 
+    /**
+     * Load purchases data.
+     *
+     * @param newPurchases the new purchases
+     */
     public void loadPurchasesData(List<Purchase> newPurchases) {
         SwingUtilities.invokeLater(() -> {
             ((WalletTableModel) walletTable.getModel()).setData(newPurchases);

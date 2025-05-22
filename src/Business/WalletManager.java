@@ -10,14 +10,31 @@ import Persistance.PurchaseSQLDAO;
 
 import java.util.List;
 
+/**
+ * The type Wallet manager.
+ */
 public class WalletManager {
-     static String NOT_ENOUGH_BALANCE = "Bro, no tienes suficiente dinero, conoce tu lugar";
+    /**
+     * The Not enough balance.
+     */
+    static String NOT_ENOUGH_BALANCE = "Bro, no tienes suficiente dinero, conoce tu lugar";
 
-     public static WalletManager instance;
+    /**
+     * The constant instance.
+     */
+    public static WalletManager instance;
 
+    /**
+     * Instantiates a new Wallet manager.
+     */
     public WalletManager() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static WalletManager getInstance() {
         if (instance == null) {
             instance = new WalletManager();
@@ -25,6 +42,13 @@ public class WalletManager {
         return instance;
     }
 
+    /**
+     * Remove transaction.
+     *
+     * @param user     the user
+     * @param purchase the purchase
+     * @param units    the units
+     */
     public void removeTransaction(User user, Purchase purchase, int units){
         try{
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
@@ -38,6 +62,13 @@ public class WalletManager {
         }
     }
 
+    /**
+     * Add transaction.
+     *
+     * @param user   the user
+     * @param crypto the crypto
+     * @param units  the units
+     */
     public void addTransaction(User user, Crypto crypto, int units) {
         double cost = crypto.getCurrentPrice() * units;
         if (cost <= user.getBalance()) {
@@ -54,6 +85,13 @@ public class WalletManager {
             throw new UnsufficientBalance(NOT_ENOUGH_BALANCE);
         }
     }
+
+    /**
+     * Gets wallet by user name.
+     *
+     * @param username the username
+     * @return the wallet by user name
+     */
     public List<Purchase> getWalletByUserName(String username) {
         PurchaseDAO purchaseDao = new PurchaseSQLDAO();
         try {
@@ -63,6 +101,12 @@ public class WalletManager {
         }
     }
 
+    /**
+     * Calculate estimated gains by user name double.
+     *
+     * @param userName the user name
+     * @return the double
+     */
     public double calculateEstimatedGainsByUserName(String userName) {
 
        // esto no es yas List <Purchase> purchases = user.getPurchases();
@@ -75,6 +119,11 @@ public class WalletManager {
         return gains;
     }
 
+    /**
+     * Notify change in crypto value.
+     *
+     * @param cryptoName the crypto name
+     */
     public void notifyChangeInCryptoValue(String cryptoName) {
         try{
             String currentUser = AccountManager.getInstance().getCurrentUserName();
@@ -89,6 +138,11 @@ public class WalletManager {
         }
     }
 
+    /**
+     * Warn users crypto deleted.
+     *
+     * @param cryptoName the crypto name
+     */
     public void warnUsersCryptoDeleted(String cryptoName) {
         try {
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();

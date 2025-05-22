@@ -15,6 +15,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Account view controller.
+ */
 public class AccountViewController implements ActionListener, EventListener {
     private static AccountViewController instance;
 
@@ -33,20 +36,36 @@ public class AccountViewController implements ActionListener, EventListener {
         startView.registerController(this);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static AccountViewController getInstance() {
         if (instance == null) instance = new AccountViewController();
 
         return instance;
     }
 
+    /**
+     * Start.
+     */
     public void start() {
         startView.setVisible(true);
     }
 
+    /**
+     * Check user profile.
+     */
     public void checkUserProfile() {
         userView.setVisible(true);
     }
 
+    /**
+     * Sets balance.
+     *
+     * @param balance the balance
+     */
     public void setBalance(String balance) {
         userView.setBalance(balance);
     }

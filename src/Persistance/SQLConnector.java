@@ -6,6 +6,9 @@ import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.sql.*;
 
+/**
+ * The type Sql connector.
+ */
 public class SQLConnector {
     private static SQLConnector instance = null;
     private Connection conn;  // Instance field (removed static 'connection')
@@ -20,6 +23,12 @@ public class SQLConnector {
         this.url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useSSL=false&serverTimezone=UTC";
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     * @throws PersistanceException the persistance exception
+     */
     public static SQLConnector getInstance() throws PersistanceException {
         if (instance == null) {
             ConfigurationDAO cDao = new ConfigurationJSONDAO();
@@ -28,6 +37,14 @@ public class SQLConnector {
         }
         return instance;
     }
+
+    /**
+     * Select query result set.
+     *
+     * @param query the query
+     * @return the result set
+     * @throws DBConnectionNotReached the db connection not reached
+     */
     public ResultSet selectQuery(String query) throws DBConnectionNotReached{
         Statement stmt = null;
         ResultSet rs = null;
@@ -44,6 +61,11 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Connect.
+     *
+     * @throws DBConnectionNotReached the db connection not reached
+     */
     public void connect() throws DBConnectionNotReached {
         try {
             conn = DriverManager.getConnection(url, username, password);
@@ -53,6 +75,12 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     * @throws DBConnectionNotReached the db connection not reached
+     */
     public synchronized Connection getConnection() throws DBConnectionNotReached {
         try {
             if (conn == null || conn.isClosed()) {
@@ -64,6 +92,11 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Disconnect.
+     *
+     * @throws DBConnectionNotReached the db connection not reached
+     */
     public void disconnect() throws DBConnectionNotReached {
         try {
             if (conn != null && !conn.isClosed()) {

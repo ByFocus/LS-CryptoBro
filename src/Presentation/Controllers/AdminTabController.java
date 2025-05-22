@@ -17,6 +17,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Admin tab controller.
+ */
 public class AdminTabController implements ActionListener, EventListener {
     private static AdminTabController instance;
     private AdminTab adminTab;
@@ -26,6 +29,11 @@ public class AdminTabController implements ActionListener, EventListener {
             adminTab.registerController(this);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static AdminTabController getInstance() {
         if (instance == null) {
             instance = new AdminTabController();
@@ -33,6 +41,11 @@ public class AdminTabController implements ActionListener, EventListener {
         return instance;
     }
 
+    /**
+     * Gets admin tab.
+     *
+     * @return the admin tab
+     */
     public AdminTab getAdminTab() {
         return adminTab;
     }

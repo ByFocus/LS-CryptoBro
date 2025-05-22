@@ -6,11 +6,19 @@ import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.Random;
 
+/**
+ * The type Bot.
+ */
 public class Bot extends Thread {
     private int buyingPeriod;
     private String cryptoName;
     private boolean running;
 
+    /**
+     * Instantiates a new Bot.
+     *
+     * @param crypto the crypto
+     */
     public Bot(Crypto crypto) {
         //buyingPeriod
         cryptoName = crypto.getName();
@@ -38,6 +46,9 @@ public class Bot extends Thread {
         }
     }
 
+    /**
+     * Kill.
+     */
     public void kill() {
         interrupt();
         running = false;

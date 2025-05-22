@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Grafico criptomoneda.
+ */
 public class GraficoCriptomoneda extends JPanel {
     private final int TIEMPO_DE_MUESTREO = 10;
     private final int NUM_MAX_PUNTOS = TIEMPO_DE_MUESTREO* 60 /5;
@@ -29,11 +32,19 @@ public class GraficoCriptomoneda extends JPanel {
     private Date primeraMuestra;
     private Date ultimaMuestra;
 
+    /**
+     * Instantiates a new Grafico criptomoneda.
+     */
     public GraficoCriptomoneda() {
         setBackground(new Color(28, 36, 52));
         repaint();
     }
 
+    /**
+     * Actualizar datos.
+     *
+     * @param nuevoValor the nuevo valor
+     */
     public void actualizarDatos(Muestra nuevoValor) {
         //Si ya he llegado al muestreo max, borro la ultima
         if (muestras.size() == NUM_MAX_PUNTOS) {
@@ -44,6 +55,9 @@ public class GraficoCriptomoneda extends JPanel {
         ultimaMuestra = muestras.getLast().getFecha();
     }
 
+    /**
+     * Calcular rango y.
+     */
     void calcularRangoY() {
         precioMinimoActual = muestras.stream().mapToDouble(Muestra::getPrecio).min().orElse(0.0);
         precioMaximoActual = muestras.stream().mapToDouble(Muestra::getPrecio).max().orElse(1.0);
@@ -82,6 +96,11 @@ public class GraficoCriptomoneda extends JPanel {
         return MARGEN_IZQ + (int) ((tiempo - primeraMuestra.getTime()) * (getWidth() - MARGEN_IZQ - MARGEN_DER) / rangoTiempo);
     }
 
+    /**
+     * Sets muestras.
+     *
+     * @param valores the valores
+     */
     public void setMuestras(LinkedList<Double> valores) {
         Date ahora = new Date();
         if (valores != null) {

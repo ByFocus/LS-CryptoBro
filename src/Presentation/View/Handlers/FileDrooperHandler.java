@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The type File drooper handler.
+ */
 public class FileDrooperHandler extends TransferHandler {
 
     //ara només acceptem fitxers, no imatges o altres

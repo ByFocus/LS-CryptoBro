@@ -4,9 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * The type Rounded button.
+ */
 public class RoundedButton extends JButton {
     private int radius;
 
+    /**
+     * Instantiates a new Rounded button.
+     *
+     * @param label  the label
+     * @param radius the radius
+     */
     public RoundedButton(String label, int radius) {
         super(label);
         this.radius = radius;

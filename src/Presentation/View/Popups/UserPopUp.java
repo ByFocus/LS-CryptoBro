@@ -6,17 +6,44 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * The type User pop up.
+ */
 public class UserPopUp extends JFrame {
-    // Event constants
+    /**
+     * The constant USER_LOGOUT.
+     */
+// Event constants
     public static final String USER_LOGOUT = "USER_LOGOUT";
+    /**
+     * The constant USER_ERASE_ACCOUNT.
+     */
     public static final String USER_ERASE_ACCOUNT = "USER_ERASE_ACCOUNT";
+    /**
+     * The constant USER_CHANGE_PASSWORD.
+     */
     public static final String USER_CHANGE_PASSWORD = "USER_CHANGE_PASSWORD";
+    /**
+     * The constant CHANGE_PASSWORD_OK.
+     */
     public static final String CHANGE_PASSWORD_OK = "CHANGE_PASSWORD_OK";
 
-    // Fonts and resources
+    /**
+     * The constant FONT_TITLE.
+     */
+// Fonts and resources
     public static final String FONT_TITLE = "Open Sans";
+    /**
+     * The constant FONT_TEXT.
+     */
     public static final String FONT_TEXT = "Arial";
+    /**
+     * The constant FRAME_TITLE.
+     */
     public static final String FRAME_TITLE = "User Profile";
+    /**
+     * The constant userProfileImgURL.
+     */
     public static final String userProfileImgURL = "imgs/usuario.png";
 
     // UI attributes
@@ -33,6 +60,14 @@ public class UserPopUp extends JFrame {
     private JButton changePasswordButton;
     private JDialog changePwdDialog;
 
+    /**
+     * Instantiates a new User pop up.
+     *
+     * @param userName    the user name
+     * @param userEmail   the user email
+     * @param userBalance the user balance
+     * @param admin       the admin
+     */
     public UserPopUp(String userName, String userEmail, String userBalance, boolean admin) {
         configureFrame();
 
@@ -106,7 +141,6 @@ public class UserPopUp extends JFrame {
         actionPanel.setOpaque(false);
         actionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-        // Only add delete and change password if not admin
         if (!admin) {
             deleteAccountButton = new JButton("Delete Account");
             deleteAccountButton.setFont(new Font(FONT_TEXT, Font.ITALIC | Font.BOLD, 21));
@@ -115,17 +149,22 @@ public class UserPopUp extends JFrame {
             deleteAccountButton.setActionCommand(USER_ERASE_ACCOUNT);
             actionPanel.add(deleteAccountButton);
 
-            changePasswordButton = new JButton("Change Password");
-            changePasswordButton.setFont(new Font(FONT_TEXT, Font.BOLD, 21));
-            changePasswordButton.setBackground(new Color(70, 129, 137));
-            changePasswordButton.setForeground(Color.WHITE);
-            changePasswordButton.setActionCommand(USER_CHANGE_PASSWORD);
-            actionPanel.add(changePasswordButton);
         }
+        changePasswordButton = new JButton("Change Password");
+        changePasswordButton.setFont(new Font(FONT_TEXT, Font.BOLD, 21));
+        changePasswordButton.setBackground(new Color(70, 129, 137));
+        changePasswordButton.setForeground(Color.WHITE);
+        changePasswordButton.setActionCommand(USER_CHANGE_PASSWORD);
+        actionPanel.add(changePasswordButton);
 
         getContentPane().add(actionPanel);
     }
 
+    /**
+     * Show change password dialog.
+     *
+     * @param controller the controller
+     */
     public void showChangePasswordDialog(ActionListener controller) {
         changePwdDialog = new JDialog(this, "Change Password", true);
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -164,10 +203,33 @@ public class UserPopUp extends JFrame {
     }
 
 
-    // Getters (no recursion error!)
+    /**
+     * Gets old pwd field.
+     *
+     * @return the old pwd field
+     */
+// Getters (no recursion error!)
     public JPasswordField getOldPwdField() { return oldPwdField; }
+
+    /**
+     * Gets new pwd field.
+     *
+     * @return the new pwd field
+     */
     public JPasswordField getNewPwdField() { return newPwdField; }
+
+    /**
+     * Gets confirm pwd field.
+     *
+     * @return the confirm pwd field
+     */
     public JPasswordField getConfirmPwdField() { return confirmPwdField; }
+
+    /**
+     * Gets change pwd dialog.
+     *
+     * @return the change pwd dialog
+     */
     public JDialog getChangePwdDialog() { return changePwdDialog; }
 
 
@@ -179,6 +241,11 @@ public class UserPopUp extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Register controller.
+     *
+     * @param listener the listener
+     */
     public void registerController(ActionListener listener) {
         logOutButton.addActionListener(listener);
         if (deleteAccountButton != null) {
@@ -189,6 +256,11 @@ public class UserPopUp extends JFrame {
         }
     }
 
+    /**
+     * Set balance.
+     *
+     * @param balance the balance
+     */
     public void setBalance(String balance){
         userBalanceLabel.setText(balance);
     }

@@ -11,6 +11,9 @@ import Business.Entities.Market;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.Controllers.EventListener;
 
+/**
+ * The type Market manager.
+ */
 public class MarketManager  {
     private Market market;
     private Map<EventType, List<EventListener>> listeners = new HashMap<>();
@@ -20,6 +23,11 @@ public class MarketManager  {
     private MarketManager() {
     }
 
+    /**
+     * Gets market manager.
+     *
+     * @return the market manager
+     */
     public static synchronized MarketManager getMarketManager() {
         if (instance == null) {
             instance = new MarketManager();
@@ -33,6 +41,9 @@ public class MarketManager  {
         }
     }
 
+    /**
+     * Stop market.
+     */
     public synchronized void stopMarket() {
         if (market != null) {
             market.kill();
@@ -40,6 +51,9 @@ public class MarketManager  {
         }
     }
 
+    /**
+     * Restart market.
+     */
     public synchronized void restartMarket() {
         stopMarket();
         startMarket();
@@ -59,10 +73,21 @@ public class MarketManager  {
         }
     }
 
+    /**
+     * Gets historical values by crypto name.
+     *
+     * @param cryptoName the crypto name
+     * @return the historical values by crypto name
+     */
     public LinkedList<Double> getHistoricalValuesByCryptoName(String cryptoName) {
         return market.getHistoricalFromCrypto(cryptoName);
     }
 
+    /**
+     * Notify.
+     *
+     * @param event the event
+     */
     public synchronized void notify(EventType event) {
         List<EventListener> subscribers = listeners.get(event);
         if (subscribers != null) {
@@ -72,6 +97,12 @@ public class MarketManager  {
         }
     }
 
+    /**
+     * Subscribe.
+     *
+     * @param eventListener the event listener
+     * @param event         the event
+     */
     public synchronized void subscribe(EventListener eventListener, EventType event) {
         List<EventListener> listSubscribers = listeners.get(event);
         if (listSubscribers == null) {
@@ -80,6 +111,13 @@ public class MarketManager  {
         }
         listSubscribers.add(eventListener);
     }
+
+    /**
+     * Unsubscribe.
+     *
+     * @param eventListener the event listener
+     * @param event         the event
+     */
     public synchronized void unsubscribe(EventListener eventListener, EventType event) {
         if (listeners != null) {
             listeners.get(event).remove(eventListener);

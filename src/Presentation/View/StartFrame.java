@@ -4,30 +4,81 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+/**
+ * The type Start frame.
+ */
 public class StartFrame extends JFrame {
-    //Constantes con los eventos
+    /**
+     * The constant USER_LOGIN.
+     */
+//Constantes con los eventos
     public static final String USER_LOGIN = "USER_LOGIN";
+    /**
+     * The constant USER_REGISTER.
+     */
     public static final String USER_REGISTER = "USER_REGISTER";
+    /**
+     * The constant SWITCH_LOGIN.
+     */
     public static final String SWITCH_LOGIN = "SWITCH_LOGIN";
+    /**
+     * The constant SWITCH_REGISTER.
+     */
     public static final String SWITCH_REGISTER = "SWITCH_REGISTER";
 
-    //Constantes con titulos, enlaces a fots y textos
+    /**
+     * The constant iconImgURL.
+     */
+//Constantes con titulos, enlaces a fots y textos
     public static final String iconImgURL = "imgs/icono.png";
 
+    /**
+     * The constant FONT.
+     */
     public static final String FONT = "Arial";
 
+    /**
+     * The constant LOGIN_VIEW.
+     */
     public static final String LOGIN_VIEW = "LOGIN";
+    /**
+     * The constant REGISTER_VIEW.
+     */
     public static final String REGISTER_VIEW = "REGISTER";
 
+    /**
+     * The constant FRAME_TITLE.
+     */
     public static final String FRAME_TITLE = "CryptoBro Login";
+    /**
+     * The constant LOGIN_TITLE.
+     */
     public static final String LOGIN_TITLE = "Login";
+    /**
+     * The constant REGISTER_TITLE.
+     */
     public static final String REGISTER_TITLE = "Register";
 
+    /**
+     * The constant USER_INPUT_LABEL.
+     */
     public static final String USER_INPUT_LABEL = "        User: ";
+    /**
+     * The constant PASSWORD_INPUT_LABEL.
+     */
     public static final String PASSWORD_INPUT_LABEL = "Password: ";
+    /**
+     * The constant EMAIL_INPUT_LABEL.
+     */
     public static final String EMAIL_INPUT_LABEL= "       Email: ";
 
+    /**
+     * The constant ASK_FOR_LOGIN.
+     */
     public static final String ASK_FOR_LOGIN = "¿Te has colado bro?";
+    /**
+     * The constant ASK_FOR_REGISTER.
+     */
     public static final String ASK_FOR_REGISTER = "Bro, ¿Todavía no eres parte de la familia?";
 
     //Atributos
@@ -47,6 +98,9 @@ public class StartFrame extends JFrame {
 
     private String actualCard;
 
+    /**
+     * Instantiates a new Start frame.
+     */
     public StartFrame() {
         configureFrame();
 
@@ -287,11 +341,19 @@ public class StartFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Switch view.
+     *
+     * @param view the view
+     */
     public void switchView(String view) {
         actualCard = view;
         cardLayout.show(mainPanel, view);
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         userLogInField.setText("");
         passwordLogInField.setText("");
@@ -300,6 +362,11 @@ public class StartFrame extends JFrame {
         emailRegisterField.setText("");
     }
 
+    /**
+     * Gets name input.
+     *
+     * @return the name input
+     */
     public String getNameInput() {
         String text;
 
@@ -309,6 +376,11 @@ public class StartFrame extends JFrame {
         return text;
     }
 
+    /**
+     * Gets password input.
+     *
+     * @return the password input
+     */
     public String getPasswordInput() {
         String text;
 
@@ -317,10 +389,20 @@ public class StartFrame extends JFrame {
         return text;
     }
 
+    /**
+     * Gets email input.
+     *
+     * @return the email input
+     */
     public String getEmailInput() {
         return emailRegisterField.getText();
     }
 
+    /**
+     * Register controller.
+     *
+     * @param listener the listener
+     */
     public void registerController(ActionListener listener) {
         loginButton.addActionListener(listener);
         registerButton.addActionListener(listener);

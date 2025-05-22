@@ -9,6 +9,9 @@ import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.*;
 
+/**
+ * The type Market.
+ */
 public class Market extends Thread{
     private Map<String, LinkedList<Double>> hitoricalValues = new HashMap<>();
     private List<Bot> bots;
@@ -16,6 +19,12 @@ public class Market extends Thread{
     private final int TIME_TO_GET = 5000;
     private boolean running;
 
+    /**
+     * Instantiates a new Market.
+     *
+     * @param bots        the bots
+     * @param cryptoNames the crypto names
+     */
     public Market(List<Bot> bots, List<String> cryptoNames) {
         this.bots = bots;
         for (String cryptoName : cryptoNames) {
@@ -55,6 +64,9 @@ public class Market extends Thread{
         }
     }
 
+    /**
+     * Kill.
+     */
     public void kill() {
         for (Bot bot : bots) {
             bot.kill();
@@ -63,6 +75,12 @@ public class Market extends Thread{
         running = false;
     }
 
+    /**
+     * Gets historical from crypto.
+     *
+     * @param cryptoName the crypto name
+     * @return the historical from crypto
+     */
     public LinkedList<Double> getHistoricalFromCrypto(String cryptoName) {
         return hitoricalValues.get(cryptoName);
     }

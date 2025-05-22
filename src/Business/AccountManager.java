@@ -5,6 +5,9 @@ import Persistance.*;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
 
+/**
+ * The type Account manager.
+ */
 public class AccountManager {
     private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
     private final String EXISTENT_MAIL_ERROR = "Bro, este correo ya está en uso!";
@@ -24,6 +27,11 @@ public class AccountManager {
 
     private AccountManager() {}
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static AccountManager getInstance() {
         if (instance == null) {
             instance = new AccountManager();
@@ -31,6 +39,14 @@ public class AccountManager {
         return instance;
     }
 
+    /**
+     * Register user.
+     *
+     * @param username the username
+     * @param mail     the mail
+     * @param password the password
+     * @throws BusinessExeption the business exeption
+     */
     public void registerUser(String username, String mail, String password) throws BusinessExeption{
         if (username.equalsIgnoreCase("admin")) {
             throw new UserAuthentificationError(TRYING_TO_REGISTER_ADMIN);
@@ -65,6 +81,14 @@ public class AccountManager {
 
     }
 
+    /**
+     * Login user user.
+     *
+     * @param username the username
+     * @param password the password
+     * @return the user
+     * @throws BusinessExeption the business exeption
+     */
     public User loginUser (String username, String password) throws BusinessExeption {
         try {
             UserDAO userDAO = new UserSQLDAO();
@@ -82,30 +106,45 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Change password.
+     *
+     * @param newPwd the new pwd
+     * @param oldPwd the old pwd
+     */
     public void changePassword(String newPwd, String oldPwd){
-        try{
-            UserDAO userDAO = new UserSQLDAO();
+        if(currentUser.getUsername() != null){
             try{
-                checkPasswordIsValid(newPwd);
-            }catch (UserAuthentificationError ex){
-                throw new UserAuthentificationError(ex.getMessage());
-            }
-            if(userDAO.validateUser(currentUser.getUsername(), oldPwd)){
+                UserDAO userDAO = new UserSQLDAO();
                 try{
-                    userDAO.updatePassword(currentUser.getUsername(), newPwd);
-                }catch (PersistanceException e){
-                    throw new DataPersistanceError(e.getMessage());
+                    checkPasswordIsValid(newPwd);
+                }catch (UserAuthentificationError ex){
+                    throw new UserAuthentificationError(ex.getMessage());
                 }
-            }else{
-                throw new UserAuthentificationError(INCORRECT_PASSWORD_ERROR);
+                if(userDAO.validateUser(currentUser.getUsername(), oldPwd)){
+                    try{
+                        userDAO.updatePassword(currentUser.getUsername(), newPwd);
+                    }catch (PersistanceException e){
+                        throw new DataPersistanceError(e.getMessage());
+                    }
+                }else{
+                    throw new UserAuthentificationError(INCORRECT_PASSWORD_ERROR);
+                }
+            } catch(DBDataNotFound e) {
+                throw new UserAuthentificationError(INEXISTENT_USER_ERROR);
+            } catch (PersistanceException e) {
+                throw new DataPersistanceError(e.getMessage());
             }
-        } catch(DBDataNotFound e) {
-            throw new UserAuthentificationError(INEXISTENT_USER_ERROR);
-        } catch (PersistanceException e) {
-            throw new DataPersistanceError(e.getMessage());
+        }else{
+            //hay que cambiar el json!!!!
         }
     }
 
+    /**
+     * Delete current user.
+     *
+     * @throws BusinessExeption the business exeption
+     */
     public void deleteCurrentUser() throws BusinessExeption{
         try {
             UserDAO userDAO = new UserSQLDAO();
@@ -115,6 +154,9 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Check current user warning.
+     */
     public void checkCurrentUserWarning() {
            try {
                if (currentUser.getCryptoDeletedFlag()) {
@@ -128,6 +170,12 @@ public class AccountManager {
            }
     }
 
+    /**
+     * Admin access.
+     *
+     * @param password the password
+     * @throws BusinessExeption the business exeption
+     */
     public void adminAccess(String password) throws BusinessExeption {
         try {
             ConfigurationDAO conDAO = new ConfigurationJSONDAO();
@@ -186,6 +234,11 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Gets current user name.
+     *
+     * @return the current user name
+     */
     public String getCurrentUserName() {
         if (currentUser == null) {
             throw new NoCurrentUser("There is no current user");
@@ -195,11 +248,22 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Gets current user.
+     *
+     * @return the current user
+     */
     public User getCurrentUser() {
         return currentUser;
     }
 
 
+    /**
+     * Warn crypto deleted.
+     *
+     * @param benefits the benefits
+     * @param username the username
+     */
     public void warnCryptoDeleted(double benefits, String username) {
         try {
             UserDAO userDAO = new UserSQLDAO();
@@ -211,6 +275,11 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Update user balance.
+     *
+     * @param change the change
+     */
     public void updateUserBalance(double change) {
         try {
             UserDAO userDAO = new UserSQLDAO();
@@ -222,6 +291,9 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Logout.
+     */
     public void logout() {
         currentUser = null;
     }

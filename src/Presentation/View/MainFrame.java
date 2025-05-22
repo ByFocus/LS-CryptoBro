@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * The type Main frame.
+ */
 public class MainFrame extends JFrame {
     //Constantes con titulos, enlaces a fots y textos
     private static final String userProfileImgURL = "imgs/usuario.png";
@@ -38,6 +41,13 @@ public class MainFrame extends JFrame {
     private MarketTab marketPanel;
     private AdminTab adminPanel;
 
+    /**
+     * Instantiates a new Main frame.
+     *
+     * @param identifier the identifier
+     * @param balance    the balance
+     * @param gains      the gains
+     */
     public MainFrame(String identifier, String balance, String gains) {
         configureFrame();
         userNameLabel = new JLabel(identifier);
@@ -68,7 +78,12 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    //Pestañas con las acciones
+    /**
+     * Configure tabs.
+     *
+     * @param admin the admin
+     */
+//Pestañas con las acciones
     public void configureTabs(boolean admin) {
         //MODIFICACIONES DE LAS CARACTERISTICAS DE UN TABBED PANE
         UIManager.put("TabbedPane.tabInsets", new Insets(5, 10, 5, 10));
@@ -145,21 +160,47 @@ public class MainFrame extends JFrame {
         return userMenu;
     }
 
+    /**
+     * Gets user panel.
+     *
+     * @return the user panel
+     */
     public JPanel getUserPanel() {
         return userPanel;
     }
 
+    /**
+     * Gets table.
+     *
+     * @return the table
+     */
     public JTable getTable() {
         return marketPanel.getTablaData();
     }
+
+    /**
+     * Refresh market.
+     *
+     * @param cryptoList the crypto list
+     */
     public void refreshMarket(List<Crypto> cryptoList) {
         marketPanel.loadCryptoData(cryptoList);
     }
 
+    /**
+     * Sets balance.
+     *
+     * @param balance the balance
+     */
     public void setBalance(double balance) {
         balanceCountLabel.setText(String.format("%.2f", balance));
     }
 
+    /**
+     * Sets estimated gains.
+     *
+     * @param estimatedGains the estimated gains
+     */
     public void setEstimatedGains(double estimatedGains) {
         String gainsText;
         if (estimatedGains < 0) {
@@ -172,6 +213,9 @@ public class MainFrame extends JFrame {
         gainsCountLabel.setText(gainsText);
     }
 
+    /**
+     * Close.
+     */
     public void close() {
         int index = mainPanel.indexOfComponent(marketPanel);
         mainPanel.removeTabAt(index);
