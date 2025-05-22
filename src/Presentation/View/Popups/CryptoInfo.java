@@ -56,7 +56,7 @@ public class CryptoInfo extends JFrame {
 
     private final JLabel cryptoNameLabel;
 
-    private GraficoCriptomoneda grafica;
+    private GraficoCriptomoneda graph;
 
     private int amount = 0;
     private int assignedRow;
@@ -70,18 +70,18 @@ public class CryptoInfo extends JFrame {
      * @param mode       the mode
      * @param row        the row
      */
-    public CryptoInfo(String cryptoName, int mode, int row){
+    public CryptoInfo(String cryptoName, int mode, double initialValue, int numCryptos, int row){
         configureFrame();
         assignedRow = row;
         cryptoNameLabel = new JLabel(cryptoName);
 
-        configureCryptoInfo(mode);
+        configureCryptoInfo(mode, initialValue, numCryptos);
     }
 
     private void configureFrame(){
         setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
-        setSize(750, 450);
+        setSize(800, 500);
         getContentPane().setBackground(new Color(28,36,52,255));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -90,19 +90,35 @@ public class CryptoInfo extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    private void configureCryptoInfo(int mode){
+    private void configureCryptoInfo(int mode, double cryptoInitialValue, int numCryptos){
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        cryptoNameLabel.setFont(new Font(FONT, Font.BOLD, 38));
+        cryptoNameLabel.setFont(new Font(FONT, Font.BOLD|Font.ITALIC, 38));
         cryptoNameLabel.setForeground(new Color(244, 233, 205));
         cryptoNameLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(cryptoNameLabel);
 
-        grafica = new GraficoCriptomoneda();
-        grafica.setPreferredSize(new Dimension(getWidth(), getHeight()));
-        grafica.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-        add(grafica);
+        if (mode != MODE_ADMIN) {
+            JLabel inventoryLabel = new JLabel();
+            inventoryLabel.setFont(new Font(FONT, Font.BOLD, 14));
+            inventoryLabel.setForeground(new Color(244, 233, 205));
+            inventoryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            if (numCryptos == 0) {
+                inventoryLabel.setText("Ninguna en posesión");
+            }
+            else {
+                inventoryLabel.setText("En posesión: " + numCryptos);
+            }
+
+            add(inventoryLabel);
+        }
+
+        graph = new GraficoCriptomoneda(cryptoInitialValue);
+        graph.setPreferredSize(new Dimension(getWidth(), getHeight()));
+        graph.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+        add(graph);
 
         JPanel panelContador = new JPanel(new FlowLayout());
 
@@ -111,6 +127,8 @@ public class CryptoInfo extends JFrame {
         amountLabel.setHorizontalAlignment(JTextField.CENTER);
         amountLabel.setEditable(false);
 
+
+        //Botones para sumar o restar cantidad de compra
         if (mode != MODE_ADMIN) {
             RoundedButton boton5Menos = new RoundedButton("-5", 15);
             boton5Menos.setFont(new Font(FONT, Font.PLAIN, 16));
@@ -248,12 +266,12 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Gets grafica.
+     * Gets graph.
      *
-     * @return the grafica
+     * @return the graph
      */
-    public GraficoCriptomoneda getGrafica() {
-        return grafica;
+    public GraficoCriptomoneda getGraph() {
+        return graph;
     }
 
     /**

@@ -5,16 +5,13 @@ import Business.BusinessExceptions.BusinessExeption;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
-import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;
-import Presentation.View.Tables.WalletTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -48,8 +45,12 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
      * @param row    the row
      */
     public void displayCryptoInfo(Crypto crypto, int mode, int row) {
-        CryptoInfo cryptoInfo =new CryptoInfo(crypto.getName(),mode, row);
-        cryptoInfo.getGrafica().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
+        String cryptoName = crypto.getName();
+        String userName = AccountManager.getInstance().getCurrentUserName();
+        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, crypto.getInitialPrice(), WalletManager.getInstance().getNumCryptoInWallet(userName ,cryptoName), row);
+
+        cryptoInfo.getGraph().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
+
         cryptoInfo.registerController(this);
         cryptoInfo.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -75,7 +76,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         switch (context) {
             case EventType.NEW_HISTORICAL_VALUE:
                 for (CryptoInfo cryptoInfo : cryptoInfos) {
-                    cryptoInfo.getGrafica().setMuestras(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(cryptoInfo.getCryptoName()));
+                    cryptoInfo.getGraph().setMuestras(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(cryptoInfo.getCryptoName()));
                 }
                 break;
         }

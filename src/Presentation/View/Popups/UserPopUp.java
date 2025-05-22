@@ -1,7 +1,10 @@
 package Presentation.View.Popups;
 
 import Presentation.View.Panels.RoundedPanel;
+import  java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -81,7 +84,7 @@ public class UserPopUp extends JFrame {
     }
 
     private void configureUserProfile(){
-        setSize(600, 500);
+        setSize(500, 600);
 
         Container c = getContentPane();
         c.setBackground(new Color(244, 233, 205));
@@ -102,7 +105,7 @@ public class UserPopUp extends JFrame {
 
         Image userProfileImg = new ImageIcon(userProfileImgURL).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         JLabel userProfile = new JLabel(new ImageIcon(userProfileImg));
-        userProfile.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
+        userProfile.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         userProfile.setAlignmentX(Component.CENTER_ALIGNMENT);
         c.add(userProfile);
 
@@ -113,7 +116,7 @@ public class UserPopUp extends JFrame {
 
         JPanel userInfoPanel = new JPanel(new BorderLayout());
         userInfoPanel.setOpaque(false);
-        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 0, 30));
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 0, 30));
 
         JPanel textPanel = new RoundedPanel(20); // 20 is the border radius
         textPanel.setBackground(new Color(70, 129, 137));
@@ -142,6 +145,40 @@ public class UserPopUp extends JFrame {
         actionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
         if (!admin) {
+            JPanel balanceInputPanel = new JPanel();
+            balanceInputPanel.setOpaque(false);
+            actionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+
+            JLabel addBalanceLabel = new JLabel("Add Balance:");
+            addBalanceLabel.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+            addBalanceLabel.setForeground(new Color(28, 36, 52));
+            balanceInputPanel.add(addBalanceLabel);
+
+            // Set the slider
+            JSlider slider = new JSlider();
+            slider.setOpaque(false);
+            slider.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+            slider.setForeground(new Color(28, 36, 52));
+            slider.setMinorTickSpacing(10);
+            slider.setPaintTicks(true);
+            slider.setPaintLabels(true);
+
+            // Add positions label in the slider
+            Hashtable<Integer, JLabel> position = new Hashtable<Integer, JLabel>();
+            position.put(0, new JLabel("0"));
+            position.put(50, new JLabel("50"));
+            position.put(100, new JLabel("100"));
+
+            slider.setLabelTable(position);
+
+            slider.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent e) {
+                }
+            });
+
+            balanceInputPanel.add(slider);
+            add(balanceInputPanel);
+
             deleteAccountButton = new JButton("Delete Account");
             deleteAccountButton.setFont(new Font(FONT_TEXT, Font.ITALIC | Font.BOLD, 21));
             deleteAccountButton.setBackground(new Color(213, 0, 0));

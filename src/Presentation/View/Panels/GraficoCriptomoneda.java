@@ -17,7 +17,7 @@ public class GraficoCriptomoneda extends JPanel {
     private final int TIEMPO_DE_MUESTREO = 10;
     private final int NUM_MAX_PUNTOS = TIEMPO_DE_MUESTREO* 60 /5;
 
-    private final DecimalFormat FORMATO_NUMERO = new DecimalFormat("#,###");
+    private final DecimalFormat FORMATO_NUMERO = new DecimalFormat("#.#####");
     private final SimpleDateFormat FORMATO_FECHA_CORTO = new SimpleDateFormat("HH:mm");
     private final SimpleDateFormat FORMATO_FECHA_LARGO = new SimpleDateFormat("HH:mm:ss");
 
@@ -27,6 +27,7 @@ public class GraficoCriptomoneda extends JPanel {
     private final int MARGEN_IZQ = 70;
 
     private final LinkedList<Muestra> muestras = new LinkedList<>();
+    private double precioInicial = 0;
     private double precioMinimoActual = 0;
     private double precioMaximoActual = 1;
     private Date primeraMuestra;
@@ -35,11 +36,12 @@ public class GraficoCriptomoneda extends JPanel {
     /**
      * Instantiates a new Grafico criptomoneda.
      */
-    public GraficoCriptomoneda() {
+    public GraficoCriptomoneda(double precioInicial) {
         setBackground(new Color(28, 36, 52));
         repaint();
-    }
 
+        this.precioInicial = precioInicial;
+    }
     /**
      * Actualizar datos.
      *
@@ -112,8 +114,8 @@ public class GraficoCriptomoneda extends JPanel {
                     calendar.add(Calendar.SECOND, (valores.size() - i) * -5);
                     Muestra muestra = new Muestra(valores.get(i), calendar.getTime());
                     actualizarDatos(muestra);
-                    repaint();
                 }
+                repaint();
             });
         }
     }
@@ -190,7 +192,7 @@ public class GraficoCriptomoneda extends JPanel {
 
         // Dibujar la línea del gráfico
         if (muestras.size() > 1) {
-            if (muestras.getLast().getPrecio() >= muestras.getFirst().getPrecio()) {
+            if (muestras.getLast().getPrecio() >= precioInicial) {
                 g2d.setColor(new Color(50, 205, 50)); // Verde
             } else {
                 g2d.setColor(new Color(205, 50, 50)); // Verde

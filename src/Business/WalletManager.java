@@ -101,6 +101,23 @@ public class WalletManager {
         }
     }
 
+    public int getNumCryptoInWallet(String userName, String cryptoName) {
+        PurchaseDAO purchaseDao = new PurchaseSQLDAO();
+        try {
+            List<Purchase> wallet = purchaseDao.getPurchasesByUserName(userName);
+            int numCrypto = 0;
+            for (Purchase purchase : wallet) {
+                if (purchase.getCrypto().equals(cryptoName)) {
+                    numCrypto = purchase.getUnits();
+                }
+            }
+
+            return numCrypto;
+        } catch (PersistanceException e) {
+            throw new DataPersistanceError(e.getMessage());
+        }
+    }
+
     /**
      * Calculate estimated gains by user name double.
      *
