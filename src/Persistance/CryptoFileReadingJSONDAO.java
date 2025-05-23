@@ -61,9 +61,9 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
 
         // Parse initialPrice
         double initialPrice = 0;
-        if (obj.has("initial-price") && !obj.get("initial-price").isJsonNull()) {
+        if (obj.has("initialPrice") && !obj.get("initialPrice").isJsonNull()) {
             try {
-                initialPrice = obj.get("initial-price").getAsDouble();
+                initialPrice = obj.get("initialPrice").getAsDouble();
             } catch (Exception e) {
                 throw new FileTypeException("Los tipos del dato no son correctos");
             }
@@ -71,9 +71,9 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
 
         // Parse currentPrice (Puede estar vacío)
         double currentPrice;
-        if (obj.has("current-price") && !obj.get("current-price").isJsonNull() && !obj.get("current-price").getAsString().isEmpty()) {
+        if (obj.has("currentPrice") && !obj.get("currentPrice").isJsonNull() && !obj.get("current-price").getAsString().isEmpty()) {
             try {
-                currentPrice = obj.get("current-price").getAsDouble();
+                currentPrice = obj.get("currentPrice").getAsDouble();
             } catch (Exception e) {
                 throw new FileTypeException("Los tipos del dato no son correctos");
             }
