@@ -19,6 +19,19 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
      */
     public CryptoFileReadingJSONDAO() {}
 
+    final static String NAME_FIELD = "name";
+    final static String CATEGORY_FIELD = "category";
+    final static String INITIAL_PRICE_FIELD = "initialPrice";
+    final static String CURRENT_PRICE_FIELD = "currentPrice";
+    final static String VOLATILITY_FIELD = "volatility";
+
+    final static String ERROR_NEGATIVE_PRICES = "Los precios tienen que ser mayores a 0, melón";
+    final static String EMPTY_FILE = "Este fichero está vacío :0";
+    final static String ERROR_OPENING = "No puedo abrir esto, tio: ";
+    final static String ERROR_NOT_A_JSON = "El fichero debe ser JSON, ¡esfuérzate más BRO!";
+    final static String ERROR_DATA_TYPE = "El formato del JSON es erróneo. Revisa que los campos obligatorios no sean nulos,\ny aseguráte de seguir formato del fichero de ejemplo";
+
+
     public List<Crypto> readCryptoFromFile(File file) throws FileTypeException {
         List<Crypto> cryptoList = new ArrayList<>();
         if (file.getName().toLowerCase().endsWith(".json")) {
@@ -41,71 +54,50 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
                     Crypto crypto = parseCryptoFromJson(root.getAsJsonObject());
                     cryptoList.add(crypto);
                 } else {
-                    throw new FileTypeException("Este fichero está vacío :0");
+                    throw new FileTypeException(EMPTY_FILE);
                 }
 
             } catch (IOException e) {
-                throw new FileTypeException("No puedo abrir esto, tio: " + file.getName());
+                throw new FileTypeException(ERROR_OPENING + file.getName());
             }
         } else {
-            throw new FileTypeException("El fichero debe ser JSON, ¡esfuerzáte más BRO!");
+            throw new FileTypeException(ERROR_NOT_A_JSON);
         }
         return cryptoList;
     }
 
     private Crypto parseCryptoFromJson(JsonObject obj) throws FileTypeException {
         try {
-            String name = obj.has("name") ? obj.get("name").getAsString() : null;
-            String category = obj.has("category") ? obj.get("category").getAsString() : null;
 
-            if (name == null || category == null) {
-                throw new FileTypeException("Los tipos del dato no son correctos");
+            String name = obj.has(NAME_FIELD) && !obj.get(NAME_FIELD).isJsonNull() ? obj.get(NAME_FIELD).getAsString() : null;
+            String category = obj.has(CATEGORY_FIELD) && !obj.get(CATEGORY_FIELD).isJsonNull() ? obj.get(CATEGORY_FIELD).getAsString() : null;
+            Double initialPrice = obj.has(INITIAL_PRICE_FIELD) && !obj.get(INITIAL_PRICE_FIELD).isJsonNull() ? obj.get(INITIAL_PRICE_FIELD).getAsDouble() : null;
+            Integer volatility = obj.has(VOLATILITY_FIELD) && !obj.get(VOLATILITY_FIELD).isJsonNull() ? obj.get(VOLATILITY_FIELD).getAsInt() : null;
+
+            // Campos obligatorios
+            if (name == null || category == null || initialPrice == null || volatility == null) {
+                throw new FileTypeException(ERROR_DATA_TYPE);
             }
 
-            // Parse initialPrice
-            double initialPrice = 0;
-            if (obj.has("initialPrice") && !obj.get("initialPrice").isJsonNull()) {
-                try {
-                    initialPrice = obj.get("initialPrice").getAsDouble();
-                } catch (Exception e) {
-                    throw new FileTypeException("Los tipos del dato no son correctos, revisa el fichero de ejemplo");
+            // El precio actual es un campo opcional
+            double currentPrice = initialPrice;
+            if (obj.has(CURRENT_PRICE_FIELD) && !obj.get(CURRENT_PRICE_FIELD).isJsonNull()) {
+                String currentPriceStr = obj.get(CURRENT_PRICE_FIELD).getAsString();
+                if (!currentPriceStr.isEmpty()) {
+                    currentPrice = Double.parseDouble(currentPriceStr);
                 }
-            } else {
-                throw new FileTypeException("Los tipos del dato no son correctos");
             }
 
-            // Parse currentPrice (Puede estar vacío)
-            double currentPrice;
-            if (obj.has("currentPrice") && !obj.get("currentPrice").isJsonNull() && !obj.get("currentPrice").getAsString().isEmpty()) {
-                try {
-                    currentPrice = obj.get("currentPrice").getAsDouble();
-                } catch (Exception e) {
-                    throw new FileTypeException("Los tipos del dato no son correctos");
-                }
-            } else {
-                currentPrice = initialPrice;
-            }
-
-            // Parse volatility
-            int volatility = 0;
-            if (obj.has("volatility") && !obj.get("volatility").isJsonNull()) {
-                try {
-                    volatility = obj.get("volatility").getAsInt();
-                } catch (Exception e) {
-                    throw new FileTypeException("Los tipos del dato no son correctos");
-                }
-            } else {
-                throw new FileTypeException("Los tipos del dato no son correctos");
-            }
-
-            // Validation
+            // Comprobar que el precio no sea negativo
             if (currentPrice <= 0 || initialPrice <= 0) {
-                throw new FileTypeException("Los precios tienen que ser mayores a 0, melonª");
+                throw new FileTypeException(ERROR_NEGATIVE_PRICES);
             }
 
             return new Crypto(name, category, currentPrice, initialPrice, volatility);
-        } catch(NullPointerException e) {
-            throw new FileTypeException("Los tipos del dato no son correctos");
+
+        } catch (Exception e) {
+            throw new FileTypeException(ERROR_DATA_TYPE);
         }
     }
+
 }
