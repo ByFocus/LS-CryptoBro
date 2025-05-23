@@ -31,6 +31,8 @@ public class UserPopUp extends JFrame {
      */
     public static final String CHANGE_PASSWORD_OK = "CHANGE_PASSWORD_OK";
 
+    public static final String ADD_BALANCE = "ADD_BALANCE";
+
     /**
      * The constant FONT_TITLE.
      */
@@ -59,10 +61,12 @@ public class UserPopUp extends JFrame {
     private JPasswordField confirmPwdField;
 
     private JButton logOutButton;
+    private JButton addBalanceButton;
     private JButton deleteAccountButton;
     private JButton changePasswordButton;
     private JDialog changePwdDialog;
 
+    private int balanceInput;
     /**
      * Instantiates a new User pop up.
      *
@@ -149,10 +153,13 @@ public class UserPopUp extends JFrame {
             balanceInputPanel.setOpaque(false);
             actionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-            JLabel addBalanceLabel = new JLabel("Add Balance:");
-            addBalanceLabel.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
-            addBalanceLabel.setForeground(new Color(28, 36, 52));
-            balanceInputPanel.add(addBalanceLabel);
+            addBalanceButton = new JButton("Add Balance:");
+            addBalanceButton.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
+            addBalanceButton.setForeground(Color.white);
+            addBalanceButton.setBackground(new Color(28, 36, 52));
+            addBalanceButton.setActionCommand(ADD_BALANCE);
+
+            balanceInputPanel.add(addBalanceButton);
 
             // Set the slider
             JSlider slider = new JSlider();
@@ -166,13 +173,14 @@ public class UserPopUp extends JFrame {
             // Add positions label in the slider
             Hashtable<Integer, JLabel> position = new Hashtable<Integer, JLabel>();
             position.put(0, new JLabel("0"));
-            position.put(50, new JLabel("50"));
-            position.put(100, new JLabel("100"));
+            position.put(50, new JLabel("500"));
+            position.put(100, new JLabel("1000"));
 
             slider.setLabelTable(position);
 
             slider.addChangeListener(new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
+                    balanceInput =  ((JSlider)e.getSource()).getValue();
                 }
             });
 
@@ -291,6 +299,9 @@ public class UserPopUp extends JFrame {
         if (changePasswordButton != null) {
             changePasswordButton.addActionListener(listener);
         }
+        if (addBalanceButton != null) {
+            addBalanceButton.addActionListener(listener);
+        }
     }
 
     /**
@@ -300,5 +311,9 @@ public class UserPopUp extends JFrame {
      */
     public void setBalance(String balance){
         userBalanceLabel.setText(balance);
+    }
+
+    public int getBalance() {
+        return balanceInput;
     }
 }

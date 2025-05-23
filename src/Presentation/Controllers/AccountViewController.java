@@ -93,12 +93,18 @@ public class AccountViewController implements ActionListener, EventListener {
                 userLogOut();
                 break;
 
+            case UserPopUp.ADD_BALANCE:
+                addBalance();
+                break;
+
             case UserPopUp.USER_ERASE_ACCOUNT:
                 userEraseAccount();
                 break;
+
             case UserPopUp.USER_CHANGE_PASSWORD:
                 userView.showChangePasswordDialog(this);
                 break;
+
             case UserPopUp.CHANGE_PASSWORD_OK:
                 String oldPwd = new String(userView.getOldPwdField().getPassword());
                 String newPwd = new String(userView.getNewPwdField().getPassword());
@@ -207,6 +213,10 @@ public class AccountViewController implements ActionListener, EventListener {
         startView.setVisible(true);
     }
 
+    private void addBalance() {
+        MessageDisplayer.displayInformativeMessage(String.valueOf(userView.getBalance()));
+        //AccountManager.getInstance().
+    }
     private void userEraseAccount() {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
