@@ -1,9 +1,7 @@
 package Presentation.View.Tabs;
 
-import Business.Entities.Crypto;
 import Business.Entities.Purchase;
-import Presentation.View.Tables.CryptoTableModel;
-import Presentation.View.Tables.SellColumnRender;
+import Presentation.View.Tables.WalletTableRender;
 import Presentation.View.Tables.WalletTableModel;
 
 import javax.swing.*;
@@ -32,8 +30,8 @@ public class WalletTab extends JPanel {
         walletTable.setBackground(new Color(3, 25, 38));
         walletTable.setForeground(new Color(244, 233, 205));
         walletTable.setFont(new Font("Arial", Font.PLAIN, 18));
-        walletTable.getColumnModel().getColumn(4).setCellRenderer(new SellColumnRender());
-        walletTable.getColumnModel().getColumn(3).setCellRenderer(new SellColumnRender());
+        walletTable.getColumnModel().getColumn(4).setCellRenderer(new WalletTableRender());
+        walletTable.getColumnModel().getColumn(3).setCellRenderer(new WalletTableRender());
 
         walletTable.setRowSelectionAllowed(false);
         walletTable.setCellSelectionEnabled(true);
