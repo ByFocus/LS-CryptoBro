@@ -152,7 +152,7 @@ public class CryptoManager{
             MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
             return log.toString();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DataPersistanceError(e.getMessage());
         }
     }
 
