@@ -70,6 +70,8 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
                 } catch (Exception e) {
                     throw new FileTypeException("Los tipos del dato no son correctos, revisa el fichero de ejemplo");
                 }
+            } else {
+                throw new FileTypeException("Los tipos del dato no son correctos");
             }
 
             // Parse currentPrice (Puede estar vacío)
@@ -92,6 +94,8 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
                 } catch (Exception e) {
                     throw new FileTypeException("Los tipos del dato no son correctos");
                 }
+            } else {
+                throw new FileTypeException("Los tipos del dato no son correctos");
             }
 
             // Validation
