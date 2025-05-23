@@ -57,6 +57,7 @@ public class WalletManager {
             purchaseDAO.substractUnits(purchase, user.getUsername(), units);
             AccountManager.getInstance().updateUserBalance(benefit);
             CryptoManager.getCryptoManager().makeTransaction(purchase.getCrypto(), units); // modifica el precio de la crypto
+            MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
