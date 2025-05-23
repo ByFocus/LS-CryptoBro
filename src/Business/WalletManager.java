@@ -109,7 +109,7 @@ public class WalletManager {
             int numCrypto = 0;
             for (Purchase purchase : wallet) {
                 if (purchase.getCrypto().equals(cryptoName)) {
-                    numCrypto = purchase.getUnits();
+                    numCrypto += purchase.getUnits();
                 }
             }
 

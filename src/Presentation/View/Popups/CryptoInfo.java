@@ -60,6 +60,9 @@ public class CryptoInfo extends JFrame {
 
     private int amount = 0;
     private int assignedRow;
+    private int numCryptos;
+    private int mode;
+    private JLabel inventoryLabel;
     private JTextField amountLabel;
     private JButton functionButton;
 
@@ -74,8 +77,9 @@ public class CryptoInfo extends JFrame {
         configureFrame();
         assignedRow = row;
         cryptoNameLabel = new JLabel(cryptoName);
-
-        configureCryptoInfo(mode, initialValue, numCryptos);
+        this.numCryptos = numCryptos;
+        this.mode = mode;
+        configureCryptoInfo(initialValue);
     }
 
     private void configureFrame(){
@@ -90,7 +94,7 @@ public class CryptoInfo extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    private void configureCryptoInfo(int mode, double cryptoInitialValue, int numCryptos){
+    private void configureCryptoInfo(double cryptoInitialValue){
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD|Font.ITALIC, 38));
@@ -100,18 +104,11 @@ public class CryptoInfo extends JFrame {
         add(cryptoNameLabel);
 
         if (mode != MODE_ADMIN) {
-            JLabel inventoryLabel = new JLabel();
+            inventoryLabel = new JLabel();
             inventoryLabel.setFont(new Font(FONT, Font.BOLD, 14));
             inventoryLabel.setForeground(new Color(244, 233, 205));
             inventoryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            if (numCryptos == 0) {
-                inventoryLabel.setText("Ninguna en posesión");
-            }
-            else {
-                inventoryLabel.setText("En posesión: " + numCryptos);
-            }
-
+            updateInventoryLabel();
             add(inventoryLabel);
         }
 
@@ -192,6 +189,25 @@ public class CryptoInfo extends JFrame {
         glue.setMinimumSize(new Dimension(0, 30));
         add(glue);
 
+    }
+
+    private void updateInventoryLabel() {
+        String labelText;
+
+        if (mode == MODE_BUY_CRYPTO) {
+            if (numCryptos == 0) {
+                labelText = "No hay cryptos en posesión";
+            } else {
+                labelText = "Tienes " + numCryptos + " cryptos en posesión";
+            }
+        } else {
+            if (numCryptos == 0) {
+                labelText = "No quedan cryptos asociadas a esta venta";
+            } else {
+                labelText = "Hay " + numCryptos + " cryptos asociadas a esta venta";
+            }
+        }
+        inventoryLabel.setText(labelText);
     }
 
     /**
@@ -289,5 +305,10 @@ public class CryptoInfo extends JFrame {
     public void resetAmount() {
         amount = 0;
         amountLabel.setText(String.valueOf(amount));
+    }
+
+    public void modifyUnits(int units) {
+        numCryptos += units;
+        updateInventoryLabel();
     }
 }
