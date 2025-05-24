@@ -306,15 +306,6 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Gets graph.
-     *
-     * @return the graph
-     */
-    public CryptoGraph getGraph() {
-        return graph;
-    }
-
-    /**
      * Get row int.
      *
      * @return the int
