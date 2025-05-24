@@ -12,6 +12,9 @@ import java.sql.*;
  * Implements a singleton pattern to provide a shared connection instance throughout the application.
  */
 public class SQLConnector {
+
+    private final String DB_CONNECTION_FAILED = "Error al conectar con la base de datos";
+
     private static SQLConnector instance = null;
     private Connection conn;  // Instance field
 
@@ -79,7 +82,7 @@ public class SQLConnector {
             }
             return conn;
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to establish database connection");
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         }
     }
 }

@@ -69,11 +69,8 @@ public class Market extends Thread{
                 }
                 MarketManager.getMarketManager().notify(EventType.NEW_HISTORICAL_VALUE);
                 Thread.sleep(pollingRate);
-            } catch (InterruptedException _) {
-            } catch (BusinessExeption e) {
-                throw new DataPersistanceError(e.getMessage());
+            } catch (InterruptedException | BusinessExeption _) {
             }
-
         }
     }
 

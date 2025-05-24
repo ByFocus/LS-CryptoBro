@@ -19,6 +19,12 @@ import java.util.List;
  * Manages actions such as buying/selling cryptos and price updates.
  */
 public class CryptoInfoTabController implements EventListener, ActionListener {
+    private final String BUY_ZERO = "Brooooo, como vas a comprar 0?\nDe hecho, ¿qué es el ZerO?, tremenda rallada";
+    private final String SELL_ZERO = "¿Vender 0? ¿Brother, seguro que eso es rentable?";
+    private final String INCORRECT_VALUE = "Hermano, reales positivos, anda";
+    private final String INCORRECT_FLOAT_FORMAT = "Si quieres poner decimales usa el punto (.)";
+    private final String NO_NUMBER = "Tú no has visto un número en tu vida";
+
     private List<CryptoInfo> cryptoInfos;
     private static CryptoInfoTabController instance;
 
@@ -123,7 +129,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                     }
                     cryptoInfo.resetAmount();
                 } else {
-                    MessageDisplayer.displayError("Brooooo, como vas a comprar 0?\nDe hecho, ¿qué es el ZerO?, tremenda rallada");
+                    MessageDisplayer.displayError(BUY_ZERO);
                 }
                 break;
 
@@ -141,7 +147,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                     }
                     cryptoInfo.resetAmount();
                 } else {
-                    MessageDisplayer.displayError("¿Vender 0? ¿Brother, seguro que eso es rentable?");
+                    MessageDisplayer.displayError(SELL_ZERO);
                 }
                 break;
 
@@ -154,13 +160,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                         CryptoManager.getCryptoManager().updateCryptoPrice(cryptoName, price);
                         MessageDisplayer.displayInformativeMessage("Eres Dios, ahora " + cryptoName + " vale " + String.format("%.4f", price));
                     } else {
-                        MessageDisplayer.displayError("Hermano, reales positivos, anda");
+                        MessageDisplayer.displayError(INCORRECT_VALUE);
                     }
                 } catch (NumberFormatException ex) {
                     if (cryptoInfo.getAmountLabel().contains(",")) {
-                        MessageDisplayer.displayError("Si quieres poner decimales usa el punto (.)");
+                        MessageDisplayer.displayError(INCORRECT_FLOAT_FORMAT);
                     } else {
-                        MessageDisplayer.displayError("Tú no has visto un número en tu vida");
+                        MessageDisplayer.displayError(NO_NUMBER);
                     }
                 } catch (BusinessExeption ex2) {
                     MessageDisplayer.displayError(ex2.getMessage());

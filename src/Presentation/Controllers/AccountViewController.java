@@ -28,8 +28,10 @@ public class AccountViewController implements ActionListener, EventListener {
     private final String REGISTER_SUCCESFUL = "Brother, ahora formas parte de la familia!";
     private final String ERASE_CONFIRMATION = "Tete, seguro que te quieres ir? No seas un mileurista!";
     private final String ERASE_CANCELATION = "Nos emocionamos (de forma varonil) que sigas con nosotros!";
-    private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
-    private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
+    private final String ERROR_INCORRECT_PASSWORD = "Bro se te ha cambiado la contraseña, más te vale recordarla!" ;
+    private final String ERROR_PASSWORD_DONT_MATCH = "Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!";
+    private final String ERROR_SAME_PASSWORDS = "Busca la definición de cambio en internet, la nueva contraseña debe ser distinta a la antigua";
+    private final String BALANCE_ERROR = "El saldo tiene que ser un real positivo, separado por puntos";
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -105,13 +107,13 @@ public class AccountViewController implements ActionListener, EventListener {
                 String confirmPwd = new String(userView.getConfirmPwdField().getPassword());
 
                 if (!newPwd.equals(confirmPwd)) {
-                    MessageDisplayer.displayError("Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!");
+                    MessageDisplayer.displayError(ERROR_PASSWORD_DONT_MATCH);
                 } else if(newPwd.equals(oldPwd)) {
-                    MessageDisplayer.displayError("Busca la definición de cambio en internet, la nueva contraseña debe ser distinta a la antigua");
+                    MessageDisplayer.displayError(ERROR_SAME_PASSWORDS);
                 }else {
                     try{
                         AccountManager.getInstance().changePassword(newPwd, oldPwd);
-                        MessageDisplayer.displayInformativeMessage("Bro se te ha cambiado la contraseña, más te vale recordarla!");
+                        MessageDisplayer.displayInformativeMessage(ERROR_INCORRECT_PASSWORD);
                         userView.getChangePwdDialog().dispose();
 
                     } catch (BusinessExeption ex) {
@@ -248,7 +250,7 @@ public class AccountViewController implements ActionListener, EventListener {
             MessageDisplayer.displayInformativeMessage(String.format("Has añadido " + change + "€\nSeguro que tributados..."));
             userView.resetBalanceChange();
         } catch (Exception e1) {
-            MessageDisplayer.displayError("El saldo tiene que ser un real positivo, separado por puntos");
+            MessageDisplayer.displayError(BALANCE_ERROR);
         }
     }
 

@@ -14,7 +14,7 @@ import Persistance.SQL.UserSQLDAO;
 public class AccountManager {
     private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
     private final String EXISTENT_MAIL_ERROR = "Bro, este correo ya está en uso!";
-    private final String INEXISTENT_USER_ERROR = "Bro, el usuario no existe!";
+    private final String INEXISTENT_USER_ERROR = "Bro no existente en nuestra BroBase";
     private final String INCORRECT_PASSWORD_ERROR = "Contraseña incorrecta, echale un vistazo bro!";
     private final String CRYPTO_DELETED_ERROR = "Brother vaya paranoia, una o más de las criptomonedas que habías\ncomprado han sido eliminadas del sistema, se te ha actualizado el saldo!";
     private final String INCORRECT_ADMIN_PASSWORD_ERROR = "Contraseña de administrador incorrecta, echale un vistazo bro!";

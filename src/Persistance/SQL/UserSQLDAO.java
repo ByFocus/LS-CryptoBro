@@ -18,6 +18,9 @@ import java.sql.SQLException;
  */
 public class UserSQLDAO implements UserDAO {
 
+    private final String DB_CONNECTION_FAILED = "Error al conectar con la base de datos";
+    private final String USER_ERROR = "Error al crear, modificar o obtener un usuario";
+
     /**
      * Registers a new user in the database.
      *
@@ -32,7 +35,7 @@ public class UserSQLDAO implements UserDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Could not reach DB!");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -44,15 +47,15 @@ public class UserSQLDAO implements UserDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to create user");
+                throw new DBConnectionNotReached(USER_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to create user");
+            throw new DBConnectionNotReached(USER_ERROR);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing statement: " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -82,10 +85,10 @@ public class UserSQLDAO implements UserDAO {
                 Boolean cryptoDeleted = result.getBoolean("cryptoDeleted");
                 user = new User(user_name, password, email, balance, cryptoDeleted);
             } else {
-                throw new DBDataNotFound("No user found with username or email: " + value);
+                throw new DBDataNotFound("No se ha encontrado ningun usuario con username o email: " + value);
             }
         } catch (SQLException e) {
-           throw new DBConnectionNotReached("Failed to get user " + e.getMessage());
+           throw new DBConnectionNotReached(USER_ERROR);
         }
 
         return user;
@@ -110,7 +113,7 @@ public class UserSQLDAO implements UserDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound("Error validating user credential " + e.getMessage());
+            throw new DBDataNotFound(USER_ERROR);
         }
     }
 
@@ -130,7 +133,7 @@ public class UserSQLDAO implements UserDAO {
             try{
                 conn = SQLConnector.getInstance().getConnection();
                 if (conn == null) {
-                    throw new DBConnectionNotReached("Could not reach DB!");
+                    throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
                 }
 
                 stmt = conn.prepareStatement(query);
@@ -139,14 +142,14 @@ public class UserSQLDAO implements UserDAO {
                 stmt.setString(3, identifier);
                 int rows = stmt.executeUpdate();
                 if (rows == 0) {
-                    throw new DBModifyData("No rows updated");
+                    throw new DBModifyData("No se ha modificado ninguna columna.");
                 }
 
             }catch (SQLException e){
-                throw new DBConnectionNotReached(e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         } catch (DBDataNotFound e) {
-            throw new DBDataNotFound("Couldn't update balance because user not retrieved from database");
+            throw new DBDataNotFound(USER_ERROR);
         }
 
 
@@ -167,10 +170,10 @@ public class UserSQLDAO implements UserDAO {
             stmt.setString(2, identifier);
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to remove user");
+                throw new DBConnectionNotReached(USER_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Error deleting user " + e.getMessage());
+            throw new DBConnectionNotReached(USER_ERROR);
         }
     }
 
@@ -192,10 +195,10 @@ public class UserSQLDAO implements UserDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to update user");
+                throw new DBConnectionNotReached(USER_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached(e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         }
     }
 
@@ -216,10 +219,10 @@ public class UserSQLDAO implements UserDAO {
             stmt.setString(3, identifier);
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to update user");
+                throw new DBConnectionNotReached(USER_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached(e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         }
     }
 }

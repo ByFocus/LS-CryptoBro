@@ -18,6 +18,10 @@ import java.util.List;
  */
 public class PurchaseSQLDAO implements PurchaseDAO {
 
+    private final String DB_CONNECTION_FAILED = "Error al conectar con la base de datos";
+    private final String PURCHASE_ERROR = "Failed to edit or adding a purchase";
+    private final String INSUFFICIENT_CRYPTOS = "Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.";
+
     /**
      * Adds a new purchase for a user.
      *
@@ -34,7 +38,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -45,15 +49,15 @@ public class PurchaseSQLDAO implements PurchaseDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to add purchase");
+                throw new DBConnectionNotReached(PURCHASE_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to add purchase to database " + e.getMessage());
+            throw new DBConnectionNotReached(PURCHASE_ERROR);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -76,7 +80,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new SQLException(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -87,13 +91,13 @@ public class PurchaseSQLDAO implements PurchaseDAO {
                 usernames.add(rs.getString("user_name"));
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to get usernames by crypto name " + e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return usernames;
@@ -115,7 +119,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try  {
             Connection conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
             stmt = conn.prepareStatement(query);
 
@@ -129,13 +133,13 @@ public class PurchaseSQLDAO implements PurchaseDAO {
                 }
 
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
+            throw new DBConnectionNotReached(PURCHASE_ERROR);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return purchases;
@@ -159,7 +163,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException("Database connection is null");
+                throw new SQLException(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -173,16 +177,16 @@ public class PurchaseSQLDAO implements PurchaseDAO {
                 buyId = rs.getInt("buy_id");
             }
             if(buyId == -1) {
-                throw new DBDataNotFound("Purchase not found!");
+                throw new DBDataNotFound(PURCHASE_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to get usernames by crypto name " + e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return buyId;
@@ -202,7 +206,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         int buyId;
         buyId = getBuyId(purchase, username);
         if (newUnits < 0) {
-             throw new DBModifyData("Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.");
+             throw new DBModifyData(INSUFFICIENT_CRYPTOS);
         }
         try {
             Connection conn = SQLConnector.getInstance().getConnection();
@@ -211,7 +215,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             stmt.setInt(2, buyId);
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to update purchase");
+                throw new DBConnectionNotReached(PURCHASE_ERROR);
             }
         } catch (SQLException e) {
             throw new DBConnectionNotReached(e.getMessage());
@@ -241,7 +245,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
             stmt = conn.prepareStatement(queryUnits);
 
@@ -258,17 +262,17 @@ public class PurchaseSQLDAO implements PurchaseDAO {
 
                     }
                 } else {
-                    throw new DBDataNotFound("Purchase not found");
+                    throw new DBDataNotFound(PURCHASE_ERROR);
                 }
 
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to get purchases by user name " + e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         }finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return benefits;
@@ -288,7 +292,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
             stmt = conn.prepareStatement(query);
 
@@ -296,15 +300,15 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             int rows = stmt.executeUpdate();
 
             if (rows == 0) {
-                throw new DBDataNotFound("Purchase not found");
+                throw new DBDataNotFound(PURCHASE_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Error al ejecutar la query");
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -322,7 +326,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
             stmt = conn.prepareStatement(query);
 
@@ -330,12 +334,12 @@ public class PurchaseSQLDAO implements PurchaseDAO {
 
             int rows = stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Error al ejecutar la query");
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
