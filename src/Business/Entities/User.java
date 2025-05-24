@@ -26,7 +26,6 @@ public class User {
         this.mail = mail;
         this.balance = balance;
         this.cryptoDeletedFlag = cryptoDeletedFlag;
-       // purchases = null;
     }
 
     /**
@@ -71,24 +70,4 @@ public class User {
      */
     public void setBalance(double balance) { this.balance = balance; }
 
-    /**
-     * Sets crypto deleted flag.
-     *
-     * @param flag the flag
-     */
-    public void setCryptoDeletedFlag(boolean flag) { this.cryptoDeletedFlag = flag; }
-
-    /**
-     * Sets password.
-     *
-     * @param password the password
-     */
-    public void setPassword(String password) { this.password = password; }
-   /* public void addPurchase(Purchase purchase) {
-        purchases.add(purchase);
-    }
-
-    public List<Purchase> getPurchases() {
-        return purchases;
-    }*/
 }
