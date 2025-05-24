@@ -63,7 +63,7 @@ public class SQLConnector {
         try {
             conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            String message = "Couldn't connect to --> " + url + " (" + e.getMessage() + ")";
+            String message = "Imposible conectarse aquí: " + url;
             throw new DBConnectionNotReached(message);
         }
     }

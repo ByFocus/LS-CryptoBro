@@ -85,7 +85,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException(DB_CONNECTION_FAILED);
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -168,7 +168,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new SQLException(DB_CONNECTION_FAILED);
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
