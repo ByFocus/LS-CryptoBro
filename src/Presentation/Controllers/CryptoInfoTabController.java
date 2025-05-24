@@ -57,7 +57,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         }
         CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, units, row);
 
-        cryptoInfo.getGraph().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
+        cryptoInfo.updateData( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
 
         cryptoInfo.registerController(this);
         cryptoInfo.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -84,7 +84,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         switch (context) {
             case EventType.NEW_HISTORICAL_VALUE:
                 for (CryptoInfo cryptoInfo : cryptoInfos) {
-                    cryptoInfo.getGraph().setMuestras(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(cryptoInfo.getCryptoName()));
+                    cryptoInfo.updateData(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(cryptoInfo.getCryptoName()));
                 }
                 break;
         }

@@ -4,7 +4,6 @@ import Business.Entities.Muestra;
 import Presentation.View.Popups.CryptoInfo;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -16,24 +15,24 @@ import java.util.concurrent.TimeUnit;
  */
 public class GraficoCriptomoneda extends JPanel {
 
-    private final DecimalFormat FORMATO_NUMERO = new DecimalFormat("#.#####");
-    private final SimpleDateFormat FORMATO_FECHA_CORTO = new SimpleDateFormat("HH:mm");
-    private final SimpleDateFormat FORMATO_FECHA_LARGO = new SimpleDateFormat("HH:mm:ss");
+    private final DecimalFormat FORMAT_NUMBER = new DecimalFormat("#.#####€");
+    private final SimpleDateFormat FORMAT_SHORT_DATE = new SimpleDateFormat("HH:mm");
+    private final SimpleDateFormat FORMATO_LONG_DATE = new SimpleDateFormat("HH:mm:ss");
 
-    private final int MARGEN_SUP = 20;
-    private final int MARGEN_DER = 20;
-    private final int MARGEN_INF = 30;
-    private final int MARGEN_IZQ = 70;
+    private final int MARGIN_SUP = 20;
+    private final int MARGIN_R = 40;
+    private final int MARGIN_BOT = 30;
+    private final int MARGIN_L = 70;
 
-    private final LinkedList<Muestra> muestras;
-    private double precioMinimoActual = 0;
-    private double precioMaximoActual = 1;
+    private final LinkedList<Muestra> samples;
+    private double minPrice  = 0;
+    private double maxPrice = 1;
 
     /**
      * Instantiates a new Grafico criptomoneda.
      */
     public GraficoCriptomoneda() {
-        muestras = new LinkedList<>();
+        samples = new LinkedList<>();
         setBackground(new Color(28, 36, 52));
         repaint();
     }
@@ -42,24 +41,24 @@ public class GraficoCriptomoneda extends JPanel {
      * Calcular rango y.
      */
     void calcularRangoY() {
-        precioMinimoActual = muestras.stream().mapToDouble(Muestra::getPrecio).min().orElse(0.0);
-        precioMaximoActual = muestras.stream().mapToDouble(Muestra::getPrecio).max().orElse(1.0);
+        minPrice = samples.stream().mapToDouble(Muestra::getPrecio).min().orElse(0.0);
+        maxPrice = samples.stream().mapToDouble(Muestra::getPrecio).max().orElse(1.0);
 
         // Añadir margen del 10% para mejor visualización
-        double margen = (precioMaximoActual - precioMinimoActual) * 0.1;
-        precioMinimoActual -= margen;
-        precioMaximoActual += margen;
+        double margen = (maxPrice - minPrice) * 0.1;
+        minPrice -= margen;
+        maxPrice += margen;
 
         // Redondear a múltiplos de paso adecuado
-        double rangoBruto = precioMaximoActual - precioMinimoActual;
+        double rangoBruto = maxPrice - minPrice;
         double potencia = Math.pow(10, Math.floor(Math.log10(rangoBruto)));
         double paso = (rangoBruto/potencia < 5) ? potencia : potencia * 2;
-        precioMinimoActual = Math.floor(precioMinimoActual / paso) * paso;
-        precioMaximoActual = Math.ceil(precioMaximoActual / paso) * paso;
+        minPrice = Math.floor(minPrice / paso) * paso;
+        maxPrice = Math.ceil(maxPrice / paso) * paso;
     }
 
     private int calcularRangoX() {
-        long diferencia = muestras.getLast().getFecha().getTime() - muestras.getFirst().getFecha().getTime();
+        long diferencia = samples.getLast().getFecha().getTime() - samples.getFirst().getFecha().getTime();
         long minutosTotales = TimeUnit.MILLISECONDS.toMinutes(diferencia);
 
         int intervalo;
@@ -74,25 +73,33 @@ public class GraficoCriptomoneda extends JPanel {
     }
 
     private int mapTiempoAPosicion(long tiempo) {
-        long rangoTiempo = muestras.getLast().getFecha().getTime() - muestras.getFirst().getFecha().getTime();
-        if (rangoTiempo == 0) return MARGEN_IZQ;
+        long rangoTiempo = samples.getLast().getFecha().getTime() - samples.getFirst().getFecha().getTime();
+        if (rangoTiempo == 0) return MARGIN_L;
 
-        return MARGEN_IZQ + (int) ((tiempo - muestras.getFirst().getFecha().getTime()) * (getWidth() - MARGEN_IZQ - MARGEN_DER) / rangoTiempo);
+        return MARGIN_L + (int) ((tiempo - samples.getFirst().getFecha().getTime()) * (getWidth() - MARGIN_L - MARGIN_R) / rangoTiempo);
     }
 
     /**
-     * Sets muestras.
+     * Sets samples.
      *
      * @param valores the valores
      */
-    public void setMuestras(LinkedList<Muestra> valores) {
+    public void setSamples(LinkedList<Muestra> valores) {
         if (valores != null) {
             SwingUtilities.invokeLater(() -> {
-                muestras.clear();
-                muestras.addAll(valores);
+                samples.clear();
+                samples.addAll(valores);
                 repaint();
             });
         }
+    }
+
+    public double getFirstValue() {
+        return samples.getFirst().getPrecio();
+    }
+
+    public double getLastValue() {
+        return samples.getLast().getPrecio();
     }
 
     @Override
@@ -104,12 +111,12 @@ public class GraficoCriptomoneda extends JPanel {
         int width = getWidth();
         int height = getHeight();
 
-        int areaGraficaAncho = width - MARGEN_IZQ - MARGEN_DER;
-        int areaGraficaAlto = height - MARGEN_SUP - MARGEN_INF;
-        if (muestras != null && !muestras.isEmpty()) {
-            if (muestras.getFirst().getFecha() != null && muestras.getLast().getFecha() != null) {
+        int areaGraficaAncho = width - MARGIN_L - MARGIN_R;
+        int areaGraficaAlto = height - MARGIN_SUP - MARGIN_BOT;
+        if (samples != null && !samples.isEmpty()) {
+            if (samples.getFirst().getFecha() != null && samples.getLast().getFecha() != null) {
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(muestras.getFirst().getFecha());
+                cal.setTime(samples.getFirst().getFecha());
 
                 // Ajustar al primer intervalo múltiplo
                 int intervalo = calcularRangoX();
@@ -117,18 +124,18 @@ public class GraficoCriptomoneda extends JPanel {
                 cal.add(Calendar.SECOND, -(segundos % intervalo));
 
                 // Dibujar marcas principales
-                while (cal.getTime().before(muestras.getLast().getFecha())) {
+                while (cal.getTime().before(samples.getLast().getFecha())) {
                     Date marca = cal.getTime();
                     int posicionX = mapTiempoAPosicion(marca.getTime());
 
                     // Seleccionar formato según intervalo
-                    String texto = (intervalo < 60) ? FORMATO_FECHA_LARGO.format(marca) : FORMATO_FECHA_CORTO.format(marca);
+                    String texto = (intervalo < 60) ? FORMATO_LONG_DATE.format(marca) : FORMAT_SHORT_DATE.format(marca);
 
                     // Dibujar línea y texto
-                    if (posicionX >= MARGEN_IZQ && posicionX <= MARGEN_IZQ + areaGraficaAncho) {
+                    if (posicionX >= MARGIN_L && posicionX <= MARGIN_L + areaGraficaAncho) {
                         g2d.setColor(new Color(70, 129, 137));
-                        g2d.drawLine(posicionX, height - MARGEN_INF, posicionX, height - MARGEN_INF + 5);
-                        g2d.drawString(texto, posicionX - 20, height - MARGEN_INF + 20);
+                        g2d.drawLine(posicionX, height - MARGIN_BOT, posicionX, height - MARGIN_BOT + 5);
+                        g2d.drawString(texto, posicionX - 20, height - MARGIN_BOT + 20);
                     }
 
                     cal.add(Calendar.SECOND, intervalo);
@@ -143,52 +150,52 @@ public class GraficoCriptomoneda extends JPanel {
 
         // Calcular valores dinámicos para el eje Y
         double[] valoresY = new double[6];
-        double paso = (precioMaximoActual - precioMinimoActual) / 5;
+        double paso = (maxPrice - minPrice) / 5;
 
         // La segunda línea desde arriba será el máximo real
         for(int i = 0; i <= 5; i++) {
-            valoresY[i] = precioMinimoActual + (paso * i);
+            valoresY[i] = minPrice + (paso * i);
         }
 
         // Dibujar líneas de referencia
         for (double valor : valoresY) {
-            double porcentaje = (valor - precioMinimoActual) / (precioMaximoActual - precioMinimoActual);
-            int y = height - MARGEN_INF - (int)(porcentaje * areaGraficaAlto);
+            double porcentaje = (valor - minPrice) / (maxPrice - minPrice);
+            int y = height - MARGIN_BOT - (int)(porcentaje * areaGraficaAlto);
 
             g2d.setColor(new Color(70, 129, 137));
-            g2d.drawLine(MARGEN_IZQ, y, width - MARGEN_DER, y);
+            g2d.drawLine(MARGIN_L, y, width - MARGIN_R, y);
 
             // Etiquetas del eje Y
             g2d.setColor(new Color(244, 233, 205));
-            String textoValor = FORMATO_NUMERO.format(valor);
+            String textoValor = FORMAT_NUMBER.format(valor);
             FontMetrics fm = g2d.getFontMetrics();
-            g2d.drawString(textoValor, MARGEN_IZQ - fm.stringWidth(textoValor) - 5, y + 5);
+            g2d.drawString(textoValor, MARGIN_L - fm.stringWidth(textoValor) - 5, y + 5);
         }
 
         // Dibujar la línea del gráfico
-        if (muestras.size() > 1) {
-            if (muestras.getLast().getPrecio() >= muestras.getFirst().getPrecio()) {
+        if (samples.size() > 1) {
+            if (samples.getLast().getPrecio() >= samples.getFirst().getPrecio()) {
                 g2d.setColor(new Color(50, 205, 50)); // Verde
             } else {
                 g2d.setColor(new Color(205, 50, 50)); // Verde
             }
             g2d.setStroke(new BasicStroke(2.0f));
 
-            int[] xPuntos = new int[muestras.size()];
-            int[] yPuntos = new int[muestras.size()];
+            int[] xPuntos = new int[samples.size()];
+            int[] yPuntos = new int[samples.size()];
 
             // Calcular las coordenadas de cada punto
-            for (int i = 0; i < muestras.size(); i++) {
+            for (int i = 0; i < samples.size(); i++) {
                 // Posición X basada en el índice
-                xPuntos[i] = MARGEN_IZQ + (i * areaGraficaAncho) / (muestras.size() - 1);
+                xPuntos[i] = MARGIN_L + (i * areaGraficaAncho) / (samples.size() - 1);
 
                 // Posición Y basada en el precio
-                double porcentajePrecio = (muestras.get(i).getPrecio() - precioMinimoActual) / (precioMaximoActual - precioMinimoActual);
-                yPuntos[i] = height - MARGEN_INF - (int)(porcentajePrecio * areaGraficaAlto);
+                double porcentajePrecio = (samples.get(i).getPrecio() - minPrice) / (maxPrice - minPrice);
+                yPuntos[i] = height - MARGIN_BOT - (int)(porcentajePrecio * areaGraficaAlto);
             }
 
             // Dibujar segmentos de línea
-            for (int i = 0; i < muestras.size() - 1; i++) {
+            for (int i = 0; i < samples.size() - 1; i++) {
                 g2d.drawLine(xPuntos[i], yPuntos[i], xPuntos[i + 1], yPuntos[i + 1]);
             }
 

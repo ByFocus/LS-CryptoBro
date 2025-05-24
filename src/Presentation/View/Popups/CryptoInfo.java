@@ -1,11 +1,14 @@
 package Presentation.View.Popups;
 
+import Business.Entities.Muestra;
 import Presentation.View.Buttons.RoundedButton;
 import Presentation.View.Panels.GraficoCriptomoneda;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.LinkedList;
 
 /**
  * The type Crypto info.
@@ -20,6 +23,7 @@ public class CryptoInfo extends JFrame {
     public static final int MODE_SELL_CRYPTO = 1;
     public static final int MODE_ADMIN = 2;
 
+    private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.#####");
     private static final String iconImgURL = "imgs/icono.png";
 
     private static final String TITLE = "Crypto Infromation";
@@ -27,15 +31,17 @@ public class CryptoInfo extends JFrame {
     private static final String FONT = "Arial";
 
     private final JLabel cryptoNameLabel;
+    private JLabel inventoryLabel;
+    private JLabel currentPriceLabel;
+    private JLabel evolutionPriceLabel;
+    private JTextField amountLabel;
+    private JButton functionButton;
     private GraficoCriptomoneda graph;
 
     private final int assignedRow;
     private final int mode;
     private int numCryptos;
     private int amount = 0;
-    private JLabel inventoryLabel;
-    private JTextField amountLabel;
-    private JButton functionButton;
 
     /**
      * Instantiates a new Crypto info.
@@ -59,20 +65,27 @@ public class CryptoInfo extends JFrame {
         setSize(800, 500);
         getContentPane().setBackground(new Color(28,36,52,255));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setLocationRelativeTo(null);
-
-        setLayout(new BorderLayout());
     }
 
     private void configureCryptoInfo(){
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD|Font.ITALIC, 38));
         cryptoNameLabel.setForeground(new Color(244, 233, 205));
         cryptoNameLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 15, 0));
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(cryptoNameLabel);
+
+        currentPriceLabel = new JLabel();
+        currentPriceLabel.setFont(new Font(FONT, Font.BOLD, 14));
+        currentPriceLabel.setForeground(new Color(244, 233, 205));
+        currentPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(currentPriceLabel);
+
+        evolutionPriceLabel = new JLabel();
+        evolutionPriceLabel.setFont(new Font(FONT, Font.BOLD, 14));
+        evolutionPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(evolutionPriceLabel);
 
         if (mode != MODE_ADMIN) {
             inventoryLabel = new JLabel();
@@ -175,6 +188,23 @@ public class CryptoInfo extends JFrame {
         addFunctionButton(mode);
         add(glue2);
 
+    }
+
+    public void updateData(LinkedList<Muestra> historicalValues) {
+        graph.setSamples(historicalValues);
+
+        double firstPrice = historicalValues.getFirst().getPrecio();
+        double lastPrice = historicalValues.getLast().getPrecio();
+        currentPriceLabel.setText(NUMBER_FORMAT.format(lastPrice) + "€");
+
+        double difference = lastPrice - firstPrice;
+        if (difference > 0) {
+            evolutionPriceLabel.setForeground(Color.GREEN);
+            evolutionPriceLabel.setText("+" + String.valueOf(difference));
+        } else {
+            evolutionPriceLabel.setForeground(Color.RED);
+            evolutionPriceLabel.setText(String.valueOf(difference));
+        }
     }
 
     private void updateInventoryLabel() {
