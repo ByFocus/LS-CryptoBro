@@ -8,68 +8,69 @@ import java.io.File;
 import java.util.List;
 
 /**
- * The interface Crypto dao.
+ * The interface Crypto dao is a Data Access Object (DAO) interface that defines methods for
+ *  performing persistence operations on {@link Crypto} entities.
  */
 public interface CryptoDAO {
+
     /**
-     * Create crypto.
+     * Persists a new cryptocurrency into the data store.
      *
-     * @param crypto the crypto
-     * @throws PersistanceException the persistance exception
+     * @param crypto the {@link Crypto} entity to create.
+     * @throws PersistanceException if an error occurs while saving the crypto.
      */
     void createCrypto(Crypto crypto) throws PersistanceException;
 
-
     /**
-     * Gets all cryptos.
+     * Retrieves all available cryptocurrencies from the data store.
      *
-     * @return the all cryptos
-     * @throws PersistanceException the persistance exception
+     * @return a list of {@link Crypto} objects.
+     * @throws PersistanceException if the data could not be fetched.
      */
     List<Crypto> getAllCryptos() throws PersistanceException;
 
     /**
-     * Gets crypto by name.
+     * Retrieves a specific {@link Crypto} based on its name.
      *
-     * @param name the name
-     * @return the crypto by name
-     * @throws PersistanceException the persistance exception
+     * @param name the name of the cryptocurrency to fetch.
+     * @return the {@link Crypto} object with the given name.
+     * @throws PersistanceException if the crypto does not exist or can't be retrieved.
      */
     Crypto getCryptoByName(String name) throws PersistanceException;
 
     /**
-     * Delete crypto.
+     * Deletes a cryptocurrency entry from the data store.
      *
-     * @param cryptoName the cryptoName
-     * @throws PersistanceException the persistance exception
+     * @param cryptoName the name of the crypto to delete.
+     * @throws PersistanceException if the deletion fails or the crypto doesn't exist.
      */
     void deleteCrypto(String cryptoName) throws PersistanceException;
 
     /**
-     * Gets crypto current price.
+     * Retrieves the current price of a specific cryptocurrency.
      *
-     * @param cryptoName the crypto name
-     * @return the crypto current price
-     * @throws PersistanceException the persistance exception
+     * @param cryptoName the name of the cryptocurrency.
+     * @return the current price as a {@code double}.
+     * @throws PersistanceException if the price cannot be retrieved.
      */
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
 
 
     /**
-     * Update crypto price.
+     * Updates the price of an existing cryptocurrency.
      *
-     * @param cryptoName the crypto name
-     * @param price      the price
-     * @throws PersistanceException the persistance exception
+     * @param cryptoName the name of the crypto to update.
+     * @param price the new price to set.
+     * @throws PersistanceException if the update fails or the crypto is not found.
      */
     void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException;
 
     /**
-     * Add cryptos from file string.
+     * Imports and registers multiple cryptocurrencies from a provided file.
      *
-     * @param file the file
-     * @return the string
-     * @throws PersistanceException the persistance exception
+     * @param file the file containing crypto data.
+     * @return a status {@code String} or summary of the operation.
+     * @throws PersistanceException if the file is invalid or the import fails.
      */
     String addCryptosFromFile(File file) throws PersistanceException;
 }

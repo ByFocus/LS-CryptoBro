@@ -3,61 +3,80 @@ package Persistance;
 import Persistance.PersistanceExceptions.ConfigurationFileError;
 
 /**
- * The interface Configuration dao.
+ * Is an interface responsible for accessing and managing
+ * application configuration data, such as database connection details and system settings.
  */
 public interface ConfigurationDAO {
 
     /**
-     * Gets admin pass.
+     * Retrieves the administrator password from the configuration.
      *
-     * @return the admin pass
-     * @throws ConfigurationFileError the configuration file error
+     * @return the admin password as a {@code String}
+     * @throws ConfigurationFileError if there is an issue reading the configuration file
      */
     String getAdminPass() throws ConfigurationFileError;
 
     /**
-     * Gets db port.
+     * Retrieves the database port defined in the configuration.
      *
-     * @return the db port
-     * @throws ConfigurationFileError the configuration file error
+     * @return the port number as an {@code int}
+     * @throws ConfigurationFileError if the configuration file cannot be read
      */
     int getDBPort() throws ConfigurationFileError;
 
     /**
-     * Gets db name.
+     * Retrieves the name of the database from the configuration.
      *
-     * @return the db name
-     * @throws ConfigurationFileError the configuration file error
+     * @return the database name as a {@code String}
+     * @throws ConfigurationFileError if the configuration cannot be accessed
      */
     String getDBName() throws ConfigurationFileError;
 
     /**
-     * Gets db user.
+     * Retrieves the username for the database connection.
      *
-     * @return the db user
-     * @throws ConfigurationFileError the configuration file error
+     * @return the database username as a {@code String}
+     * @throws ConfigurationFileError if an error occurs while accessing the configuration
      */
     String getDBUser() throws ConfigurationFileError;
 
     /**
-     * Gets db pass.
+     * Retrieves the password for the database connection.
      *
-     * @return the db pass
-     * @throws ConfigurationFileError the configuration file error
+     * @return the database password as a {@code String}
+     * @throws ConfigurationFileError if the password cannot be read from the configuration
      */
     String getDBPass() throws ConfigurationFileError;
 
     /**
-     * Gets dbip.
+     * Retrieves the IP address of the database server.
      *
-     * @return the dbip
-     * @throws ConfigurationFileError the configuration file error
+     * @return the database IP address as a {@code String}
+     * @throws ConfigurationFileError if the configuration file is unreadable or invalid
      */
     String getDBIP() throws ConfigurationFileError;
 
+    /**
+     * Retrieves the polling interval used for tasks like refreshing crypto prices.
+     *
+     * @return the polling interval in seconds as a {@code double}
+     * @throws ConfigurationFileError if the interval cannot be parsed or retrieved
+     */
     double getPollingInterval() throws ConfigurationFileError;
 
+    /**
+     * Retrieves the maximum number of data points to retain (e.g., for graph history).
+     *
+     * @return the maximum number of data points as an {@code int}
+     * @throws ConfigurationFileError if the configuration is corrupted or unreadable
+     */
     int getMaximumDataPoints() throws ConfigurationFileError;
 
+    /**
+     * Updates the administrator password in the configuration file.
+     *
+     * @param adminPass the new admin password to be set
+     * @throws ConfigurationFileError if the new password cannot be saved
+     */
     void setAdminPass(String adminPass) throws ConfigurationFileError;
 }
