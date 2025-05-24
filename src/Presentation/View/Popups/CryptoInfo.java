@@ -1,6 +1,6 @@
 package Presentation.View.Popups;
 
-import Business.Entities.Muestra;
+import Business.Entities.Sample;
 import Presentation.View.Buttons.RoundedButton;
 import Presentation.View.Panels.CryptoGraph;
 
@@ -200,11 +200,11 @@ public class CryptoInfo extends JFrame {
 
     }
 
-    public void updateData(LinkedList<Muestra> historicalValues) {
+    public void updateData(LinkedList<Sample> historicalValues) {
         graph.setSamples(historicalValues);
 
-        double firstPrice = historicalValues.getFirst().getPrecio();
-        double lastPrice = historicalValues.getLast().getPrecio();
+        double firstPrice = historicalValues.getFirst().getPrice();
+        double lastPrice = historicalValues.getLast().getPrice();
         currentPriceLabel.setText(NUMBER_FORMAT.format(lastPrice) + "€");
 
         double difference = lastPrice - firstPrice;

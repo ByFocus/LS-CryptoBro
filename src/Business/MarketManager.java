@@ -8,7 +8,7 @@ import Business.Entities.Crypto;
 import java.util.*;
 
 import Business.Entities.Market;
-import Business.Entities.Muestra;
+import Business.Entities.Sample;
 import Persistance.ConfigurationDAO;
 import Persistance.ConfigurationJSONDAO;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -84,7 +84,7 @@ public class MarketManager  {
      * @param cryptoName the crypto name
      * @return the historical values by crypto name
      */
-    public LinkedList<Muestra> getHistoricalValuesByCryptoName(String cryptoName) {
+    public LinkedList<Sample> getHistoricalValuesByCryptoName(String cryptoName) {
         return market.getHistoricalFromCrypto(cryptoName);
     }
 

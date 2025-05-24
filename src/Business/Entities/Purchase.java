@@ -42,10 +42,4 @@ public class Purchase {
      */
     public double getPriceUnit() { return priceUnit; }
 
-    /**
-     * Decrease units.
-     *
-     * @param units the units
-     */
-    public void decreaseUnits(int units) { this.units -= units; }
 }

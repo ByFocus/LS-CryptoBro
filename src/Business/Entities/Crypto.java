@@ -63,28 +63,6 @@ public class Crypto {
     public int getVolatility() { return volatility; }
 
     /**
-     * Sets current price.
-     *
-     * @param currentPrice the current price
-     */
-    public void setCurrentPrice(double currentPrice) { this.currentPrice = currentPrice; }
-    //public void setInitialPrice(double initialPrice) { this.initialPrice = initialPrice; }
-
-    /**
-     * Buy.
-     */
-    public void buy() {
-        currentPrice = currentPrice * 1.01;
-    }
-
-    /**
-     * Sell.
-     */
-    public void sell() {
-        currentPrice = currentPrice * 0.99; // amb aquesta operació en principi mai està per sota de zero
-    }
-
-    /**
      * Calculate market gap double.
      *
      * @return the double

@@ -1,6 +1,5 @@
 package Business.Entities;
 
-import java.util.List;
 
 /**
  * The type User.
@@ -11,7 +10,6 @@ public class User {
     private String password;
     private double balance;
     private boolean cryptoDeletedFlag;
-    //private List<Purchase> purchases;
 
     /**
      * Instantiates a new User.

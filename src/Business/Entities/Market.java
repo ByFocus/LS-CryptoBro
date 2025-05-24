@@ -5,16 +5,14 @@ import Business.BusinessExceptions.DataPersistanceError;
 import Business.CryptoManager;
 import Business.EventType;
 import Business.MarketManager;
-import Persistance.PersistanceExceptions.PersistanceException;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
  * The type Market.
  */
 public class Market extends Thread{
-    private Map<String, LinkedList<Muestra>> hitoricalValues = new HashMap<>();
+    private Map<String, LinkedList<Sample>> hitoricalValues = new HashMap<>();
     private List<Bot> bots;
     private int pollingRate;
     private int maxNumPoints;
@@ -46,17 +44,17 @@ public class Market extends Thread{
 
     @Override
     public void run() {
-        while (running) { //TODO: A lo mejor es preferible tener un booleano
+        while (running) {
             try {
                 CryptoManager c = new CryptoManager();
                 Date date = new Date();
-                for (Map.Entry<String, LinkedList<Muestra>> entry : hitoricalValues.entrySet()) {
-                    LinkedList<Muestra> list = entry.getValue();
+                for (Map.Entry<String, LinkedList<Sample>> entry : hitoricalValues.entrySet()) {
+                    LinkedList<Sample> list = entry.getValue();
                     if (list.size() == maxNumPoints) {
                         list.removeFirst(); // treu l'element més antic
                     }
 
-                    list.addLast(new Muestra(c.getCryptoByName(entry.getKey()).getCurrentPrice(), date));
+                    list.addLast(new Sample(c.getCryptoByName(entry.getKey()).getCurrentPrice(), date));
                 }
                 MarketManager.getMarketManager().notify(EventType.NEW_HISTORICAL_VALUE);
                 Thread.sleep(pollingRate);
@@ -86,8 +84,8 @@ public class Market extends Thread{
      * @param cryptoName the crypto name
      * @return the historical from crypto
      */
-    public LinkedList<Muestra> getHistoricalFromCrypto(String cryptoName) {
-        LinkedList<Muestra> copyHistoric= (LinkedList<Muestra>) hitoricalValues.get(cryptoName).clone();
+    public LinkedList<Sample> getHistoricalFromCrypto(String cryptoName) {
+        LinkedList<Sample> copyHistoric= (LinkedList<Sample>) hitoricalValues.get(cryptoName).clone();
         return copyHistoric;
     }
 }

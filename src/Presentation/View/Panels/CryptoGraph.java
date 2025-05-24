@@ -1,6 +1,6 @@
 package Presentation.View.Panels;
 
-import Business.Entities.Muestra;
+import Business.Entities.Sample;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ public class CryptoGraph extends JPanel {
     private final int MARGIN_BOT = 30;
     private final int MARGIN_L = 70;
 
-    private final LinkedList<Muestra> samples;
+    private final LinkedList<Sample> samples;
     private double minPrice  = 0;
     private double maxPrice = 1;
 
@@ -40,8 +40,8 @@ public class CryptoGraph extends JPanel {
      * Calcular rango y.
      */
     void calculateYRange() {
-        minPrice = samples.stream().mapToDouble(Muestra::getPrecio).min().orElse(0.0);
-        maxPrice = samples.stream().mapToDouble(Muestra::getPrecio).max().orElse(1.0);
+        minPrice = samples.stream().mapToDouble(Sample::getPrice).min().orElse(0.0);
+        maxPrice = samples.stream().mapToDouble(Sample::getPrice).max().orElse(1.0);
 
         // Añadir margen del 10% para mejor visualización
         double margin = (maxPrice - minPrice) * 0.1;
@@ -56,7 +56,7 @@ public class CryptoGraph extends JPanel {
     }
 
     private int calculateXRange() {
-        long difference = samples.getLast().getFecha().getTime() - samples.getFirst().getFecha().getTime();
+        long difference = samples.getLast().getDate().getTime() - samples.getFirst().getDate().getTime();
         long totalMinutes = TimeUnit.MILLISECONDS.toMinutes(difference);
 
         int interval;
@@ -71,10 +71,10 @@ public class CryptoGraph extends JPanel {
     }
 
     private int mapTimeToPosition(long time) {
-        long timeRange = samples.getLast().getFecha().getTime() - samples.getFirst().getFecha().getTime();
+        long timeRange = samples.getLast().getDate().getTime() - samples.getFirst().getDate().getTime();
         if (timeRange == 0) return MARGIN_L;
 
-        return MARGIN_L + (int) ((time - samples.getFirst().getFecha().getTime()) * (getWidth() - MARGIN_L - MARGIN_R) / timeRange);
+        return MARGIN_L + (int) ((time - samples.getFirst().getDate().getTime()) * (getWidth() - MARGIN_L - MARGIN_R) / timeRange);
     }
 
     /**
@@ -82,7 +82,7 @@ public class CryptoGraph extends JPanel {
      *
      * @param values the values
      */
-    public void setSamples(LinkedList<Muestra> values) {
+    public void setSamples(LinkedList<Sample> values) {
         if (values != null) {
             SwingUtilities.invokeLater(() -> {
                 samples.clear();
@@ -104,9 +104,9 @@ public class CryptoGraph extends JPanel {
         int graphAreaWidth = width - MARGIN_L - MARGIN_R;
         int graphAreaHeight = height - MARGIN_SUP - MARGIN_BOT;
         if (samples != null && !samples.isEmpty()) {
-            if (samples.getFirst().getFecha() != null && samples.getLast().getFecha() != null) {
+            if (samples.getFirst().getDate() != null && samples.getLast().getDate() != null) {
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(samples.getFirst().getFecha());
+                cal.setTime(samples.getFirst().getDate());
 
                 // Ajustar al primer interval múltiplo
                 int interval = calculateXRange();
@@ -114,7 +114,7 @@ public class CryptoGraph extends JPanel {
                 cal.add(Calendar.SECOND, -(seconds % interval));
 
                 // Dibujar marcas principales
-                while (cal.getTime().before(samples.getLast().getFecha())) {
+                while (cal.getTime().before(samples.getLast().getDate())) {
                     Date mark = cal.getTime();
                     int xPosition = mapTimeToPosition(mark.getTime());
 
@@ -162,7 +162,7 @@ public class CryptoGraph extends JPanel {
 
         // Dibujar la línea del gráfico
         if (samples.size() > 1) {
-            if (samples.getLast().getPrecio() >= samples.getFirst().getPrecio()) {
+            if (samples.getLast().getPrice() >= samples.getFirst().getPrice()) {
                 g2d.setColor(new Color(50, 205, 50)); // Verde
             } else {
                 g2d.setColor(new Color(205, 50, 50)); // Rojo
@@ -178,7 +178,7 @@ public class CryptoGraph extends JPanel {
                 xPoints[i] = MARGIN_L + (i * graphAreaWidth) / (samples.size() - 1);
 
                 // Posición Y basada en el precio
-                double porcentajePrecio = (samples.get(i).getPrecio() - minPrice) / (maxPrice - minPrice);
+                double porcentajePrecio = (samples.get(i).getPrice() - minPrice) / (maxPrice - minPrice);
                 yPoints[i] = height - MARGIN_BOT - (int)(porcentajePrecio * graphAreaHeight);
             }
 
