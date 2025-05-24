@@ -58,10 +58,10 @@ public class CryptoInfo extends JFrame {
 
     private GraficoCriptomoneda graph;
 
-    private int amount = 0;
-    private int assignedRow;
+    private final int assignedRow;
+    private final int mode;
     private int numCryptos;
-    private int mode;
+    private int amount = 0;
     private JLabel inventoryLabel;
     private JTextField amountLabel;
     private JButton functionButton;

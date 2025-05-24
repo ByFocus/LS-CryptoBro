@@ -7,7 +7,6 @@ import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 import Business.EventType;
 import Business.WalletManager;
-import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.*;
 import Presentation.View.StartFrame;
 
@@ -60,15 +59,6 @@ public class AccountViewController implements ActionListener, EventListener {
      */
     public void checkUserProfile() {
         userView.setVisible(true);
-    }
-
-    /**
-     * Sets balance.
-     *
-     * @param balance the balance
-     */
-    public void setBalance(String balance) {
-        userView.setBalance(balance);
     }
 
     @Override
@@ -174,7 +164,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     startView.dispose();
                     ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITE", true);
-                    userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", true);
+                    userView = new UserPopUp("Admin", "Admin@gmail.com", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
@@ -193,7 +183,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     String profit = priceFormat.format(gains);
 
                     ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
-                    userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()),false);
+                    userView = new UserPopUp(userName, user.getMail(), false);
                     userView.registerController(this);
 
                     try {
@@ -219,8 +209,16 @@ public class AccountViewController implements ActionListener, EventListener {
     }
 
     private void addBalance() {
-        MessageDisplayer.displayInformativeMessage(String.valueOf(userView.getBalance()*10));
-        //AccountManager.getInstance().
+        double change;
+
+        try {
+            change = userView.getBalanceChange();
+            AccountManager.getInstance().updateUserBalance(change);
+            MessageDisplayer.displayInformativeMessage(String.format("Has añadido " + change + "€\nSeguro que tributados..."));
+            userView.resetBalanceChange();
+        } catch (Exception e1) {
+            MessageDisplayer.displayError("El saldo tiene que ser un real positivo, separado por puntos");
+        }
     }
     private void userEraseAccount() {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);

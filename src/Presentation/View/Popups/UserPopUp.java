@@ -54,32 +54,28 @@ public class UserPopUp extends JFrame {
     // UI attributes
     private final JLabel userNameLabel;
     private final JLabel userEmailLabel;
-    private JLabel userBalanceLabel;
 
     private JPasswordField oldPwdField;
     private JPasswordField newPwdField;
     private JPasswordField confirmPwdField;
+    private JTextField balanceField;
 
     private JButton logOutButton;
     private JButton addBalanceButton;
     private JButton deleteAccountButton;
     private JButton changePasswordButton;
     private JDialog changePwdDialog;
-
-    private int balanceInput;
     /**
      * Instantiates a new User pop up.
      *
      * @param userName    the user name
      * @param userEmail   the user email
-     * @param userBalance the user balance
      * @param admin       the admin
      */
-    public UserPopUp(String userName, String userEmail, String userBalance, boolean admin) {
+    public UserPopUp(String userName, String userEmail, boolean admin) {
         configureFrame();
 
         this.userNameLabel = new JLabel(userName);
-        this.userBalanceLabel = new JLabel("Balance: " + userBalance);
         this.userEmailLabel = new JLabel("Email: " + userEmail);
 
         configureUserProfile();
@@ -153,7 +149,13 @@ public class UserPopUp extends JFrame {
             balanceInputPanel.setOpaque(false);
             actionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-            addBalanceButton = new JButton("Add Balance:");
+            balanceField = new JTextField();
+            balanceField.setEditable(true);
+            balanceField.setPreferredSize(new Dimension(100, 30));
+            balanceField.setFont(new Font(FONT_TEXT, Font.PLAIN, 18));
+            balanceInputPanel.add(balanceField);
+
+            addBalanceButton = new JButton("Add Balance");
             addBalanceButton.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
             addBalanceButton.setForeground(Color.white);
             addBalanceButton.setBackground(new Color(28, 36, 52));
@@ -161,30 +163,6 @@ public class UserPopUp extends JFrame {
 
             balanceInputPanel.add(addBalanceButton);
 
-            // Set the slider
-            JSlider slider = new JSlider();
-            slider.setOpaque(false);
-            slider.setFont(new Font(FONT_TEXT, Font.BOLD, 18));
-            slider.setForeground(new Color(28, 36, 52));
-            slider.setMinorTickSpacing(10);
-            slider.setPaintTicks(true);
-            slider.setPaintLabels(true);
-
-            // Add positions label in the slider
-            Hashtable<Integer, JLabel> position = new Hashtable<Integer, JLabel>();
-            position.put(0, new JLabel("0"));
-            position.put(50, new JLabel("500"));
-            position.put(100, new JLabel("1000"));
-
-            slider.setLabelTable(position);
-
-            slider.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
-                    balanceInput =  ((JSlider)e.getSource()).getValue();
-                }
-            });
-
-            balanceInputPanel.add(slider);
             add(balanceInputPanel);
 
             deleteAccountButton = new JButton("Delete Account");
@@ -253,7 +231,6 @@ public class UserPopUp extends JFrame {
      *
      * @return the old pwd field
      */
-// Getters (no recursion error!)
     public JPasswordField getOldPwdField() { return oldPwdField; }
 
     /**
@@ -304,16 +281,11 @@ public class UserPopUp extends JFrame {
         }
     }
 
-    /**
-     * Set balance.
-     *
-     * @param balance the balance
-     */
-    public void setBalance(String balance){
-        userBalanceLabel.setText(balance);
+    public double getBalanceChange() {
+        return Double.parseDouble(balanceField.getText());
     }
 
-    public int getBalance() {
-        return balanceInput;
+    public void resetBalanceChange() {
+        balanceField.setText("");
     }
 }
