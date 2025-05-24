@@ -32,6 +32,7 @@ public class AccountViewController implements ActionListener, EventListener {
     private final String ERROR_PASSWORD_DONT_MATCH = "Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!";
     private final String ERROR_SAME_PASSWORDS = "Busca la definición de cambio en internet, la nueva contraseña debe ser distinta a la antigua";
     private final String BALANCE_ERROR = "El saldo tiene que ser un real positivo, separado por puntos";
+    private final String MESSAGE_ACCOUNT_DELETED = "Has sido despojado de todo aquello que te importa.\n(Se te ha eliminado de la aplicación)";
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -263,10 +264,11 @@ public class AccountViewController implements ActionListener, EventListener {
         if (option == JOptionPane.YES_OPTION) {
             try {
                 AccountManager.getInstance().deleteCurrentUser();
+                userLogOut();
+                MessageDisplayer.displayInformativeMessage(MESSAGE_ACCOUNT_DELETED);
             } catch (BusinessExeption ex) {
                 MessageDisplayer.displayError(ex.getMessage());
             }
-            userLogOut();
         }
         else {
             MessageDisplayer.displayInformativeMessage(ERASE_CANCELATION);
