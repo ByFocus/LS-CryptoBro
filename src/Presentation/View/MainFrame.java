@@ -53,14 +53,11 @@ public class MainFrame extends JFrame {
         userNameLabel = new JLabel(identifier);
         balanceCountLabel = new JLabel(balance);
         gainsCountLabel = new JLabel();
-        if (gains.contains("-")) {
-            gainsCountLabel.setForeground(Color.RED);
-        } else if (!gains.equals("0")){
-            gainsCountLabel.setForeground(Color.GREEN);
-            gains = "+"+gains;
-        } else gains = "None";
-
-        gainsCountLabel.setText(gains);
+        try {
+            setEstimatedGains(Double.parseDouble(gains));
+        } catch (NumberFormatException e) {
+            gainsCountLabel.setText(gains);
+        }
 
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -207,9 +204,12 @@ public class MainFrame extends JFrame {
         if (estimatedGains < 0) {
             gainsCountLabel.setForeground(Color.RED);
             gainsText = String.format("%.4f", estimatedGains);
-        } else {
+        } else if (estimatedGains != 0){
             gainsCountLabel.setForeground(Color.GREEN);
             gainsText = "+"+String.format("%.4f", estimatedGains);
+        } else {
+            gainsCountLabel.setForeground(Color.WHITE);
+            gainsText = "Ninguno";
         }
         gainsCountLabel.setText(gainsText);
     }

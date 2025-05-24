@@ -8,6 +8,9 @@ import Business.Entities.Crypto;
 import java.util.*;
 
 import Business.Entities.Market;
+import Business.Entities.Muestra;
+import Persistance.ConfigurationDAO;
+import Persistance.ConfigurationJSONDAO;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.Controllers.EventListener;
 
@@ -58,7 +61,7 @@ public class MarketManager  {
         stopMarket();
         startMarket();
     }
-    private void createMarket() {
+    private void createMarket() throws BusinessExeption {
         try {
             List<Bot> bots = new ArrayList<>();
             List<Crypto> cryptoList = new CryptoManager().getAllCryptos();
@@ -67,8 +70,10 @@ public class MarketManager  {
                 bots.add(new Bot(crypto));
                 cryptoNames.add(crypto.getName());
             }
-            market = new Market(bots, cryptoNames);
-        }catch (BusinessExeption e) {
+            ConfigurationDAO confDAO = new ConfigurationJSONDAO();
+
+            market = new Market(bots, cryptoNames, confDAO.getPollingInterval() ,confDAO.getMaximumDataPoints());
+        }catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }
     }
@@ -79,7 +84,7 @@ public class MarketManager  {
      * @param cryptoName the crypto name
      * @return the historical values by crypto name
      */
-    public LinkedList<Double> getHistoricalValuesByCryptoName(String cryptoName) {
+    public LinkedList<Muestra> getHistoricalValuesByCryptoName(String cryptoName) {
         return market.getHistoricalFromCrypto(cryptoName);
     }
 

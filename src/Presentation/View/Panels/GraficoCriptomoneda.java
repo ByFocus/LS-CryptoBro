@@ -1,6 +1,7 @@
 package Presentation.View.Panels;
 
 import Business.Entities.Muestra;
+import Presentation.View.Popups.CryptoInfo;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -14,8 +15,6 @@ import java.util.concurrent.TimeUnit;
  * The type Grafico criptomoneda.
  */
 public class GraficoCriptomoneda extends JPanel {
-    private final int TIEMPO_DE_MUESTREO = 10;
-    private final int NUM_MAX_PUNTOS = TIEMPO_DE_MUESTREO* 60 /5;
 
     private final DecimalFormat FORMATO_NUMERO = new DecimalFormat("#.#####");
     private final SimpleDateFormat FORMATO_FECHA_CORTO = new SimpleDateFormat("HH:mm");
@@ -26,7 +25,7 @@ public class GraficoCriptomoneda extends JPanel {
     private final int MARGEN_INF = 30;
     private final int MARGEN_IZQ = 70;
 
-    private final LinkedList<Muestra> muestras = new LinkedList<>();
+    private final LinkedList<Muestra> muestras;
     private double precioMinimoActual = 0;
     private double precioMaximoActual = 1;
 
@@ -34,20 +33,9 @@ public class GraficoCriptomoneda extends JPanel {
      * Instantiates a new Grafico criptomoneda.
      */
     public GraficoCriptomoneda() {
+        muestras = new LinkedList<>();
         setBackground(new Color(28, 36, 52));
         repaint();
-    }
-    /**
-     * Actualizar datos.
-     *
-     * @param nuevoValor the nuevo valor
-     */
-    public void actualizarDatos(Muestra nuevoValor) {
-        //Si ya he llegado al muestreo max, borro la ultima
-        if (muestras.size() == NUM_MAX_PUNTOS) {
-            muestras.removeFirst();
-        }
-        muestras.addLast(nuevoValor);
     }
 
     /**
@@ -97,18 +85,11 @@ public class GraficoCriptomoneda extends JPanel {
      *
      * @param valores the valores
      */
-    public void setMuestras(LinkedList<Double> valores) {
-        Date ahora = new Date();
+    public void setMuestras(LinkedList<Muestra> valores) {
         if (valores != null) {
             SwingUtilities.invokeLater(() -> {
                 muestras.clear();
-                for (int i = 0; i < valores.size(); i++) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(ahora);
-                    calendar.add(Calendar.SECOND, (valores.size() - i) * -5);
-                    Muestra muestra = new Muestra(valores.get(i), calendar.getTime());
-                    actualizarDatos(muestra);
-                }
+                muestras.addAll(valores);
                 repaint();
             });
         }

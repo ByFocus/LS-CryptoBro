@@ -7,16 +7,17 @@ import Business.EventType;
 import Business.MarketManager;
 import Persistance.PersistanceExceptions.PersistanceException;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 /**
  * The type Market.
  */
 public class Market extends Thread{
-    private Map<String, LinkedList<Double>> hitoricalValues = new HashMap<>();
+    private Map<String, LinkedList<Muestra>> hitoricalValues = new HashMap<>();
     private List<Bot> bots;
-    private final static int MAX_SIZE = 120; // 10 min every 5 secs
-    private final int TIME_TO_GET = 5000;
+    private int pollingRate;
+    private int maxNumPoints;
     private boolean running;
 
     /**
@@ -25,8 +26,10 @@ public class Market extends Thread{
      * @param bots        the bots
      * @param cryptoNames the crypto names
      */
-    public Market(List<Bot> bots, List<String> cryptoNames) {
+    public Market(List<Bot> bots, List<String> cryptoNames, double pollingRate, int maxNumPoints) {
         this.bots = bots;
+        this.pollingRate = (int)pollingRate*1000;
+        this.maxNumPoints = maxNumPoints;
         for (String cryptoName : cryptoNames) {
             hitoricalValues.put(cryptoName, new LinkedList<>());
         }
@@ -46,15 +49,17 @@ public class Market extends Thread{
         while (running) { //TODO: A lo mejor es preferible tener un booleano
             try {
                 CryptoManager c = new CryptoManager();
-                for (Map.Entry<String, LinkedList<Double>> entry : hitoricalValues.entrySet()) {
-                    LinkedList<Double> list = entry.getValue();
-                    if (list.size() == MAX_SIZE) {
+                Date date = new Date();
+                for (Map.Entry<String, LinkedList<Muestra>> entry : hitoricalValues.entrySet()) {
+                    LinkedList<Muestra> list = entry.getValue();
+                    if (list.size() == maxNumPoints) {
                         list.removeFirst(); // treu l'element més antic
                     }
-                    list.addLast(c.getCryptoByName(entry.getKey()).getCurrentPrice());
+
+                    list.addLast(new Muestra(c.getCryptoByName(entry.getKey()).getCurrentPrice(), date));
                 }
                 MarketManager.getMarketManager().notify(EventType.NEW_HISTORICAL_VALUE);
-                Thread.sleep(TIME_TO_GET);
+                Thread.sleep(pollingRate);
             } catch (InterruptedException _) {
                 //
             } catch (BusinessExeption e) {
@@ -81,7 +86,8 @@ public class Market extends Thread{
      * @param cryptoName the crypto name
      * @return the historical from crypto
      */
-    public LinkedList<Double> getHistoricalFromCrypto(String cryptoName) {
-        return hitoricalValues.get(cryptoName);
+    public LinkedList<Muestra> getHistoricalFromCrypto(String cryptoName) {
+        LinkedList<Muestra> copyHistoric= (LinkedList<Muestra>) hitoricalValues.get(cryptoName).clone();
+        return copyHistoric;
     }
 }
