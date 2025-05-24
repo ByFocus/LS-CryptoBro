@@ -16,6 +16,9 @@ import java.util.List;
  * adding or deleting cryptocurrencies.
  */
 public class AdminTabController implements ActionListener {
+    private final String FILE_MISSING = "Brother, no has añadido ningun fichebro!";
+    private final String CRYPTO_NOT_SELECTED = "No has seleccionado ninguna crypto, bro!";
+
     private static AdminTabController instance;
     private AdminTab adminTab;
 
@@ -71,7 +74,7 @@ public class AdminTabController implements ActionListener {
                     }
                     adminTab.resetTab(cryptoManager.getAllCryptoNames());
                 } else {
-                    MessageDisplayer.displayError("Brother, no has añadido ningun fichebro!");
+                    MessageDisplayer.displayError(FILE_MISSING);
                 }
                 break;
 
@@ -90,7 +93,7 @@ public class AdminTabController implements ActionListener {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
                 } else {
-                    MessageDisplayer.displayError("No has seleccionado ninguna crypto, bro!");
+                    MessageDisplayer.displayError(CRYPTO_NOT_SELECTED);
                 }
         }
     }

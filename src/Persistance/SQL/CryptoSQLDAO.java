@@ -18,7 +18,8 @@ import java.util.List;
  */
 public class CryptoSQLDAO implements CryptoDAO {
 
-    private final String CRYPTO_FAILED = "Failed to create crypto entry";
+    private final String CRYPTO_FAILED = "Error al editar o crear la entrada de la criptomoneda";
+    private final String DB_CONNECTION_FAILED = "Error al conectar con la base de datos";
 
     /**
      * Inserts a new cryptocurrency into the database.
@@ -36,7 +37,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -48,15 +49,15 @@ public class CryptoSQLDAO implements CryptoDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to create crypto");
+                throw new DBConnectionNotReached(CRYPTO_FAILED);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached("Couldn't connect to database " + e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Couldn't close stmt " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -77,7 +78,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -86,15 +87,15 @@ public class CryptoSQLDAO implements CryptoDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Couldn't update crypto");
+                throw new DBConnectionNotReached(CRYPTO_FAILED);
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to update crypto in database " + e.getMessage());
+            throw new DBDataNotFound(CRYPTO_FAILED);
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing statement " + e.getMessage());
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -115,7 +116,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -126,7 +127,7 @@ public class CryptoSQLDAO implements CryptoDAO {
             if (rs.next()) {
                 return rs.getDouble("current_value");
             } else {
-                throw new DBDataNotFound("No cryptocurrency found with name: " + cryptoName);
+                throw new DBDataNotFound("No se ha encontrado la cryptomoneda con el nombre: " + cryptoName);
             }
         } catch (SQLException e) {
             throw new DBDataNotFound(e.getMessage());
@@ -135,7 +136,7 @@ public class CryptoSQLDAO implements CryptoDAO {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources!");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
     }
@@ -155,23 +156,23 @@ public class CryptoSQLDAO implements CryptoDAO {
         try{
             conn = SQLConnector.getInstance().getConnection();
             if(conn == null){
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
             stmt = conn.prepareStatement(query);
             stmt.setString(1, cryptoName);
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DBDataNotFound("Couldn't find crypto");
+                throw new DBDataNotFound(CRYPTO_FAILED);
             }
         } catch (SQLException e){
-            throw new DBConnectionNotReached("Failed to delete crypto in database" + e.getMessage());
+            throw new DBConnectionNotReached(CRYPTO_FAILED);
         } finally{
             if(stmt != null){
                 try {
                     stmt.close();
                 } catch (SQLException e){
-                    throw new DBConnectionNotReached("Error closing resources");
+                    throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
                 }
             }
         }
@@ -193,7 +194,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -210,13 +211,13 @@ public class CryptoSQLDAO implements CryptoDAO {
                 cryptoList.add(crypto);
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to retrieve cryptos from database " + e.getMessage());
+            throw new DBDataNotFound(CRYPTO_FAILED);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return cryptoList;
@@ -240,7 +241,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         try {
             conn = SQLConnector.getInstance().getConnection();
             if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
 
             stmt = conn.prepareStatement(query);
@@ -256,16 +257,16 @@ public class CryptoSQLDAO implements CryptoDAO {
 
                 crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
             } else {
-                throw new DBDataNotFound("No crypto found with name: " + name);
+                throw new DBDataNotFound("No se ha encontrado la cryptomoneda con el nombre: " + name);
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to get crypto by name from database " + e.getMessage());
+            throw new DBDataNotFound(CRYPTO_FAILED);
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources");
+                throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
             }
         }
         return crypto;
