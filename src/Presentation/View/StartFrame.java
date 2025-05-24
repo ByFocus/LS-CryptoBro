@@ -2,7 +2,6 @@ package Presentation.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 /**
  * Main frame for user login and registration.
