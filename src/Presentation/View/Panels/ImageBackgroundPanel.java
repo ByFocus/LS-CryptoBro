@@ -4,17 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * The type Image background panel.
+ * A custom JPanel that displays a background image with configurable transparency.
  */
 public class ImageBackgroundPanel extends JPanel {
     private Image backgroundImage;
     private float alpha; // 0.0 full transparent, 1.0 opaco
 
     /**
-     * Instantiates a new Image background panel.
+     * Constructs a new ImageBackgroundPanel with the specified image and alpha.
      *
-     * @param image the image
-     * @param alpha the alpha
+     * @param image the background image to display
+     * @param alpha the transparency level (0.0 to 1.0)
      */
     public ImageBackgroundPanel(Image image, float alpha) {
         this.backgroundImage = image;
@@ -23,15 +23,20 @@ public class ImageBackgroundPanel extends JPanel {
     }
 
     /**
-     * Sets image.
+     * Sets a new image as the panel background and triggers repaint.
      *
-     * @param image the image
+     * @param image the new background image
      */
     public void setImage(Image image) {
         backgroundImage = image;
         repaint();
     }
 
+    /**
+     * Paints the component including the background image with the specified alpha.
+     *
+     * @param g the Graphics object used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

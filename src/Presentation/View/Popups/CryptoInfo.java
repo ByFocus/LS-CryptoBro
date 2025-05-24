@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 
 /**
- * The type Crypto info.
+ * The type Crypto info is a GUI window that displays detailed information about a selected cryptocurrency.
  */
 public class CryptoInfo extends JFrame {
 
@@ -44,11 +44,12 @@ public class CryptoInfo extends JFrame {
     private int amount = 0;
 
     /**
-     * Instantiates a new Crypto info.
+     * Constructs a new CryptoInfo frame with the given settings.
      *
-     * @param cryptoName the crypto name
-     * @param mode       the mode
-     * @param row        the row
+     * @param cryptoName the name of the cryptocurrency to display
+     * @param mode the interaction mode (buy/sell/admin)
+     * @param numCryptos the number of cryptos the user owns (or 0 for admin)
+     * @param row the row index in the source table
      */
     public CryptoInfo(String cryptoName, int mode, int numCryptos, int row){
         configureFrame();
@@ -59,6 +60,9 @@ public class CryptoInfo extends JFrame {
         configureCryptoInfo();
     }
 
+    /**
+     * Configures the frame properties including size, layout, background, and close operation.
+     */
     private void configureFrame(){
         setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
@@ -69,6 +73,10 @@ public class CryptoInfo extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Initializes and arranges the components used to display cryptocurrency information,
+     * including the name, price, inventory, amount controls, and functional buttons.
+     */
     private void configureCryptoInfo(){
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD|Font.ITALIC, 38));
         cryptoNameLabel.setForeground(new Color(244, 233, 205));
@@ -200,6 +208,11 @@ public class CryptoInfo extends JFrame {
 
     }
 
+    /**
+     * Updates the graph and price data using the given historical values.
+     *
+     * @param historicalValues the historical price samples of the crypto
+     */
     public void updateData(LinkedList<Sample> historicalValues) {
         graph.setSamples(historicalValues);
 
@@ -217,6 +230,10 @@ public class CryptoInfo extends JFrame {
         }
     }
 
+    /**
+     * Updates the inventory label depending on the user mode (buy/sell)
+     * and the number of cryptos owned or available.
+     */
     private void updateInventoryLabel() {
         String labelText;
 
@@ -237,9 +254,9 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Add function button.
+     * Adds the corresponding function button based on the interaction mode.
      *
-     * @param option the option
+     * @param option the user mode (buy, sell, or admin)
      */
     public void addFunctionButton(int option) {
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -271,6 +288,11 @@ public class CryptoInfo extends JFrame {
         add(functionButton, BorderLayout.SOUTH);
     }
 
+    /**
+     * Applies consistent styling to the action button depending on the mode.
+     *
+     * @param button the button to be styled
+     */
     private void styleButton(JButton button) {
         button.setFont(new Font(FONT, Font.ITALIC | Font.BOLD, 21));
         button.setBackground(new Color(244, 233, 205));
@@ -279,25 +301,25 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Register controller.
+     * Registers an action listener for the function button.
      *
-     * @param listener the listener
+     * @param listener the action listener to register
      */
     public void registerController(ActionListener listener) {
         if (functionButton != null) functionButton.addActionListener(listener);
     }
 
     /**
-     * Gets amount label.
+     * Returns the currently displayed amount in the text field.
      *
-     * @return the amount label
+     * @return the amount as a string
      */
     public String getAmountLabel() {
         return amountLabel.getText();
     }
 
     /**
-     * Gets crypto name.
+     * Gets the name of the selected cryptocurrency.
      *
      * @return the crypto name
      */
@@ -306,35 +328,45 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Gets graph.
+     * Returns the CryptoGraph panel used to visualize the historical prices.
      *
-     * @return the graph
+     * @return the graph component
      */
     public CryptoGraph getGraph() {
         return graph;
     }
 
     /**
-     * Get row int.
+     * Returns the associated row index in the table.
      *
-     * @return the int
+     * @return the row number
      */
     public int getRow(){
         return assignedRow;
     }
 
     /**
-     * Reset amount.
+     * Resets the selected amount to zero.
      */
     public void resetAmount() {
         updateAmountLabel(0);
     }
 
+    /**
+     * Updates the internal `amount` value and refreshes the amount text field.
+     *
+     * @param num the new amount to display
+     */
     private void updateAmountLabel(int num) {
         amount = num;
         amountLabel.setText(String.valueOf(amount));
     }
 
+    /**
+     * Modifies the total number of cryptos in possession and updates the label.
+     *
+     * @param units the number of units to add or remove
+     */
     public void modifyUnits(int units) {
         numCryptos += units;
         updateInventoryLabel();

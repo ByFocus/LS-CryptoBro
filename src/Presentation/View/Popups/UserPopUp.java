@@ -220,29 +220,29 @@ public class UserPopUp extends JFrame {
     public JPasswordField getOldPwdField() { return oldPwdField; }
 
     /**
-     * Gets new pwd field.
+     * Returns the password field for the new password.
      *
-     * @return the new pwd field
+     * @return the new password field
      */
     public JPasswordField getNewPwdField() { return newPwdField; }
 
     /**
-     * Gets confirm pwd field.
+     * Returns the password field to confirm the new password.
      *
-     * @return the confirm pwd field
+     * @return the confirm password field
      */
     public JPasswordField getConfirmPwdField() { return confirmPwdField; }
 
     /**
-     * Gets change pwd dialog.
+     * Returns the password change dialog instance.
      *
-     * @return the change pwd dialog
+     * @return the password change dialog
      */
     public JDialog getChangePwdDialog() { return changePwdDialog; }
 
-
-
-
+    /**
+     * Configures the frame window properties.
+     */
     private void configureFrame() {
         setTitle(FRAME_TITLE);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -250,9 +250,9 @@ public class UserPopUp extends JFrame {
     }
 
     /**
-     * Register controller.
+     * Registers an external ActionListener to handle button interactions.
      *
-     * @param listener the listener
+     * @param listener the controller to handle actions
      */
     public void registerController(ActionListener listener) {
         logOutButton.addActionListener(listener);
@@ -267,10 +267,19 @@ public class UserPopUp extends JFrame {
         }
     }
 
-    public double getBalanceChange() {
+    /**
+     * Gets the numeric value entered in the balance input field.
+     *
+     * @return the balance change as a double
+     * @throws NumberFormatException if the field does not contain a valid number
+     */
+    public double getBalanceChange() throws NumberFormatException {
         return Double.parseDouble(balanceField.getText());
     }
 
+    /**
+     * Clears the balance input field.
+     */
     public void resetBalanceChange() {
         balanceField.setText("");
     }

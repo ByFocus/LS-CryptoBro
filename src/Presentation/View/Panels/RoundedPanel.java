@@ -4,15 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * The type Rounded panel.
+ * The type Rounded panel is a custom JPanel with rounded corners.
  */
-public class RoundedPanel extends JPanel {
+public class    RoundedPanel extends JPanel {
     private int cornerRadius;
 
     /**
-     * Instantiates a new Rounded panel.
+     * Constructs a new RoundedPanel with a specified corner radius.
      *
-     * @param radius the radius
+     * @param radius the radius of the rounded corners
      */
     public RoundedPanel(int radius) {
         super();
@@ -20,6 +20,11 @@ public class RoundedPanel extends JPanel {
         setOpaque(false); // Needed for transparency
     }
 
+    /**
+     * Paints the panel with rounded corners.
+     *
+     * @param g the Graphics object to protect
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

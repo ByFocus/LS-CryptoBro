@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The type Grafico criptomoneda.
+ * A panel that displays a dynamic line graph representing the historical price evolution of a cryptocurrency.
  */
 public class CryptoGraph extends JPanel {
 
@@ -28,7 +28,7 @@ public class CryptoGraph extends JPanel {
     private double maxPrice = 1;
 
     /**
-     * Instantiates a new Grafico criptomoneda.
+     * Constructs a new CryptoGraph with default settings and dark background.
      */
     public CryptoGraph() {
         samples = new LinkedList<>();
@@ -37,7 +37,8 @@ public class CryptoGraph extends JPanel {
     }
 
     /**
-     * Calcular rango y.
+     * Calculates the vertical (Y-axis) range based on sample prices.
+     * Expands the range by 10% margin for better visual spacing.
      */
     void calculateYRange() {
         minPrice = samples.stream().mapToDouble(Sample::getPrice).min().orElse(0.0);
@@ -55,6 +56,11 @@ public class CryptoGraph extends JPanel {
         maxPrice = Math.ceil(maxPrice / step) * step;
     }
 
+    /**
+     * Determines an appropriate time interval for x-axis markers based on the total time span.
+     *
+     * @return the time interval in seconds
+     */
     private int calculateXRange() {
         long difference = samples.getLast().getDate().getTime() - samples.getFirst().getDate().getTime();
         long totalMinutes = TimeUnit.MILLISECONDS.toMinutes(difference);
@@ -70,6 +76,12 @@ public class CryptoGraph extends JPanel {
         return interval;
     }
 
+    /**
+     * Maps a timestamp to a horizontal pixel position on the graph.
+     *
+     * @param time the time in milliseconds
+     * @return the corresponding x position in pixels
+     */
     private int mapTimeToPosition(long time) {
         long timeRange = samples.getLast().getDate().getTime() - samples.getFirst().getDate().getTime();
         if (timeRange == 0) return MARGIN_L;
@@ -78,9 +90,10 @@ public class CryptoGraph extends JPanel {
     }
 
     /**
-     * Sets samples.
+     * Sets the samples to be displayed in the graph.
+     * Clears the old data and repaints the graph.
      *
-     * @param values the values
+     * @param values the list of new sample data
      */
     public void setSamples(LinkedList<Sample> values) {
         if (values != null) {
@@ -92,6 +105,11 @@ public class CryptoGraph extends JPanel {
         }
     }
 
+    /**
+     * Paints the graph component, including background grid lines, axes, labels, and the price line.
+     *
+     * @param g the Graphics context to use for painting
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
