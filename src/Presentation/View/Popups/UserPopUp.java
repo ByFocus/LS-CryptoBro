@@ -1,10 +1,7 @@
 package Presentation.View.Popups;
 
 import Presentation.View.Panels.RoundedPanel;
-import  java.util.*;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;

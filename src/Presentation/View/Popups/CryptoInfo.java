@@ -328,15 +328,6 @@ public class CryptoInfo extends JFrame {
     }
 
     /**
-     * Returns the CryptoGraph panel used to visualize the historical prices.
-     *
-     * @return the graph component
-     */
-    public CryptoGraph getGraph() {
-        return graph;
-    }
-
-    /**
      * Returns the associated row index in the table.
      *
      * @return the row number
