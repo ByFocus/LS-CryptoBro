@@ -5,6 +5,7 @@ import Presentation.View.Tables.WalletTableRender;
 import Presentation.View.Tables.WalletTableModel;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.List;
 
@@ -25,6 +26,11 @@ public class WalletTab extends JPanel {
 
         WalletTableModel modelo = new WalletTableModel(compras);
         walletTable = new JTable(modelo);
+        JTableHeader header = walletTable.getTableHeader();
+        header.setBackground(new Color(3, 25, 38));
+        header.setForeground(Color.white);
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
+        header.setFont(new Font("Arial", Font.BOLD, 16));
 
         walletTable.setRowHeight(75);
         walletTable.setBackground(new Color(3, 25, 38));
@@ -42,10 +48,6 @@ public class WalletTab extends JPanel {
         add(scroll);
     }
 
-    /*public void loadPurchaseData(List<Purchase> compras) {
-        ((CryptoTableModel) cartera.getModel()).setData(compras);
-        ((CryptoTableModel) cartera.getModel()).fireTableDataChanged();
-    }*/
 
     /**
      * Gets tabla data.

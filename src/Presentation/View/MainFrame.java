@@ -9,6 +9,7 @@ import Presentation.View.Tabs.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -51,13 +52,10 @@ public class MainFrame extends JFrame {
     public MainFrame(String identifier, String balance, String gains) {
         configureFrame();
         userNameLabel = new JLabel(identifier);
-        balanceCountLabel = new JLabel(balance);
+        balanceCountLabel = new JLabel();
+        balanceCountLabel.setText(balance);
         gainsCountLabel = new JLabel();
-        try {
-            setEstimatedGains(Double.parseDouble(gains));
-        } catch (NumberFormatException e) {
-            gainsCountLabel.setText(gains);
-        }
+        setEstimatedGains(Double.parseDouble(gains));
 
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
@@ -168,30 +166,12 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Gets table.
-     *
-     * @return the table
-     */
-    public JTable getTable() {
-        return marketPanel.getTablaData();
-    }
-
-    /**
-     * Refresh market.
-     *
-     * @param cryptoList the crypto list
-     */
-    public void refreshMarket(List<Crypto> cryptoList) {
-        marketPanel.loadCryptoData(cryptoList);
-    }
-
-    /**
      * Sets balance.
      *
      * @param balance the balance
      */
     public void setBalance(double balance) {
-        balanceCountLabel.setText(String.format("%.2f", balance));
+        balanceCountLabel.setText(String.format("%.2f€", balance));
     }
 
     /**
@@ -201,12 +181,13 @@ public class MainFrame extends JFrame {
      */
     public void setEstimatedGains(double estimatedGains) {
         String gainsText;
+        DecimalFormat priceFormat = new DecimalFormat("#.#####€");
         if (estimatedGains < 0) {
             gainsCountLabel.setForeground(Color.RED);
-            gainsText = String.format("%.4f", estimatedGains);
+            gainsText = priceFormat.format(estimatedGains);
         } else if (estimatedGains != 0){
             gainsCountLabel.setForeground(Color.GREEN);
-            gainsText = "+"+String.format("%.4f", estimatedGains);
+            gainsText = "+"+priceFormat.format(estimatedGains);
         } else {
             gainsCountLabel.setForeground(Color.WHITE);
             gainsText = "Ninguno";

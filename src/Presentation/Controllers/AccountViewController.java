@@ -176,11 +176,11 @@ public class AccountViewController implements ActionListener, EventListener {
                     User user =AccountManager.getInstance().loginUser(userName, password);
                     startView.dispose();
 
-                    DecimalFormat priceFormat = new DecimalFormat("#.#####");
+                    DecimalFormat priceFormat = new DecimalFormat("#.#####€");
 
                     String balance = priceFormat.format(user.getBalance());
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
-                    String profit = priceFormat.format(gains);
+                    String profit = String.valueOf(gains);
 
                     ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
                     userView = new UserPopUp(userName, user.getMail(), false);

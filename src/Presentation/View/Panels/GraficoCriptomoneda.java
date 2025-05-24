@@ -106,35 +106,35 @@ public class GraficoCriptomoneda extends JPanel {
 
         int areaGraficaAncho = width - MARGEN_IZQ - MARGEN_DER;
         int areaGraficaAlto = height - MARGEN_SUP - MARGEN_INF;
+        if (muestras != null && !muestras.isEmpty()) {
+            if (muestras.getFirst().getFecha() != null && muestras.getLast().getFecha() != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(muestras.getFirst().getFecha());
 
-        if (muestras.getFirst().getFecha() != null && muestras.getLast().getFecha() != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(muestras.getFirst().getFecha());
+                // Ajustar al primer intervalo múltiplo
+                int intervalo = calcularRangoX();
+                int segundos = cal.get(Calendar.SECOND);
+                cal.add(Calendar.SECOND, -(segundos % intervalo));
 
-            // Ajustar al primer intervalo múltiplo
-            int intervalo = calcularRangoX();
-            int segundos = cal.get(Calendar.SECOND);
-            cal.add(Calendar.SECOND, -(segundos % intervalo));
+                // Dibujar marcas principales
+                while (cal.getTime().before(muestras.getLast().getFecha())) {
+                    Date marca = cal.getTime();
+                    int posicionX = mapTiempoAPosicion(marca.getTime());
 
-            // Dibujar marcas principales
-            while (cal.getTime().before(muestras.getLast().getFecha())) {
-                Date marca = cal.getTime();
-                int posicionX = mapTiempoAPosicion(marca.getTime());
+                    // Seleccionar formato según intervalo
+                    String texto = (intervalo < 60) ? FORMATO_FECHA_LARGO.format(marca) : FORMATO_FECHA_CORTO.format(marca);
 
-                // Seleccionar formato según intervalo
-                String texto = (intervalo < 60) ? FORMATO_FECHA_LARGO.format(marca) : FORMATO_FECHA_CORTO.format(marca);
+                    // Dibujar línea y texto
+                    if (posicionX >= MARGEN_IZQ && posicionX <= MARGEN_IZQ + areaGraficaAncho) {
+                        g2d.setColor(new Color(70, 129, 137));
+                        g2d.drawLine(posicionX, height - MARGEN_INF, posicionX, height - MARGEN_INF + 5);
+                        g2d.drawString(texto, posicionX - 20, height - MARGEN_INF + 20);
+                    }
 
-                // Dibujar línea y texto
-                if (posicionX >= MARGEN_IZQ && posicionX <= MARGEN_IZQ + areaGraficaAncho) {
-                    g2d.setColor(new Color(70, 129, 137));
-                    g2d.drawLine(posicionX, height - MARGEN_INF, posicionX, height - MARGEN_INF + 5);
-                    g2d.drawString(texto, posicionX - 20, height - MARGEN_INF + 20);
+                    cal.add(Calendar.SECOND, intervalo);
                 }
-
-                cal.add(Calendar.SECOND, intervalo);
             }
         }
-
         calcularRangoY();
 
         // Dibujar líneas horizontales y etiquetas del eje Y

@@ -28,7 +28,7 @@ public class WalletTableModel extends AbstractTableModel {
     /**
      * Sets data.
      *
-     * @param newPurchases the compras
+     * @param newPurchases   the compras
      */
     public void setData(List<Purchase> newPurchases) {
         SwingUtilities.invokeLater(() -> {
