@@ -54,7 +54,7 @@ public class WalletManager {
             PurchaseDAO purchaseDAO = new PurchaseSQLDAO();
             CryptoManager cryptoManager = new CryptoManager();
             double benefit = units * cryptoManager.getCryptoByName(purchase.getCrypto()).getCurrentPrice();
-            purchaseDAO.substractUnits(purchase, user.getUsername(), units);
+            purchaseDAO.subtractUnits(purchase, user.getUsername(), units);
             AccountManager.getInstance().updateUserBalance(benefit);
             CryptoManager.getCryptoManager().makeTransaction(purchase.getCrypto(), units); // modifica el precio de la crypto
             MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);

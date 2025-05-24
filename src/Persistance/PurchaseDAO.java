@@ -42,10 +42,10 @@ public interface PurchaseDAO {
      *
      * @param purchase         the purchase
      * @param username         the username
-     * @param unitsToSubstract the units to substract
+     * @param unitsToSubtract the units to substract
      * @throws PersistanceException the persistance exception
      */
-    void substractUnits(Purchase purchase, String username, int unitsToSubstract) throws PersistanceException;
+    void subtractUnits(Purchase purchase, String username, int unitsToSubtract) throws PersistanceException;
 
     /**
      * Sell all purchases from crypto double.

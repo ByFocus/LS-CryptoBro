@@ -161,10 +161,9 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         return buyId;
     }
 
-
-    public void substractUnits(Purchase purchase, String username, int unitsToSubstract) throws PersistanceException{
+    public void subtractUnits(Purchase purchase, String username, int unitsToSubtract) throws PersistanceException{
         String query = "UPDATE PURCHASE SET number = ? WHERE buy_id = ?";
-        int newUnits = purchase.getUnits() - unitsToSubstract;
+        int newUnits = purchase.getUnits() - unitsToSubtract;
         int buyId;
         try{
             buyId = getBuyId(purchase, username);
