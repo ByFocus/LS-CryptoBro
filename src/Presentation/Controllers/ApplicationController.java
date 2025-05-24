@@ -5,7 +5,6 @@ import Business.BusinessExceptions.NoCurrentUser;
 import Business.MarketManager;
 import Business.EventType;
 import Business.WalletManager;
-import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.MainFrame;
 
 import java.awt.event.MouseAdapter;
@@ -45,7 +44,6 @@ public class ApplicationController implements EventListener {
      * @param balance    the balance to display
      * @param gains      the estimated gains to display
      * @param admin      whether the current user is an admin
-     * @throws PersistanceException if an error occurs during data loading
      */
     public void newApplication(String identifier, String balance, String gains, boolean admin) {
         appFrame = new MainFrame(identifier, balance, gains);
