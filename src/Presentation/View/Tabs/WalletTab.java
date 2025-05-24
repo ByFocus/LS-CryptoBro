@@ -63,7 +63,7 @@ public class WalletTab extends JPanel {
      *
      * @return the tabla data
      */
-    public JTable getTablaData() {
+    public JTable getTableData() {
         return walletTable;
     }
 

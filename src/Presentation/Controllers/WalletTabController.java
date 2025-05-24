@@ -65,15 +65,15 @@ public class WalletTabController implements EventListener, ActionListener {
     }
 
     private void attachTableMouseListener() {
-        walletTab.getTablaData().addMouseListener(new MouseAdapter() {
+        walletTab.getTableData().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int row = walletTab.getTablaData().getSelectedRow();
-                int col = walletTab.getTablaData().getSelectedColumn();
+                int row = walletTab.getTableData().getSelectedRow();
+                int col = walletTab.getTableData().getSelectedColumn();
                 if (row != -1 && col == 6) {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
-                        String cryptoName = String.valueOf(walletTab.getTablaData().getValueAt(row, 0));
+                        String cryptoName = String.valueOf(walletTab.getTableData().getValueAt(row, 0));
                         CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  CryptoInfo.MODE_SELL_CRYPTO, row);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
@@ -105,6 +105,6 @@ public class WalletTabController implements EventListener, ActionListener {
      * @return the purchase by row
      */
     public Purchase getPurchaseByRow(int row) {
-        return ((WalletTableModel)walletTab.getTablaData().getModel()).getPurchaseAtRow(row);
+        return ((WalletTableModel)walletTab.getTableData().getModel()).getPurchaseAtRow(row);
     }
 }
