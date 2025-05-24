@@ -27,20 +27,15 @@ public class GraficoCriptomoneda extends JPanel {
     private final int MARGEN_IZQ = 70;
 
     private final LinkedList<Muestra> muestras = new LinkedList<>();
-    private double precioInicial = 0;
     private double precioMinimoActual = 0;
     private double precioMaximoActual = 1;
-    private Date primeraMuestra;
-    private Date ultimaMuestra;
 
     /**
      * Instantiates a new Grafico criptomoneda.
      */
-    public GraficoCriptomoneda(double precioInicial) {
+    public GraficoCriptomoneda() {
         setBackground(new Color(28, 36, 52));
         repaint();
-
-        this.precioInicial = precioInicial;
     }
     /**
      * Actualizar datos.
@@ -53,8 +48,6 @@ public class GraficoCriptomoneda extends JPanel {
             muestras.removeFirst();
         }
         muestras.addLast(nuevoValor);
-        primeraMuestra = muestras.getFirst().getFecha();
-        ultimaMuestra = muestras.getLast().getFecha();
     }
 
     /**
@@ -78,24 +71,25 @@ public class GraficoCriptomoneda extends JPanel {
     }
 
     private int calcularRangoX() {
-        long diferencia = ultimaMuestra.getTime() - primeraMuestra.getTime();
+        long diferencia = muestras.getLast().getFecha().getTime() - muestras.getFirst().getFecha().getTime();
         long minutosTotales = TimeUnit.MILLISECONDS.toMinutes(diferencia);
 
         int intervalo;
         if (minutosTotales <= 1) intervalo = 15; // Cada 15 segundos para menos de 1 minutos
         else if (minutosTotales <= 5) intervalo = 60; // Cada minuto para menos de 5 minutos
         else if (minutosTotales <= 10) intervalo = 2 * 60; // Cada 2 minutos para menos de 10 minutos
-        else if (minutosTotales <= 25) intervalo = 5 * 60; // Cada 5 minutos
+        else if (minutosTotales <= 30) intervalo = 5 * 60; // Cada 5 minutos
+        else if (minutosTotales <= 60) intervalo = 10 * 60;
         else intervalo = 15 * 60; // Cada 15 minutos para más de 1 hora
 
         return intervalo;
     }
 
     private int mapTiempoAPosicion(long tiempo) {
-        long rangoTiempo = ultimaMuestra.getTime() - primeraMuestra.getTime();
+        long rangoTiempo = muestras.getLast().getFecha().getTime() - muestras.getFirst().getFecha().getTime();
         if (rangoTiempo == 0) return MARGEN_IZQ;
 
-        return MARGEN_IZQ + (int) ((tiempo - primeraMuestra.getTime()) * (getWidth() - MARGEN_IZQ - MARGEN_DER) / rangoTiempo);
+        return MARGEN_IZQ + (int) ((tiempo - muestras.getFirst().getFecha().getTime()) * (getWidth() - MARGEN_IZQ - MARGEN_DER) / rangoTiempo);
     }
 
     /**
@@ -132,9 +126,9 @@ public class GraficoCriptomoneda extends JPanel {
         int areaGraficaAncho = width - MARGEN_IZQ - MARGEN_DER;
         int areaGraficaAlto = height - MARGEN_SUP - MARGEN_INF;
 
-        if (primeraMuestra != null && ultimaMuestra != null) {
+        if (muestras.getFirst().getFecha() != null && muestras.getLast().getFecha() != null) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(primeraMuestra);
+            cal.setTime(muestras.getFirst().getFecha());
 
             // Ajustar al primer intervalo múltiplo
             int intervalo = calcularRangoX();
@@ -142,7 +136,7 @@ public class GraficoCriptomoneda extends JPanel {
             cal.add(Calendar.SECOND, -(segundos % intervalo));
 
             // Dibujar marcas principales
-            while (cal.getTime().before(ultimaMuestra)) {
+            while (cal.getTime().before(muestras.getLast().getFecha())) {
                 Date marca = cal.getTime();
                 int posicionX = mapTiempoAPosicion(marca.getTime());
 
@@ -192,7 +186,7 @@ public class GraficoCriptomoneda extends JPanel {
 
         // Dibujar la línea del gráfico
         if (muestras.size() > 1) {
-            if (muestras.getLast().getPrecio() >= precioInicial) {
+            if (muestras.getLast().getPrecio() >= muestras.getFirst().getPrecio()) {
                 g2d.setColor(new Color(50, 205, 50)); // Verde
             } else {
                 g2d.setColor(new Color(205, 50, 50)); // Verde

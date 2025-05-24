@@ -11,51 +11,22 @@ import java.awt.event.ActionListener;
  * The type Crypto info.
  */
 public class CryptoInfo extends JFrame {
-    /**
-     * The constant BUY_CRYPTO.
-     */
+
     public static final String BUY_CRYPTO = "BUY_CRYPTO";
-    /**
-     * The constant CHANGE_PRICE.
-     */
     public static final String CHANGE_PRICE = "CHANGE_PRICE";
-    /**
-     * The constant SELL_CRYPTO.
-     */
     public static final String SELL_CRYPTO = "SELL_CRYPTO";
 
-    /**
-     * The constant iconImgURL.
-     */
-    public static final String iconImgURL = "imgs/icono.png";
-
-    /**
-     * The constant TITLE.
-     */
-    public static final String TITLE = "Crypto Infromation";
-
-    /**
-     * The constant FONT.
-     */
-    public static final String FONT = "Arial";
-
-    /**
-     * The constant MODE_BUY_CRYPTO.
-     */
     public static final int MODE_BUY_CRYPTO = 0;
-
-    /**
-     * The constant MODE_SELL_CRYPTO.
-     */
     public static final int MODE_SELL_CRYPTO = 1;
-
-    /**
-     * The constant MODE_ADMIN.
-     */
     public static final int MODE_ADMIN = 2;
 
-    private final JLabel cryptoNameLabel;
+    private static final String iconImgURL = "imgs/icono.png";
 
+    private static final String TITLE = "Crypto Infromation";
+
+    private static final String FONT = "Arial";
+
+    private final JLabel cryptoNameLabel;
     private GraficoCriptomoneda graph;
 
     private final int assignedRow;
@@ -73,13 +44,13 @@ public class CryptoInfo extends JFrame {
      * @param mode       the mode
      * @param row        the row
      */
-    public CryptoInfo(String cryptoName, int mode, double initialValue, int numCryptos, int row){
+    public CryptoInfo(String cryptoName, int mode, int numCryptos, int row){
         configureFrame();
         assignedRow = row;
         cryptoNameLabel = new JLabel(cryptoName);
         this.numCryptos = numCryptos;
         this.mode = mode;
-        configureCryptoInfo(initialValue);
+        configureCryptoInfo();
     }
 
     private void configureFrame(){
@@ -94,7 +65,7 @@ public class CryptoInfo extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    private void configureCryptoInfo(double cryptoInitialValue){
+    private void configureCryptoInfo(){
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         cryptoNameLabel.setFont(new Font(FONT, Font.BOLD|Font.ITALIC, 38));
@@ -112,7 +83,7 @@ public class CryptoInfo extends JFrame {
             add(inventoryLabel);
         }
 
-        graph = new GraficoCriptomoneda(cryptoInitialValue);
+        graph = new GraficoCriptomoneda();
         graph.setPreferredSize(new Dimension(getWidth(), getHeight()));
         graph.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         add(graph);

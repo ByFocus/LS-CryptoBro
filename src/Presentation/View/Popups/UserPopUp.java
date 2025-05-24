@@ -13,42 +13,17 @@ import java.awt.event.ActionListener;
  * The type User pop up.
  */
 public class UserPopUp extends JFrame {
-    /**
-     * The constant USER_LOGOUT.
-     */
 // Event constants
     public static final String USER_LOGOUT = "USER_LOGOUT";
-    /**
-     * The constant USER_ERASE_ACCOUNT.
-     */
     public static final String USER_ERASE_ACCOUNT = "USER_ERASE_ACCOUNT";
-    /**
-     * The constant USER_CHANGE_PASSWORD.
-     */
     public static final String USER_CHANGE_PASSWORD = "USER_CHANGE_PASSWORD";
-    /**
-     * The constant CHANGE_PASSWORD_OK.
-     */
     public static final String CHANGE_PASSWORD_OK = "CHANGE_PASSWORD_OK";
-
     public static final String ADD_BALANCE = "ADD_BALANCE";
 
-    /**
-     * The constant FONT_TITLE.
-     */
 // Fonts and resources
     public static final String FONT_TITLE = "Open Sans";
-    /**
-     * The constant FONT_TEXT.
-     */
     public static final String FONT_TEXT = "Arial";
-    /**
-     * The constant FRAME_TITLE.
-     */
     public static final String FRAME_TITLE = "User Profile";
-    /**
-     * The constant userProfileImgURL.
-     */
     public static final String userProfileImgURL = "imgs/usuario.png";
 
     // UI attributes

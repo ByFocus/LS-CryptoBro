@@ -55,7 +55,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
             String userName = AccountManager.getInstance().getCurrentUserName();
             units = WalletManager.getInstance().getNumCryptoInWallet(userName, cryptoName);
         }
-        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, crypto.getInitialPrice(), units, row);
+        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, units, row);
 
         cryptoInfo.getGraph().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
 
