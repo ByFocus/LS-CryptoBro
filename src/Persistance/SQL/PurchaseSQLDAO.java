@@ -23,6 +23,11 @@ public class PurchaseSQLDAO implements PurchaseDAO {
     private final String INSUFFICIENT_CRYPTOS = "Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.";
 
     /**
+     *  Default constructor for the class PurchaseSQLDAO
+     */
+    public PurchaseSQLDAO() {}
+
+    /**
      * Adds a new purchase for a user.
      *
      * @param user     the user making the purchase

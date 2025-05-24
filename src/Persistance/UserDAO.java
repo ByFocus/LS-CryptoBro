@@ -9,10 +9,10 @@ import Persistance.PersistanceExceptions.PersistanceException;
  */
 public interface UserDAO {
     /**
-     * Register user.
+     * Registers the user in the database
      *
-     * @param user the user
-     * @throws PersistanceException the persistance exception
+     * @param user the user that is registered
+     * @throws PersistanceException when failed to acces or modify the database
      */
     void registerUser(User user) throws PersistanceException;
 
@@ -21,52 +21,52 @@ public interface UserDAO {
      *
      * @param value the value
      * @return the user by username or email
-     * @throws PersistanceException the persistance exception
+     * @throws PersistanceException when failed to acces or modify the database
      */
     User getUserByUsernameOrEmail(String value)  throws PersistanceException;
 
     /**
-     * Validate user boolean.
+     * Validates the credentials of a user
      *
-     * @param identifier the identifier
+     * @param identifier the identifier, either the mail or username
      * @param password   the password
-     * @return the boolean
-     * @throws PersistanceException the persistance exception
+     * @return true if the credentials are correct, false if not
+     * @throws PersistanceException when failed to acces or modify the database
      */
     boolean validateUser(String identifier, String password) throws PersistanceException;
 
     /**
-     * Remove user.
+     * Deletes a user from the database.
      *
-     * @param identifier the identifier
-     * @throws PersistanceException the persistance exception
+     * @param identifier the identifier of the user
+     * @throws PersistanceException when failed to acces or modify the database
      */
     void removeUser(String identifier) throws PersistanceException;
 
     /**
-     * Update crypto deleted flag.
+     * Updates the  crypto-deleted flag from a user.
      *
-     * @param username  the username
-     * @param flagValue the flag value
-     * @throws PersistanceException the persistance exception
+     * @param username  the username of the user
+     * @param flagValue the new value of the crypto-deleted flag
+     * @throws PersistanceException when failed to acces or modify the database
      */
     void updateCryptoDeletedFlag(String username, boolean flagValue) throws PersistanceException;
 
     /**
-     * Update balance.
+     * Updates the balance of the user.
      *
-     * @param newPurchaseValue the new purchase value
-     * @param identifier       the identifier
-     * @throws PersistanceException the persistance exception
+     * @param newPurchaseValue the amount to add to the current user balance
+     * @param identifier       the identifier of the user
+     * @throws PersistanceException when failed to acces or modify the database
      */
     void updateBalance(double newPurchaseValue, String identifier) throws PersistanceException;
 
     /**
-     * Update password.
+     * Updates the current password of a user
      *
-     * @param identifier the identifier
-     * @param password   the password
-     * @throws PersistanceException the persistance exception
+     * @param identifier the identifier of the uesr
+     * @param password   the new password
+     * @throws PersistanceException when failed to acces or modify the database
      */
     void updatePassword(String identifier, String password) throws PersistanceException;
 }
