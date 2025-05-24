@@ -2,7 +2,7 @@ package Presentation.View.Popups;
 
 import Business.Entities.Muestra;
 import Presentation.View.Buttons.RoundedButton;
-import Presentation.View.Panels.GraficoCriptomoneda;
+import Presentation.View.Panels.CryptoGraph;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +36,7 @@ public class CryptoInfo extends JFrame {
     private JLabel evolutionPriceLabel;
     private JTextField amountLabel;
     private JButton functionButton;
-    private GraficoCriptomoneda graph;
+    private CryptoGraph graph;
 
     private final int assignedRow;
     private final int mode;
@@ -62,7 +62,7 @@ public class CryptoInfo extends JFrame {
     private void configureFrame(){
         setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
-        setSize(800, 500);
+        setSize(800, 600);
         getContentPane().setBackground(new Color(28,36,52,255));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -78,7 +78,7 @@ public class CryptoInfo extends JFrame {
 
         if (mode != MODE_ADMIN) {
             inventoryLabel = new JLabel();
-            inventoryLabel.setFont(new Font(FONT, Font.BOLD, 18));
+            inventoryLabel.setFont(new Font(FONT, Font.BOLD, 15));
             inventoryLabel.setForeground(new Color(244, 233, 205));
             inventoryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             updateInventoryLabel();
@@ -108,7 +108,7 @@ public class CryptoInfo extends JFrame {
         add(cryptoPriceInfo);
 
 
-        graph = new GraficoCriptomoneda();
+        graph = new CryptoGraph();
         graph.setPreferredSize(new Dimension(getWidth(), getHeight()));
         graph.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         add(graph);
@@ -310,7 +310,7 @@ public class CryptoInfo extends JFrame {
      *
      * @return the graph
      */
-    public GraficoCriptomoneda getGraph() {
+    public CryptoGraph getGraph() {
         return graph;
     }
 
