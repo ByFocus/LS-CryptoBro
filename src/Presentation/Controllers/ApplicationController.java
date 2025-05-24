@@ -19,7 +19,6 @@ public class ApplicationController implements EventListener {
     private static ApplicationController instance;
 
     private MainFrame appFrame;
-    private CryptoInfo cryptoInfoFrame;
 
     private ApplicationController() {
     }
