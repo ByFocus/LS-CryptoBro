@@ -55,7 +55,12 @@ public class MainFrame extends JFrame {
         balanceCountLabel = new JLabel();
         balanceCountLabel.setText(balance);
         gainsCountLabel = new JLabel();
-        setEstimatedGains(Double.parseDouble(gains));
+        try {
+            setEstimatedGains(Double.parseDouble(gains));
+        } catch (NumberFormatException e) {
+            gainsCountLabel.setText(gains);
+        }
+
 
         userPanel = new JPanel();
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
