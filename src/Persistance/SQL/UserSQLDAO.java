@@ -1,10 +1,11 @@
-package Persistance;
+package Persistance.SQL;
 
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.DBModifyData;
 import Persistance.PersistanceExceptions.PersistanceException;
+import Persistance.UserDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 /**
  * The type User sqldao.
  */
-public class UserSQLDAO implements UserDAO{
+public class UserSQLDAO implements UserDAO {
 
     public void registerUser(User user) throws PersistanceException {
         String query = "INSERT INTO user (user_name, email, password, balance, cryptoDeleted) VALUES (?, ?, ?, ?, ?)";

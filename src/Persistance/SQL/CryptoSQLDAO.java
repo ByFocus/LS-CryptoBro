@@ -1,7 +1,8 @@
-package Persistance;
+package Persistance.SQL;
 
 import Business.Entities.Crypto;
-import Persistance.PersistanceExceptions.ConfigurationFileError;
+import Persistance.CryptoDAO;
+import Persistance.CryptoFileReadingJSONDAO;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.PersistanceException;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * The type Crypto sqldao.
  */
-public class CryptoSQLDAO implements CryptoDAO{
+public class CryptoSQLDAO implements CryptoDAO {
 
     private final String CRYPTO_FAILED = "Failed to create crypto entry";
 
@@ -84,41 +85,6 @@ public class CryptoSQLDAO implements CryptoDAO{
             }
         }
     }
-    //TODO: IGUAL NO SE NECESSITA
-    public void updateCrypto(Crypto crypto)  throws PersistanceException{
-
-
-        String query = "UPDATE cryptocurrency SET current_value = ?, category = ?, volatility = ? WHERE name = ?";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
-        try {
-            conn = SQLConnector.getInstance().getConnection();
-            if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
-            }
-
-            stmt = conn.prepareStatement(query);
-            stmt.setDouble(1, crypto.getCurrentPrice());
-            stmt.setString(2, crypto.getCategory());
-            stmt.setDouble(3, crypto.getVolatility());
-            stmt.setString(4, crypto.getName());
-
-            int rowsAffected = stmt.executeUpdate();
-            if(rowsAffected == 0){
-                throw new DBConnectionNotReached("Failed to update crypto");
-            }
-        } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to update crypto in database" + e.getMessage());
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing statement " + e.getMessage());
-            }
-            // Note: Don't close conn here as it's managed by SQLConnector
-        }
-    }
 
     public double getCryptoCurrentPrice(String cryptoName) throws PersistanceException {
         // Correct the query syntax to SELECT the current_value from the table
@@ -158,7 +124,7 @@ public class CryptoSQLDAO implements CryptoDAO{
         }
     }
 
-    public void deleteCrypto(String cryptoname) throws PersistanceException{
+    public void deleteCrypto(String cryptoName) throws PersistanceException{
 
         String query = "DELETE FROM cryptocurrency WHERE name = ?";
         Connection conn = null;
@@ -170,7 +136,7 @@ public class CryptoSQLDAO implements CryptoDAO{
                 throw new DBConnectionNotReached("Database connection is null");
             }
             stmt = conn.prepareStatement(query);
-            stmt.setString(1, cryptoname);
+            stmt.setString(1, cryptoName);
 
             // Execute the update
             int rowsAffected = stmt.executeUpdate();
@@ -272,75 +238,6 @@ public class CryptoSQLDAO implements CryptoDAO{
             // Note: Don't close conn here as it's managed by SQLConnector
         }
         return crypto;
-    }
-
-    public List<Crypto> getCryptoByCategory (String category) throws PersistanceException {
-        String query = "SELECT * FROM cryptocurrency WHERE category = ? AND cryptoDeleted = false";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        Crypto crypto = null;
-        List<Crypto> cryptos = new ArrayList<>();
-
-        try {
-            conn = SQLConnector.getInstance().getConnection();
-            if (conn == null) {
-                throw new DBConnectionNotReached("Database connection is null");
-            }
-
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, category);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String name = rs.getString("name");
-                double currentPrice = rs.getDouble("current_value");
-                double initialPrice = rs.getDouble("init_value");
-                int volatility = rs.getInt("volatility");
-
-                crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
-                cryptos.add(crypto);
-            }
-        } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to fetch crypto by category");
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources: " + e.getMessage());
-            }
-        }
-        return cryptos;
-    }
-
-    public List<String> getCategories() throws PersistanceException {
-        List<String> categories = new ArrayList<>();
-        String query = "SELECT DISTINCT category FROM cryptocurrency WHERE cryptoDeleted = false";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = SQLConnector.getInstance().getConnection();
-            stmt = conn.prepareStatement(query);
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                categories.add(rs.getString("category"));
-            }
-        } catch (SQLException e) {
-            throw new DBDataNotFound("Failed to retrieve categories " +  e.getMessage());
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new DBConnectionNotReached("Error closing resources: " + e.getMessage());
-            }
-        }
-
-        return categories;
     }
 
     public String addCryptosFromFile(File file) throws PersistanceException{

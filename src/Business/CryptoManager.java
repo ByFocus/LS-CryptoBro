@@ -4,11 +4,9 @@ import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.DataPersistanceError;
 import Business.Entities.Crypto;
 import Persistance.CryptoDAO;
-import Persistance.CryptoSQLDAO;
+import Persistance.SQL.CryptoSQLDAO;
 import Persistance.PersistanceExceptions.PersistanceException;
-import Persistance.PurchaseSQLDAO;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.List;
 

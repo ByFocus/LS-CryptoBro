@@ -1,6 +1,7 @@
-package Persistance;
+package Persistance.SQL;
 
-import Business.BusinessExceptions.DataPersistanceError;
+import Persistance.ConfigurationDAO;
+import Persistance.ConfigurationJSONDAO;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.PersistanceException;
 

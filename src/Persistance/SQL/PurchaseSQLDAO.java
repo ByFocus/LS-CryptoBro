@@ -1,12 +1,12 @@
-package Persistance;
+package Persistance.SQL;
 
-import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Business.Entities.User;
 import Persistance.PersistanceExceptions.DBConnectionNotReached;
 import Persistance.PersistanceExceptions.DBDataNotFound;
 import Persistance.PersistanceExceptions.DBModifyData;
 import Persistance.PersistanceExceptions.PersistanceException;
+import Persistance.PurchaseDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The type Purchase sqldao.
  */
-public class PurchaseSQLDAO implements PurchaseDAO{
+public class PurchaseSQLDAO implements PurchaseDAO {
 
     public void addPurchase(User user, Purchase purchase)  throws PersistanceException {
 

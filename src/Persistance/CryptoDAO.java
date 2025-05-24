@@ -19,13 +19,6 @@ public interface CryptoDAO {
      */
     void createCrypto(Crypto crypto) throws PersistanceException;
 
-    /**
-     * Update crypto.
-     *
-     * @param crypto the crypto
-     * @throws PersistanceException the persistance exception
-     */
-    void updateCrypto(Crypto crypto) throws PersistanceException;
 
     /**
      * Gets all cryptos.
@@ -47,10 +40,10 @@ public interface CryptoDAO {
     /**
      * Delete crypto.
      *
-     * @param cryptoname the cryptoname
+     * @param cryptoName the cryptoName
      * @throws PersistanceException the persistance exception
      */
-    void deleteCrypto(String cryptoname) throws PersistanceException;
+    void deleteCrypto(String cryptoName) throws PersistanceException;
 
     /**
      * Gets crypto current price.
@@ -61,22 +54,6 @@ public interface CryptoDAO {
      */
     double getCryptoCurrentPrice(String cryptoName) throws PersistanceException;
 
-    /**
-     * Gets crypto by category.
-     *
-     * @param category the category
-     * @return the crypto by category
-     * @throws PersistanceException the persistance exception
-     */
-    List<Crypto> getCryptoByCategory (String category) throws PersistanceException;
-
-    /**
-     * Gets categories.
-     *
-     * @return the categories
-     * @throws PersistanceException the persistance exception
-     */
-    List<String> getCategories () throws PersistanceException;
 
     /**
      * Update crypto price.

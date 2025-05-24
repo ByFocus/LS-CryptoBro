@@ -6,7 +6,7 @@ import Business.BusinessExceptions.UnsufficientBalance;
 import Business.Entities.*;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Persistance.PurchaseDAO;
-import Persistance.PurchaseSQLDAO;
+import Persistance.SQL.PurchaseSQLDAO;
 
 import java.util.List;
 
