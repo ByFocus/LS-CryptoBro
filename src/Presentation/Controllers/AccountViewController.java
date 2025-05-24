@@ -140,7 +140,7 @@ public class AccountViewController implements ActionListener, EventListener {
             try {
                 AccountManager am = AccountManager.getInstance();
                 am.registerUser(userName, email, password);
-                switchToLoginView();
+                logInNormalUser(userName, password);
                 MessageDisplayer.displayInformativeMessage(REGISTER_SUCCESFUL);
             } catch (BusinessExeption e1) {
                 MessageDisplayer.displayError(e1.getMessage());
@@ -149,15 +149,13 @@ public class AccountViewController implements ActionListener, EventListener {
     }
 
     private void loginUser() {
-        String userName = startView.getNameInput();
+        String identifier = startView.getNameInput();
         String password = startView.getPasswordInput();
 
-        if(userName.isEmpty() || password.isEmpty()) {
+        if(identifier.isEmpty() || password.isEmpty()) {
             MessageDisplayer.displayError(ERROR_EMPTY_FIELD);
         } else {
-
-
-            if (userName.equalsIgnoreCase("admin")) {
+            if (identifier.equalsIgnoreCase("admin")) {
                 try {
                     startView.reset();
                     AccountManager.getInstance().adminAccess(password);
@@ -172,30 +170,33 @@ public class AccountViewController implements ActionListener, EventListener {
             }
             else {
                 try  {
-                    startView.reset();
-                    User user =AccountManager.getInstance().loginUser(userName, password);
-                    startView.dispose();
-
-                    DecimalFormat priceFormat = new DecimalFormat("#.#####€");
-
-                    String balance = priceFormat.format(user.getBalance());
-                    double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
-                    String profit = String.valueOf(gains);
-
-                    ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
-                    userView = new UserPopUp(userName, user.getMail(), false);
-                    userView.registerController(this);
-
-                    try {
-                        AccountManager.getInstance().checkCurrentUserWarning();
-                    } catch (CryptoDeleted e){
-                        MessageDisplayer.displayWarning(e.getMessage());
-                    }
-
+                    logInNormalUser(identifier, password);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
                 }
             }
+        }
+    }
+
+    private void logInNormalUser(String identifier, String password) throws BusinessExeption {
+        startView.reset();
+        User user =AccountManager.getInstance().loginUser(identifier, password);
+        startView.dispose();
+
+        DecimalFormat priceFormat = new DecimalFormat("#.#####€");
+
+        String balance = priceFormat.format(user.getBalance());
+        double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
+        String profit = String.valueOf(gains);
+
+        ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
+        userView = new UserPopUp(identifier, user.getMail(), false);
+        userView.registerController(this);
+
+        try {
+            AccountManager.getInstance().checkCurrentUserWarning();
+        } catch (CryptoDeleted e){
+            MessageDisplayer.displayWarning(e.getMessage());
         }
     }
 
@@ -205,6 +206,7 @@ public class AccountViewController implements ActionListener, EventListener {
         CryptoInfoTabController.getInstance().close();
         MarketTabController.getInstance().close();
         AccountManager.getInstance().logout();
+        switchToLoginView();
         startView.setVisible(true);
     }
 
