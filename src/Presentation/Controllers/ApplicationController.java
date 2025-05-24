@@ -7,7 +7,6 @@ import Business.EventType;
 import Business.WalletManager;
 import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.MainFrame;
-import Presentation.View.Popups.CryptoInfo;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

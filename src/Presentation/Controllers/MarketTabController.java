@@ -3,8 +3,6 @@ package Presentation.Controllers;
 import Business.*;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.Entities.Crypto;
-import Business.Entities.Market;
-import Business.Entities.User;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;
 import Presentation.View.Tabs.MarketTab;
@@ -14,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,11 +42,6 @@ public class MarketTabController implements EventListener, ActionListener {
         return instance;
     }
 
-    private void initializeMarketTab(boolean admin) {
-        List<Crypto> cryptos = new CryptoManager().getAllCryptos();
-        marketTab = new MarketTab(cryptos);
-        attachTableMouseListener(admin);
-    }
     /**
      * Gets market tab.
      *

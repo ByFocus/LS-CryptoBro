@@ -2,7 +2,6 @@ package Presentation.Controllers;
 
 import Business.*;
 import Business.BusinessExceptions.BusinessExeption;
-import Business.Entities.Crypto;
 import Business.Entities.Purchase;
 import Presentation.View.Popups.CryptoInfo;
 import Presentation.View.Popups.MessageDisplayer;

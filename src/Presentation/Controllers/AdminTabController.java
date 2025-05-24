@@ -1,20 +1,14 @@
 package Presentation.Controllers;
 
 import Business.BusinessExceptions.BusinessExeption;
-import Business.BusinessExceptions.DataPersistanceError;
 import Business.CryptoManager;
-import Business.Entities.Crypto;
-import Business.Entities.Market;
-import Business.EventType;
 import Business.MarketManager;
-import Persistance.PersistanceExceptions.PersistanceException;
 import Presentation.View.Popups.MessageDisplayer;
 import Presentation.View.Tabs.AdminTab;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

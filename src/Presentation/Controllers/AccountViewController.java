@@ -3,7 +3,6 @@ package Presentation.Controllers;
 import Business.AccountManager;
 import Business.BusinessExceptions.BusinessExeption;
 import Business.BusinessExceptions.CryptoDeleted;
-import Business.BusinessExceptions.UserAuthentificationError;
 import Business.Entities.User;
 import Business.EventType;
 import Business.WalletManager;
