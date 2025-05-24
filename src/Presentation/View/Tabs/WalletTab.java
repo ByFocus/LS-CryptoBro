@@ -1,7 +1,6 @@
 package Presentation.View.Tabs;
 
 import Business.Entities.Purchase;
-import Presentation.View.Tables.CryptoTableRender;
 import Presentation.View.Tables.WalletTableRender;
 import Presentation.View.Tables.WalletTableModel;
 
@@ -33,7 +32,7 @@ public class WalletTab extends JPanel {
         JTableHeader header = walletTable.getTableHeader();
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
         header.setReorderingAllowed(false);
-        header.setDefaultRenderer(new CryptoTableRender(true));
+        header.setDefaultRenderer(new WalletTableRender(true));
 
         walletTable.setRowHeight(40);
         walletTable.setBackground(new Color(28, 36, 52, 255));

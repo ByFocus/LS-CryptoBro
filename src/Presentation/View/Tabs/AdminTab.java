@@ -1,7 +1,5 @@
 package Presentation.View.Tabs;
 
-import Business.EventType;
-import Presentation.Controllers.EventListener;
 import Presentation.View.Handlers.FileDrooperHandler;
 import Presentation.View.Panels.ImageBackgroundPanel;
 
@@ -10,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,9 +31,6 @@ public class AdminTab extends JPanel {
      */
     public static final String DEL_CRYPTO_COMMAND = "DELETE CRYPTO";
 
-
-    private EventListener listener;
-
     private JPanel addPanel;
     private JLabel howManyFilesLabel;
     private JTextArea filesNamesArea;
@@ -55,7 +49,6 @@ public class AdminTab extends JPanel {
      */
     public AdminTab(String[] names) {
         configureTab(names);
-        //this.setTransferHandler(new FileDrooperHandler());
     }
 
     /**
