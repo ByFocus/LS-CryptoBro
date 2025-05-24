@@ -185,7 +185,6 @@ public class UserPopUp extends JFrame {
         panel.add(new JLabel("Confirm New Password:"));
         panel.add(confirmPwdField);
 
-        // Create a wrapper panel with padding
         JPanel paddedPanel = new JPanel(new BorderLayout());
         paddedPanel.setBorder(new EmptyBorder(30, 40, 30, 40)); // top, left, bottom, right
         paddedPanel.add(panel, BorderLayout.CENTER);

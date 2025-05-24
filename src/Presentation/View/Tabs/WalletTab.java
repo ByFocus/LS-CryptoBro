@@ -24,7 +24,6 @@ public class WalletTab extends JPanel {
     public WalletTab(List<Purchase> compras) {
         this.setLayout(new BorderLayout());
 
-        //Color backColor =new Color(157, 190, 187);
         Color backColor = new Color(222, 212, 189);
         setBackground(backColor);
 

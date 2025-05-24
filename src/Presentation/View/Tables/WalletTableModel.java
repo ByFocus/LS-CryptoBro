@@ -52,7 +52,7 @@ public class WalletTableModel extends AbstractTableModel {
                     fireTableCellUpdated(i, 5);
                 }
 
-                // solo se modifican las filas si cambia el número de criptos
+                // solo se modifican las filas si cambia el número de cryptos
                 if (newPurchases.size() > purchases.size()) {
                     for (int i = purchases.size(); i < newPurchases.size(); i++) {
                         purchases.add(newPurchases.get(i));

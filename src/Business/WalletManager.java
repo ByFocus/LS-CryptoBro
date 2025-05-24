@@ -155,7 +155,6 @@ public class WalletManager {
                 MarketManager.getMarketManager().notify(EventType.USER_ESTIMATED_GAINS_CHANGED);
             }
         } catch (BusinessExeption _) {
-            // Admin access — no user context
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
         }

@@ -25,7 +25,6 @@ public class MarketTab extends JPanel {
      */
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
-        //Color backColor = new Color(244, 233, 205, 200);
         Color backColor =new Color(157, 190, 187);
         setBackground(backColor);
 
@@ -51,7 +50,6 @@ public class MarketTab extends JPanel {
         cryptoTable.setCellSelectionEnabled(true);
 
         cryptoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        //cryptoTabla.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
 
         JScrollPane scroll = new JScrollPane(cryptoTable);
         scroll.getViewport().setBackground(backColor);
@@ -69,7 +67,6 @@ public class MarketTab extends JPanel {
      * @param cryptoList the updated list of {@code Crypto} objects
      */
     public void loadCryptoData(List<Crypto> cryptoList) {
-        //this utility prevents and updates this in a safe way, because swing components are not thread-safe
         SwingUtilities.invokeLater(() -> {
             ((CryptoTableModel) cryptoTable.getModel()).setData(cryptoList);
         });

@@ -54,7 +54,6 @@ public class UserSQLDAO implements UserDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Error closing statement: " + e.getMessage());
             }
-            // Note: Don't close conn here since it's managed by SQLConnector
         }
     }
 
@@ -81,9 +80,8 @@ public class UserSQLDAO implements UserDAO {
                 String password = result.getString("password");
                 Double balance = result.getDouble("balance");
                 Boolean cryptoDeleted = result.getBoolean("cryptoDeleted");
-                user = new User(user_name, password, email, balance, cryptoDeleted); // Adjust constructor parameters if needed
+                user = new User(user_name, password, email, balance, cryptoDeleted);
             } else {
-                // Throw custom exception if no data is found
                 throw new DBDataNotFound("No user found with username or email: " + value);
             }
         } catch (SQLException e) {

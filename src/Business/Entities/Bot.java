@@ -2,7 +2,6 @@ package Business.Entities;
 
 import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
-import Persistance.PersistanceExceptions.PersistanceException;
 
 import java.util.Random;
 
@@ -40,10 +39,8 @@ public class Bot extends Thread {
                     CryptoManager.getCryptoManager().botMakeTransaction(cryptoName, buy);
                     Thread.sleep(buyingPeriod);
                 } catch (BusinessExeption _) {
-                    // Silently ignore failed transactions
                 }
             } catch (InterruptedException _) {
-                // Thread interrupted, exit gracefully
             }
         }
     }

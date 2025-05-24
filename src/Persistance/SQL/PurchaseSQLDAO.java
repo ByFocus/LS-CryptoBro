@@ -55,7 +55,6 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
     }
 
@@ -96,7 +95,6 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
         return usernames;
     }
@@ -186,7 +184,6 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Failed to close statement " + e.getMessage());
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
         return buyId;
     }
@@ -252,7 +249,6 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             stmt.setString(2, userName);
             rs = stmt.executeQuery();
                 if (rs.next()) {
-                    // aquí tenemos el número de unidades, ahora hay que venderlas
                     benefits = rs.getDouble(1);
                     try (PreparedStatement deleteStmt = conn.prepareStatement(queryDelete)) {
                         deleteStmt.setString(1, cryptoName);
@@ -333,7 +329,6 @@ public class PurchaseSQLDAO implements PurchaseDAO {
             stmt.setString(1, userName);
 
             int rows = stmt.executeUpdate();
-            // en aquest cas rows també potser 0, ja que el usuari pot no tenir purchases
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Error al ejecutar la query");
         } finally {
