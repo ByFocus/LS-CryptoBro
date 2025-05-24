@@ -40,8 +40,6 @@ public class CryptoTableModel extends AbstractTableModel {
      * @param newCryptos the new cryptos
      */
     public synchronized void setData(List<Crypto> newCryptos) {
-        // miramos si ha cambiado el número de cryptos
-        boolean structureChanged = (newCryptos.size() != cryptos.size());
 
         // cambia la crypto
         for (int i = 0; i < Math.min(cryptos.size(), newCryptos.size()); i++) {
@@ -52,7 +50,9 @@ public class CryptoTableModel extends AbstractTableModel {
             if (!existing.equals(updated)) {
                 cryptos.set(i, updated);
             }
-            fireTableRowsUpdated(i, i); // Notify UI to repaint this row
+            fireTableCellUpdated(i, 2);
+            fireTableCellUpdated(i, 3);
+            fireTableCellUpdated(i, 4);
         }
 
         // solo se modifican las filas si cambia el número de criptos
@@ -66,13 +66,6 @@ public class CryptoTableModel extends AbstractTableModel {
             cryptos.subList(newCryptos.size(), oldSize).clear();
             fireTableRowsDeleted(newCryptos.size(), oldSize - 1); // quita una
         }
-/*
-        // Cambia toda la tabla
-        if (structureChanged) {
-            SwingUtilities.invokeLater(() -> {
-                fireTableStructureChanged();
-            });
-        }*/
     }
 
 
@@ -110,14 +103,5 @@ public class CryptoTableModel extends AbstractTableModel {
         return columnas[column];
     }
 
-    /**
-     * Clear.
-     */
-    public void clear() {
-        cryptos.clear();
-        SwingUtilities.invokeLater(() -> {
-            fireTableDataChanged();
-        });
-    }
 }
 
