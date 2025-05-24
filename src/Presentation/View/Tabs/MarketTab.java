@@ -1,14 +1,11 @@
 package Presentation.View.Tabs;
 
 import Business.Entities.Crypto;
-import Presentation.View.Tables.CryptoNameRender;
+import Presentation.View.Tables.CryptoTableRender;
 import Presentation.View.Tables.CryptoTableModel;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class MarketTab extends JPanel {
         cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
         cryptoTabla.setRowHeight(40);
         for (int i = 0; i < cryptoTabla.getColumnCount(); i++) {
-            cryptoTabla.getColumnModel().getColumn(i).setCellRenderer(new CryptoNameRender());
+            cryptoTabla.getColumnModel().getColumn(i).setCellRenderer(new CryptoTableRender());
         }
 
         cryptoTabla.setRowSelectionAllowed(false);

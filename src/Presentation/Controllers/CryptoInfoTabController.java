@@ -46,8 +46,15 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
      */
     public void displayCryptoInfo(Crypto crypto, int mode, int row) {
         String cryptoName = crypto.getName();
-        String userName = AccountManager.getInstance().getCurrentUserName();
-        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, crypto.getInitialPrice(), WalletManager.getInstance().getNumCryptoInWallet(userName ,cryptoName), row);
+
+        int units;
+        if (mode == CryptoInfo.MODE_SELL_CRYPTO) {
+            units = WalletTabController.getInstance().getPurchaseByRow(row).getUnits();
+        } else {
+            String userName = AccountManager.getInstance().getCurrentUserName();
+            units = WalletManager.getInstance().getNumCryptoInWallet(userName, cryptoName);
+        }
+        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, crypto.getInitialPrice(), units, row);
 
         cryptoInfo.getGraph().setMuestras( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
 
@@ -95,6 +102,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                     try {
                         buyCrypto(cryptoName, units);
                         MessageDisplayer.displayInformativeMessage("Has comprado " + units + " " + cryptoName + "!\n Así se hace brother, tú pa lante como los de Alicante");
+                        cryptoInfo.modifyUnits(units);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
@@ -106,19 +114,19 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                 break;
             case CryptoInfo.SELL_CRYPTO:
                 JButton sellButton = (JButton) e.getSource();
-                CryptoInfo sellCryptoInfo = (CryptoInfo) sellButton.getClientProperty("parentCryptoInfo");
-                int sellUnits = Integer.parseInt(sellCryptoInfo.getAmountLabel());
+                int sellUnits = Integer.parseInt(cryptoInfo.getAmountLabel());
 
                 if (sellUnits > 0) {
                     try {
                         Purchase purchase = WalletTabController.getInstance().getPurchaseByRow(cryptoInfo.getRow());
                         sellCrypto(purchase, sellUnits);
                         MessageDisplayer.displayInformativeMessage("Has vendido " + sellUnits + " " + cryptoName + "!\n !Así se hace brother, de aquí a la luna!");
+                        cryptoInfo.modifyUnits(-1*sellUnits);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
 
-                    sellCryptoInfo.resetAmount();
+                    cryptoInfo.resetAmount();
 
                 } else {
                     MessageDisplayer.displayError("¿Vender 0? ¿Brother, seguro que eso es rentable?");

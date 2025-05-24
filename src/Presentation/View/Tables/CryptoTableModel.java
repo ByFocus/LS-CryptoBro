@@ -66,13 +66,13 @@ public class CryptoTableModel extends AbstractTableModel {
             cryptos.subList(newCryptos.size(), oldSize).clear();
             fireTableRowsDeleted(newCryptos.size(), oldSize - 1); // quita una
         }
-
+/*
         // Cambia toda la tabla
         if (structureChanged) {
             SwingUtilities.invokeLater(() -> {
                 fireTableStructureChanged();
             });
-        }
+        }*/
     }
 
 
