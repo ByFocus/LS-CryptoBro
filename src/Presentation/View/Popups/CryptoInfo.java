@@ -133,11 +133,11 @@ public class CryptoInfo extends JFrame {
             boton5Menos.setForeground(Color.WHITE);
             boton5Menos.setBorder(BorderFactory.createEmptyBorder(5, 18, 5, 13));
             boton5Menos.addActionListener(e -> {
-                amount -= 5;
-                if (amount <= 0) {
-                    amount = 0;
+                if (amount < 5) {
+                    updateAmountLabel(0);
+                } else {
+                    updateAmountLabel(amount-5);
                 }
-                amountLabel.setText(String.valueOf(amount));
             });
 
             RoundedButton botonMenos = new RoundedButton("-", 15);
@@ -147,8 +147,7 @@ public class CryptoInfo extends JFrame {
             botonMenos.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 13));
             botonMenos.addActionListener(e -> {
                 if (amount > 0) {
-                    amount--;
-                    amountLabel.setText(String.valueOf(amount));
+                   updateAmountLabel(amount-1);
                 }
             });
 
@@ -158,8 +157,7 @@ public class CryptoInfo extends JFrame {
             botonMas.setForeground(Color.WHITE);
             botonMas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
             botonMas.addActionListener(e -> {
-                amount++;
-                amountLabel.setText(String.valueOf(amount));
+                updateAmountLabel(amount+1);
             });
 
             RoundedButton boton5Mas = new RoundedButton("+5", 15);
@@ -168,8 +166,7 @@ public class CryptoInfo extends JFrame {
             boton5Mas.setForeground(Color.WHITE);
             boton5Mas.setBorder(BorderFactory.createEmptyBorder(5, 13, 5, 13));
             boton5Mas.addActionListener(e -> {
-                amount += 5;
-                amountLabel.setText(String.valueOf(amount));
+               updateAmountLabel(amount+5);
             });
             panelContador.add(boton5Menos);
             panelContador.add(botonMenos);
@@ -180,14 +177,32 @@ public class CryptoInfo extends JFrame {
             panelContador.add(amountLabel);
         }
 
+
+
         panelContador.setOpaque(false);
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+
+        Component glue1 = Box.createVerticalGlue();
+        glue1.setMinimumSize(new Dimension(0, 30));
+        Component glue2 = Box.createVerticalGlue();
+        glue2.setMinimumSize(new Dimension(0, 30));
+
         add(panelContador, BorderLayout.CENTER);
+        if (mode == MODE_SELL_CRYPTO) {
+            RoundedButton allButton = new RoundedButton("Todas", 15);
+            allButton.addActionListener(e-> {
+                updateAmountLabel(numCryptos);
+            });
+            allButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            allButton.setFont(new Font(FONT, Font.PLAIN, 16));
+            allButton.setBackground(new Color(70, 129, 167, 255));
+            allButton.setForeground(Color.WHITE);
+            add(allButton);
+        }
+        add(glue1);
         addFunctionButton(mode);
-        Component glue = Box.createVerticalGlue();
-        glue.setMinimumSize(new Dimension(0, 30));
-        add(glue);
+        add(glue2);
 
     }
 
@@ -232,7 +247,6 @@ public class CryptoInfo extends JFrame {
                 styleButton(functionButton);
                 functionButton.setActionCommand(SELL_CRYPTO);
                 functionButton.putClientProperty("parentCryptoInfo", this);
-                buttonPanel.add(functionButton);
                 break;
             case MODE_ADMIN:
                 amountLabel.setEditable(true); // para que pueda introducir el valor
@@ -240,11 +254,10 @@ public class CryptoInfo extends JFrame {
                 styleButton(functionButton);
                 functionButton.setActionCommand(CHANGE_PRICE);
                 functionButton.putClientProperty("parentCryptoInfo", this);
-                buttonPanel.add(functionButton);
                 break;
         }
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(functionButton, BorderLayout.SOUTH);
     }
 
     private void styleButton(JButton button) {
@@ -303,7 +316,11 @@ public class CryptoInfo extends JFrame {
      * Reset amount.
      */
     public void resetAmount() {
-        amount = 0;
+        updateAmountLabel(0);
+    }
+
+    private void updateAmountLabel(int num) {
+        amount = num;
         amountLabel.setText(String.valueOf(amount));
     }
 
