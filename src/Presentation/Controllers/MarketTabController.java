@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,11 @@ public class MarketTabController implements EventListener, ActionListener {
         return instance;
     }
 
-
+    private void initializeMarketTab(boolean admin) {
+        List<Crypto> cryptos = new CryptoManager().getAllCryptos();
+        marketTab = new MarketTab(cryptos);
+        attachTableMouseListener(admin);
+    }
     /**
      * Gets market tab.
      *
@@ -54,10 +59,21 @@ public class MarketTabController implements EventListener, ActionListener {
      * @return the market tab
      */
     public MarketTab getMarketTab(boolean admin) {
-        if (marketTab == null) {
+        /*if (marketTab == null) {
             List<Crypto> cryptos = new CryptoManager().getAllCryptos();
             marketTab = new MarketTab(cryptos);
             SwingUtilities.invokeLater(() ->attachTableMouseListener(admin));
+        }*/
+        // Check if we're already on the EDT
+        if (SwingUtilities.isEventDispatchThread()) {
+            initializeMarketTab(admin); // Direct initialization on EDT
+        } else {
+            try {
+                // Block until initialization completes on EDT
+                SwingUtilities.invokeAndWait(() -> initializeMarketTab(admin));
+            } catch (InterruptedException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
         return marketTab;
     }

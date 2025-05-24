@@ -23,23 +23,24 @@ public class MarketTab extends JPanel {
      */
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
-        setBackground(new Color(244, 233, 205));//new Color(70, 129, 137));
+        setBackground(new Color(157, 190, 187));
 
         CryptoTableModel modelo = new CryptoTableModel(cryptoList);
         cryptoTabla = new JTable(modelo);
         JTableHeader header = cryptoTabla.getTableHeader();
-        header.setBackground(new Color(3, 25, 38));
-        header.setForeground(Color.white);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
-        header.setFont(new Font("Arial", Font.BOLD, 16));
         header.setReorderingAllowed(false);
-        header.setBorder(BorderFactory.createLineBorder(Color.black));
+        header.setDefaultRenderer(new CryptoTableRender(true));
+
+
         cryptoTabla.setBackground(new Color(70, 129, 137));
-        cryptoTabla.setForeground(new Color(255, 255, 255));
+        cryptoTabla.setForeground(Color.white);
         cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
         cryptoTabla.setRowHeight(40);
+        cryptoTabla.setShowGrid(false);
+        cryptoTabla.setIntercellSpacing(new Dimension(0, 0));
         for (int i = 0; i < cryptoTabla.getColumnCount(); i++) {
-            cryptoTabla.getColumnModel().getColumn(i).setCellRenderer(new CryptoTableRender());
+            cryptoTabla.getColumnModel().getColumn(i).setCellRenderer(new CryptoTableRender(false));
         }
 
         cryptoTabla.setRowSelectionAllowed(false);
@@ -49,9 +50,9 @@ public class MarketTab extends JPanel {
         //cryptoTabla.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
 
         JScrollPane scroll = new JScrollPane(cryptoTabla);
-        scroll.getViewport().setBackground(new Color(244, 233, 205));
-        scroll.setBackground(new Color(244, 233, 205));
-        scroll.getVerticalScrollBar().setBackground(new Color(244, 233, 205));
+        scroll.getViewport().setBackground(new Color(157, 190, 187));
+        scroll.setBackground(new Color(157, 190, 187));
+        scroll.getVerticalScrollBar().setBackground(new Color(157, 190, 187));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(scroll, BorderLayout.CENTER);
 

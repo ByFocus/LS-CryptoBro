@@ -22,18 +22,6 @@ public class CryptoTableModel extends AbstractTableModel {
         this.cryptos = cryptos;
     }
 
-    /*
-    public synchronized void setData(List<Crypto> cryptos) {
-        boolean numCryptosChanged = getRowCount() != cryptos.size();
-        this.cryptos.clear();
-        this.cryptos.addAll(cryptos);
-        if (numCryptosChanged) {
-           fireTableDataChanged();
-        } else {
-           fireTableRowsUpdated();
-        }
-    }*/
-
     /**
      * Sets data.
      *
