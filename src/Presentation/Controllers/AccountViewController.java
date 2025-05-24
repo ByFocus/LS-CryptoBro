@@ -14,6 +14,7 @@ import Presentation.View.StartFrame;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 /**
  * The type Account view controller.
@@ -172,7 +173,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     AccountManager.getInstance().adminAccess(password);
 
                     startView.dispose();
-                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITO", true);
+                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITE", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", "UNDEFINED", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
@@ -185,9 +186,13 @@ public class AccountViewController implements ActionListener, EventListener {
                     User user =AccountManager.getInstance().loginUser(userName, password);
                     startView.dispose();
 
-                    double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
+                    DecimalFormat priceFormat = new DecimalFormat("#.#####");
 
-                    ApplicationController.getInstance().newApplication(user.getUsername(), String.format("%.2f",user.getBalance()), String.format("%.4f",gains) ,false);
+                    String balance = priceFormat.format(user.getBalance());
+                    double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
+                    String profit = priceFormat.format(gains);
+
+                    ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
                     userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()),false);
                     userView.registerController(this);
 
@@ -214,7 +219,7 @@ public class AccountViewController implements ActionListener, EventListener {
     }
 
     private void addBalance() {
-        MessageDisplayer.displayInformativeMessage(String.valueOf(userView.getBalance()));
+        MessageDisplayer.displayInformativeMessage(String.valueOf(userView.getBalance()*10));
         //AccountManager.getInstance().
     }
     private void userEraseAccount() {
