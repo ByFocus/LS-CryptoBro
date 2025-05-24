@@ -150,7 +150,7 @@ public class UserPopUp extends JFrame {
 
             deleteAccountButton = new JButton("Delete Account");
             deleteAccountButton.setFont(new Font(FONT_TEXT, Font.ITALIC | Font.BOLD, 21));
-            deleteAccountButton.setBackground(new Color(213, 0, 0));
+            deleteAccountButton.setBackground(new Color(154, 40, 45));
             deleteAccountButton.setForeground(Color.WHITE);
             deleteAccountButton.setActionCommand(USER_ERASE_ACCOUNT);
             actionPanel.add(deleteAccountButton);
