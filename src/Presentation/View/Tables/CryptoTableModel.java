@@ -41,9 +41,9 @@ public class CryptoTableModel extends AbstractTableModel {
             if (!existing.equals(updated)) {
                 cryptos.set(i, updated);
             }
-            fireTableCellUpdated(i, 2);
             fireTableCellUpdated(i, 3);
             fireTableCellUpdated(i, 4);
+            fireTableCellUpdated(i, 5);
         }
 
         // solo se modifican las filas si cambia el número de criptos
