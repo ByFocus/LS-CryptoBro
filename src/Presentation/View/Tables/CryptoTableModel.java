@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
-    private final String[] columns = {"Nombre", "Categoría", "Precio Actual", "Variación", "Variación %"};
+    private final String[] columns = {"Nombre", "Categoría", "Precio Inicial", "Precio Actual", "Variación", "Variación %"};
 
     /**
      * Constructs a new {@code CryptoTableModel} with the specified list of cryptocurrencies.
@@ -91,14 +91,16 @@ public class CryptoTableModel extends AbstractTableModel {
         if (rowIndex < cryptos.size()) {
             Crypto crypto = cryptos.get(rowIndex);
             double marketGap = crypto.calculateMarketGap();
+            double percentageVariation = marketGap*100.0/crypto.getInitialPrice();
             char sign = marketGap > 0? '+': ' ';
 
             switch (columnIndex) {
                 case 0: return crypto.getName();
                 case 1: return crypto.getCategory();
-                case 2: return String.format("%.6f €",crypto.getCurrentPrice());
-                case 3: return String.format("%c%.6f",sign, marketGap);
-                case 4: return String.format("%c%.2f%%",sign, marketGap*100);
+                case 2: return String.format("%.4f€",crypto.getInitialPrice());
+                case 3: return String.format("%.4f€",crypto.getCurrentPrice());
+                case 4: return String.format("%c%.6f",sign, marketGap);
+                case 5: return String.format("%c%.2f%%",sign, percentageVariation);
                 default: return null;
             }
         }

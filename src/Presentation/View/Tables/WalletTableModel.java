@@ -101,7 +101,8 @@ public class WalletTableModel extends AbstractTableModel {
             try {
                 CryptoManager cm = new CryptoManager();
                 Crypto crypto = cm.getCryptoByName(purchase.getCrypto());
-                double benefitUnit = crypto.getCurrentPrice()*purchase.getUnits() - purchase.getPriceUnit()*purchase.getUnits();
+                double benefitUnit = crypto.getCurrentPrice() - purchase.getPriceUnit();
+                double percentageBenefit = benefitUnit*100.0/purchase.getPriceUnit();
                 double benefitTotal = benefitUnit*purchase.getUnits();
                 char sign = benefitUnit > 0? '+': ' ';
 
@@ -113,7 +114,7 @@ public class WalletTableModel extends AbstractTableModel {
                     case 2:
                         return String.format("%.5f€", purchase.getPriceUnit());
                     case 3:
-                        return String.format("%c%.2f%%", sign, benefitUnit*100);
+                        return String.format("%c%.2f%%", sign, percentageBenefit);
                     case 4:
                         return String.format("%.5f€", crypto.getCurrentPrice()*purchase.getUnits());
                     case 5:

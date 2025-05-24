@@ -51,7 +51,7 @@ public class CryptoTableRender extends DefaultTableCellRenderer {
                 c.setBackground(new Color(28, 36, 52, 255));
                 c.setForeground(Color.white);
                 c.setFont(new Font("Arial", Font.BOLD, 18));
-            } else if (column == 3 || column == 4) {
+            } else if (column == 4 || column == 5) {
                 if (value != null) {
                     String text = (String) value;
                     if (text.contains("+")) {
