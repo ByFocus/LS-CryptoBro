@@ -76,25 +76,37 @@ public class CryptoInfo extends JFrame {
         cryptoNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(cryptoNameLabel);
 
-        currentPriceLabel = new JLabel();
-        currentPriceLabel.setFont(new Font(FONT, Font.BOLD, 14));
-        currentPriceLabel.setForeground(new Color(244, 233, 205));
-        currentPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(currentPriceLabel);
-
-        evolutionPriceLabel = new JLabel();
-        evolutionPriceLabel.setFont(new Font(FONT, Font.BOLD, 14));
-        evolutionPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(evolutionPriceLabel);
-
         if (mode != MODE_ADMIN) {
             inventoryLabel = new JLabel();
-            inventoryLabel.setFont(new Font(FONT, Font.BOLD, 14));
+            inventoryLabel.setFont(new Font(FONT, Font.BOLD, 18));
             inventoryLabel.setForeground(new Color(244, 233, 205));
             inventoryLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             updateInventoryLabel();
             add(inventoryLabel);
         }
+
+        JPanel cryptoPriceInfo = new JPanel();
+        cryptoPriceInfo.setOpaque(false);
+        cryptoPriceInfo.setLayout(new GridBagLayout());
+        cryptoPriceInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cryptoPriceInfo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 600));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 15, 0, 0);
+
+        currentPriceLabel = new JLabel();
+        currentPriceLabel.setFont(new Font(FONT, Font.BOLD, 24));
+        currentPriceLabel.setForeground(new Color(244, 233, 205));
+        cryptoPriceInfo.add(currentPriceLabel, gbc);
+
+        gbc.gridy = 1;
+        evolutionPriceLabel = new JLabel();
+        evolutionPriceLabel.setFont(new Font(FONT, Font.ITALIC, 18));
+        cryptoPriceInfo.add(evolutionPriceLabel, gbc);
+        add(cryptoPriceInfo);
+
 
         graph = new GraficoCriptomoneda();
         graph.setPreferredSize(new Dimension(getWidth(), getHeight()));
@@ -161,11 +173,9 @@ public class CryptoInfo extends JFrame {
             panelContador.add(amountLabel);
         }
 
-
-
         panelContador.setOpaque(false);
         panelContador.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelContador.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+        panelContador.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
         Component glue1 = Box.createVerticalGlue();
         glue1.setMinimumSize(new Dimension(0, 30));
@@ -200,10 +210,10 @@ public class CryptoInfo extends JFrame {
         double difference = lastPrice - firstPrice;
         if (difference > 0) {
             evolutionPriceLabel.setForeground(Color.GREEN);
-            evolutionPriceLabel.setText("+" + String.valueOf(difference));
+            evolutionPriceLabel.setText("+" + NUMBER_FORMAT.format(difference));
         } else {
             evolutionPriceLabel.setForeground(Color.RED);
-            evolutionPriceLabel.setText(String.valueOf(difference));
+            evolutionPriceLabel.setText(NUMBER_FORMAT.format(difference));
         }
     }
 
