@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
-    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Variación %"};
+    private final String[] columns = {"Nombre", "Categoría", "Precio Actual", "Variación", "Variación %"};
 
     /**
      * Constructs a new {@code CryptoTableModel} with the specified list of cryptocurrencies.
@@ -76,7 +76,7 @@ public class CryptoTableModel extends AbstractTableModel {
      */
     @Override
     public int getColumnCount() {
-        return columnas.length;
+        return columns.length;
     }
 
     /**
@@ -113,7 +113,7 @@ public class CryptoTableModel extends AbstractTableModel {
      */
     @Override
     public String getColumnName(int column) {
-        return columnas[column];
+        return columns[column];
     }
 
 }
