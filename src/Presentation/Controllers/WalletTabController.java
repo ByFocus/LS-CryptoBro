@@ -69,10 +69,9 @@ public class WalletTabController implements EventListener, ActionListener {
         walletTab.getTablaData().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("mouseClicked");
                 int row = walletTab.getTablaData().getSelectedRow();
                 int col = walletTab.getTablaData().getSelectedColumn();
-                if (row != -1 && col == 4) {
+                if (row != -1 && col == 6) {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                         String cryptoName = String.valueOf(walletTab.getTablaData().getValueAt(row, 0));

@@ -85,7 +85,6 @@ public class Market extends Thread{
      * @return the historical from crypto
      */
     public LinkedList<Sample> getHistoricalFromCrypto(String cryptoName) {
-        LinkedList<Sample> copyHistoric= (LinkedList<Sample>) hitoricalValues.get(cryptoName).clone();
-        return copyHistoric;
+        return (LinkedList<Sample>) hitoricalValues.get(cryptoName).clone();
     }
 }

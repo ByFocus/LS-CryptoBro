@@ -42,7 +42,7 @@ public class FileDrooperHandler extends TransferHandler {
         }
 
         // obtenim el component pare
-        Component component = (JComponent) support.getComponent();
+        Component component =  support.getComponent();
         while (component != null && !(component instanceof AdminTab)) {
             component = component.getParent();
         }

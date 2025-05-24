@@ -1,11 +1,14 @@
 package Presentation.View.Tables;
 
+import Business.BusinessExceptions.BusinessExeption;
 import Business.CryptoManager;
 import Business.Entities.Crypto;
 import Business.Entities.Purchase;
+import Presentation.View.Popups.MessageDisplayer;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import java.nio.BufferOverflowException;
 import java.util.List;
 
 /**
@@ -13,7 +16,7 @@ import java.util.List;
  */
 public class WalletTableModel extends AbstractTableModel {
 
-    private final String[] columnas = {"Crypto", "Unidades", "Precio de compra", "Balance", "Vender"};
+    private final String[] columnas = {"Crypto", "Unidades", "Precio de compra", "% de cambio", "Precio actual total", "Beneficio (total)", "Vender"};
     private List<Purchase> purchases;
 
     /**
@@ -42,9 +45,9 @@ public class WalletTableModel extends AbstractTableModel {
                     if (!existing.equals(updated)) {
                         purchases.set(i, updated);
                     }
-                    fireTableCellUpdated(i, 2);
                     fireTableCellUpdated(i, 3);
                     fireTableCellUpdated(i, 4);
+                    fireTableCellUpdated(i, 5);
                 }
 
                 // solo se modifican las filas si cambia el número de criptos
@@ -73,28 +76,38 @@ public class WalletTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public Object getValueAt(int rowIndex, int columnIndex)  {
         if (rowIndex <= purchases.size()) {
-            Purchase compra = purchases.get(rowIndex);
-            CryptoManager cm = new CryptoManager();
-            Crypto crypto = cm.getCryptoByName(compra.getCrypto());
-            double benefit = crypto.getCurrentPrice()*compra.getUnits() - compra.getPriceUnit()*compra.getUnits();
-            char sign = benefit > 0? '+': ' ';
+            Purchase purchase = purchases.get(rowIndex);
+            try {
+                CryptoManager cm = new CryptoManager();
+                Crypto crypto = cm.getCryptoByName(purchase.getCrypto());
+                double benefitUnit = crypto.getCurrentPrice()*purchase.getUnits() - purchase.getPriceUnit()*purchase.getUnits();
+                double benefitTotal = benefitUnit*purchase.getUnits();
+                char sign = benefitUnit > 0? '+': ' ';
 
-            switch (columnIndex) {
-                case 0:
-                    return compra.getCrypto();
-                case 1:
-                    return compra.getUnits();
-                case 2:
-                    return String.format("%.8f", compra.getPriceUnit());
-                case 3:
-                    return String.format("%c%.8f",sign, benefit);
-                case 4:
-                    return "Vender";
-                default:
-                    return null;
+                switch (columnIndex) {
+                    case 0:
+                        return purchase.getCrypto();
+                    case 1:
+                        return purchase.getUnits();
+                    case 2:
+                        return String.format("%.5f€", purchase.getPriceUnit());
+                    case 3:
+                        return String.format("%c%.2f%%", sign, benefitUnit*100);
+                    case 4:
+                        return String.format("%.5f€", crypto.getCurrentPrice()*purchase.getUnits());
+                    case 5:
+                        return String.format("%c%.5f€",sign, benefitTotal);
+                    case 6:
+                        return "Vender";
+                    default:
+                        return null;
+                }
+            } catch (BusinessExeption e) {
+                MessageDisplayer.displayError(e.getMessage());
             }
+
         }
         return null;
     }

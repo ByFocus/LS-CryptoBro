@@ -113,7 +113,7 @@ public class AccountManager {
      * @param newPwd the new pwd
      * @param oldPwd the old pwd
      */
-    public void changePassword(String newPwd, String oldPwd){
+    public void changePassword(String newPwd, String oldPwd) throws  BusinessExeption{
         if(currentUser != null){
             try{
                 UserDAO userDAO = new UserSQLDAO();
@@ -165,7 +165,7 @@ public class AccountManager {
     /**
      * Check current user warning.
      */
-    public void checkCurrentUserWarning() {
+    public void checkCurrentUserWarning() throws BusinessExeption{
            try {
                if (currentUser.getCryptoDeletedFlag()) {
                    //modificamos el valor de la base de datos (ya se le ha avisado)
@@ -196,7 +196,6 @@ public class AccountManager {
     }
 
     private void checkPasswordIsValid (String password) throws BusinessExeption{
-        String errorMessage = null;
 
         if (password == null || password.length() < 8) {
             throw new UserAuthentificationError(PASSWORD_LENGHT_INVALID);
@@ -247,7 +246,7 @@ public class AccountManager {
      *
      * @return the current user name
      */
-    public String getCurrentUserName() {
+    public String getCurrentUserName() throws BusinessExeption{
         if (currentUser == null) {
             throw new NoCurrentUser("There is no current user");
         }
@@ -272,7 +271,7 @@ public class AccountManager {
      * @param benefits the benefits
      * @param username the username
      */
-    public void warnCryptoDeleted(double benefits, String username) {
+    public void warnCryptoDeleted(double benefits, String username) throws BusinessExeption {
         try {
             UserDAO userDAO = new UserSQLDAO();
             User user = userDAO.getUserByUsernameOrEmail(username);
@@ -288,7 +287,7 @@ public class AccountManager {
      *
      * @param change the change
      */
-    public void updateUserBalance(double change) {
+    public void updateUserBalance(double change) throws BusinessExeption {
         try {
             UserDAO userDAO = new UserSQLDAO();
             userDAO.updateBalance(change, currentUser.getUsername());

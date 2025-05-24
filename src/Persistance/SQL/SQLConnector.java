@@ -35,6 +35,7 @@ public class SQLConnector {
             ConfigurationDAO cDao = new ConfigurationJSONDAO();
             instance = new SQLConnector(cDao.getDBUser(), cDao.getDBPass(), cDao.getDBIP(), cDao.getDBPort(), cDao.getDBName());
             instance.connect();
+
         }
         return instance;
     }

@@ -258,7 +258,7 @@ public class CryptoSQLDAO implements CryptoDAO {
         }
         log.append("Se han añadido " + cryptoCount + " cryptos.\n");
         if (!error.isEmpty()) {
-            log.append(error.toString());
+            log.append(error);
         }
         return log.toString();
     }

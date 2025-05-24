@@ -27,11 +27,11 @@ public class WalletTableRender extends DefaultTableCellRenderer {
             c.setFont(new Font("Arial", Font.BOLD, 16));
             ((JLabel)c).setBorder(BorderFactory.createLineBorder(new Color(3, 25, 38)));
         } else {
-            if (column == 4) {
+            if (column == 6) {
                 c.setBackground(new Color(244, 233, 205));
                 c.setForeground(Color.BLACK);
                 c.setFont(new Font("Arial", Font.BOLD, 18));
-            } else if (column == 3) {
+            } else if (column == 3 || column == 5) {
                 if (value != null) {
                     String text = (String) value;
                     if (text.contains("+")) {

@@ -102,14 +102,16 @@ public class AccountViewController implements ActionListener, EventListener {
                 String confirmPwd = new String(userView.getConfirmPwdField().getPassword());
 
                 if (!newPwd.equals(confirmPwd)) {
-                    JOptionPane.showMessageDialog(userView, "Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
+                    MessageDisplayer.displayError("Revisa bro, que te has equivocado escribiendo las nuevas contraseñas!");
+                } else if(newPwd.equals(oldPwd)) {
+                    MessageDisplayer.displayError("Busca la definición de cambio en internet, la nueva contraseña debe ser distinta a la antigua");
+                }else {
                     try{
                         AccountManager.getInstance().changePassword(newPwd, oldPwd);
                         MessageDisplayer.displayInformativeMessage("Bro se te ha cambiado la contraseña, más te vale recordarla!");
                         userView.getChangePwdDialog().dispose();
 
-                    } catch (UserAuthentificationError ex) {
+                    } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
 
@@ -226,7 +228,11 @@ public class AccountViewController implements ActionListener, EventListener {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
         if (option == JOptionPane.YES_OPTION) {
-            AccountManager.getInstance().deleteCurrentUser();
+            try {
+                AccountManager.getInstance().deleteCurrentUser();
+            } catch (BusinessExeption ex) {
+                MessageDisplayer.displayError(ex.getMessage());
+            }
             userLogOut();
         }
         else {

@@ -46,7 +46,6 @@ public class ApplicationController implements EventListener {
      * @throws PersistanceException the persistance exception
      */
     public void newApplication(String identifier, String balance, String gains, boolean admin) {
-        // CAMBIAMOS LOS VALORES DEL APPFRAM Y LO OTRO
         appFrame = new MainFrame(identifier, balance, gains);
 
         appFrame.configureTabs(admin);

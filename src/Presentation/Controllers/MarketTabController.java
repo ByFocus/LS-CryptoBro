@@ -71,7 +71,6 @@ public class MarketTabController implements EventListener, ActionListener {
         marketTab.getTablaData().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("mouseClicked");
                 int row = marketTab.getTablaData().getSelectedRow();
                 int col = marketTab.getTablaData().getSelectedColumn();
                 if (row != -1 && col == 0) {

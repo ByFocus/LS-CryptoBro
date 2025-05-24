@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * The type Admin tab controller.
  */
-public class AdminTabController implements ActionListener, EventListener {
+public class AdminTabController implements ActionListener {
     private static AdminTabController instance;
     private AdminTab adminTab;
 
@@ -48,15 +48,6 @@ public class AdminTabController implements ActionListener, EventListener {
      */
     public AdminTab getAdminTab() {
         return adminTab;
-    }
-
-    @Override
-    public void update(EventType context) {
-        switch (context) {
-            default:
-                break;
-
-        }
     }
 
     @Override
@@ -100,7 +91,4 @@ public class AdminTabController implements ActionListener, EventListener {
         }
     }
 
-    private void handleFiles() {
-
-    }
 }

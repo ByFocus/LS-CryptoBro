@@ -50,7 +50,7 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         jsonObject.addProperty("maximum_data_points", String.valueOf(getMaximumDataPoints()));
 
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
-            gson.toJson(gson.fromJson(jsonObject, JsonObject.class), writer);
+            gson.toJson(jsonObject, writer);
         } catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR + e.getMessage());
         }
@@ -115,7 +115,7 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         Gson gson = new Gson();
 
         try (FileReader reader = new FileReader(FILE_NAME)) {
-            return gson.fromJson(reader, JsonObject.class).get("polling_interval").getAsInt();
+            return gson.fromJson(reader, JsonObject.class).get("polling_interval").getAsDouble();
         } catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }

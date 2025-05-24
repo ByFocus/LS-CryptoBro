@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
-    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Varición %"};
+    private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Variación %"};
 
     /**
      * Instantiates a new Crypto table model.
@@ -79,7 +79,7 @@ public class CryptoTableModel extends AbstractTableModel {
                 case 1: return crypto.getCategory();
                 case 2: return String.format("%.6f €",crypto.getCurrentPrice());
                 case 3: return String.format("%c%.6f",sign, marketGap);
-                case 4: return String.format("%c%.2f%%",sign, crypto.calculateMarketGap()*100);
+                case 4: return String.format("%c%.2f%%",sign, marketGap*100);
                 default: return null;
             }
         }

@@ -131,64 +131,64 @@ public class CryptoGraph extends JPanel {
                     cal.add(Calendar.SECOND, interval);
                 }
             }
-        }
 
-        calculateYRange();
+            calculateYRange();
 
-        // Dibujar líneas horizontales y etiquetas del eje Y
-        g2d.setFont(new Font("Arial", Font.PLAIN, 12));
-        g2d.setStroke(new BasicStroke(0.5f));
+            // Dibujar líneas horizontales y etiquetas del eje Y
+            g2d.setFont(new Font("Arial", Font.PLAIN, 12));
+            g2d.setStroke(new BasicStroke(0.5f));
 
-        // Calcular valores dinámicos para el eje Y
-        double[] yValues = new double[6];
-        for(int i = 0; i <= 5; i++) {
-            yValues[i] = minPrice + ((maxPrice - minPrice) / 5 * i);
-        }
-
-        // Dibujar líneas de referencia
-        for (double valor : yValues) {
-            double percentage = (valor - minPrice) / (maxPrice - minPrice);
-            int y = height - MARGIN_BOT - (int)(percentage * graphAreaHeight);
-
-            g2d.setColor(new Color(70, 129, 137));
-            g2d.drawLine(MARGIN_L, y, width - MARGIN_R, y);
-
-            // Etiquetas del eje Y
-            g2d.setColor(new Color(244, 233, 205));
-            String price = FORMAT_NUMBER.format(valor);
-            FontMetrics fm = g2d.getFontMetrics();
-            g2d.drawString(price, MARGIN_L - fm.stringWidth(price) - 5, y + 5);
-        }
-
-        // Dibujar la línea del gráfico
-        if (samples.size() > 1) {
-            if (samples.getLast().getPrice() >= samples.getFirst().getPrice()) {
-                g2d.setColor(new Color(50, 205, 50)); // Verde
-            } else {
-                g2d.setColor(new Color(205, 50, 50)); // Rojo
-            }
-            g2d.setStroke(new BasicStroke(2.0f));
-
-            int[] xPoints = new int[samples.size()];
-            int[] yPoints = new int[samples.size()];
-
-            // Calcular las coordenadas de cada punto
-            for (int i = 0; i < samples.size(); i++) {
-                // Posición X basada en el índice
-                xPoints[i] = MARGIN_L + (i * graphAreaWidth) / (samples.size() - 1);
-
-                // Posición Y basada en el precio
-                double porcentajePrecio = (samples.get(i).getPrice() - minPrice) / (maxPrice - minPrice);
-                yPoints[i] = height - MARGIN_BOT - (int)(porcentajePrecio * graphAreaHeight);
+            // Calcular valores dinámicos para el eje Y
+            double[] yValues = new double[6];
+            for(int i = 0; i <= 5; i++) {
+                yValues[i] = minPrice + ((maxPrice - minPrice) / 5 * i);
             }
 
-            // Dibujar segmentos de línea
-            for (int i = 0; i < samples.size() - 1; i++) {
-                g2d.drawLine(xPoints[i], yPoints[i], xPoints[i + 1], yPoints[i + 1]);
+            // Dibujar líneas de referencia
+            for (double valor : yValues) {
+                double percentage = (valor - minPrice) / (maxPrice - minPrice);
+                int y = height - MARGIN_BOT - (int)(percentage * graphAreaHeight);
+
+                g2d.setColor(new Color(70, 129, 137));
+                g2d.drawLine(MARGIN_L, y, width - MARGIN_R, y);
+
+                // Etiquetas del eje Y
+                g2d.setColor(new Color(244, 233, 205));
+                String price = FORMAT_NUMBER.format(valor);
+                FontMetrics fm = g2d.getFontMetrics();
+                g2d.drawString(price, MARGIN_L - fm.stringWidth(price) - 5, y + 5);
             }
 
-            // Dibujar punto final (actual)
-            g2d.fillOval(xPoints[xPoints.length - 1] - 4, yPoints[yPoints.length - 1] - 4, 8, 8);
+            // Dibujar la línea del gráfico
+            if (samples.size() > 1) {
+                if (samples.getLast().getPrice() >= samples.getFirst().getPrice()) {
+                    g2d.setColor(new Color(50, 205, 50)); // Verde
+                } else {
+                    g2d.setColor(new Color(205, 50, 50)); // Rojo
+                }
+                g2d.setStroke(new BasicStroke(2.0f));
+
+                int[] xPoints = new int[samples.size()];
+                int[] yPoints = new int[samples.size()];
+
+                // Calcular las coordenadas de cada punto
+                for (int i = 0; i < samples.size(); i++) {
+                    // Posición X basada en el índice
+                    xPoints[i] = MARGIN_L + (i * graphAreaWidth) / (samples.size() - 1);
+
+                    // Posición Y basada en el precio
+                    double porcentajePrecio = (samples.get(i).getPrice() - minPrice) / (maxPrice - minPrice);
+                    yPoints[i] = height - MARGIN_BOT - (int)(porcentajePrecio * graphAreaHeight);
+                }
+
+                // Dibujar segmentos de línea
+                for (int i = 0; i < samples.size() - 1; i++) {
+                    g2d.drawLine(xPoints[i], yPoints[i], xPoints[i + 1], yPoints[i + 1]);
+                }
+
+                // Dibujar punto final (actual)
+                g2d.fillOval(xPoints[xPoints.length - 1] - 4, yPoints[yPoints.length - 1] - 4, 8, 8);
+            }
         }
     }
 }

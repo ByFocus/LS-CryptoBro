@@ -165,13 +165,9 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         String query = "UPDATE PURCHASE SET number = ? WHERE buy_id = ?";
         int newUnits = purchase.getUnits() - unitsToSubtract;
         int buyId;
-        try{
-            buyId = getBuyId(purchase, username);
-             if (newUnits < 0) {
-                 throw new DBModifyData("Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.");
-             }
-        }catch (PersistanceException ex){
-            throw ex;
+        buyId = getBuyId(purchase, username);
+        if (newUnits < 0) {
+             throw new DBModifyData("Brother, no tienes tantas cryptos. Pon los pies en la tierra campeón.");
         }
         try {
             Connection conn = SQLConnector.getInstance().getConnection();
