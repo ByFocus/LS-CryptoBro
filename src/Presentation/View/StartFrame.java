@@ -5,101 +5,50 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 /**
- * The type Start frame.
+ * Main frame for user login and registration.
+ * It supports switching between login and register panels using a CardLayout.
  */
 public class StartFrame extends JFrame {
-    /**
-     * The constant USER_LOGIN.
-     */
-//Constantes con los eventos
+    // Constants for actions
     public static final String USER_LOGIN = "USER_LOGIN";
-    /**
-     * The constant USER_REGISTER.
-     */
     public static final String USER_REGISTER = "USER_REGISTER";
-    /**
-     * The constant SWITCH_LOGIN.
-     */
     public static final String SWITCH_LOGIN = "SWITCH_LOGIN";
-    /**
-     * The constant SWITCH_REGISTER.
-     */
     public static final String SWITCH_REGISTER = "SWITCH_REGISTER";
 
-    /**
-     * The constant iconImgURL.
-     */
-//Constantes con titulos, enlaces a fots y textos
+    // UI text and visual constants
     public static final String iconImgURL = "imgs/icono.png";
-
-    /**
-     * The constant FONT.
-     */
     public static final String FONT = "Arial";
-
-    /**
-     * The constant LOGIN_VIEW.
-     */
     public static final String LOGIN_VIEW = "LOGIN";
-    /**
-     * The constant REGISTER_VIEW.
-     */
     public static final String REGISTER_VIEW = "REGISTER";
-
-    /**
-     * The constant FRAME_TITLE.
-     */
     public static final String FRAME_TITLE = "CryptoBro Login";
-    /**
-     * The constant LOGIN_TITLE.
-     */
     public static final String LOGIN_TITLE = "Login";
-    /**
-     * The constant REGISTER_TITLE.
-     */
     public static final String REGISTER_TITLE = "Register";
-
-    /**
-     * The constant USER_INPUT_LABEL.
-     */
     public static final String USER_INPUT_LABEL = "        User: ";
-    /**
-     * The constant PASSWORD_INPUT_LABEL.
-     */
     public static final String PASSWORD_INPUT_LABEL = "Password: ";
-    /**
-     * The constant EMAIL_INPUT_LABEL.
-     */
-    public static final String EMAIL_INPUT_LABEL= "       Email: ";
-
-    /**
-     * The constant ASK_FOR_LOGIN.
-     */
+    public static final String EMAIL_INPUT_LABEL = "       Email: ";
     public static final String ASK_FOR_LOGIN = "¿Te has colado bro?";
-    /**
-     * The constant ASK_FOR_REGISTER.
-     */
     public static final String ASK_FOR_REGISTER = "Bro, ¿Todavía no eres parte de la familia?";
 
-    //Atributos
+    // Fields for user input
     private JTextField userLogInField;
     private JPasswordField passwordLogInField;
     private JTextField userRegisterField;
     private JPasswordField passwordRegisterField;
     private JTextField emailRegisterField;
 
+    // Buttons for interaction
     private JButton loginButton;
     private JButton switchToRegisterButton;
     private JButton registerButton;
     private JButton switchToLoginButton;
 
+    // Panels and layout
     private final JPanel mainPanel;
     private final CardLayout cardLayout;
-
     private String actualCard;
 
     /**
-     * Instantiates a new Start frame.
+     * Constructs the StartFrame, initializing UI components and layout.
      */
     public StartFrame() {
         configureFrame();
@@ -119,6 +68,13 @@ public class StartFrame extends JFrame {
         cardLayout.show(mainPanel, LOGIN_VIEW);
     }
 
+    /**
+     * Creates and configures the login panel.
+     * This panel includes input fields for username and password,
+     * a login button, and a button to switch to the registration view.
+     *
+     * @return a JPanel configured for the login screen.
+     */
     private JPanel createLoginPanel() {
         JPanel loginPanel = new JPanel(new BorderLayout());
         loginPanel.setBackground(new Color(3, 25, 38)); // Fondo negro
@@ -216,6 +172,13 @@ public class StartFrame extends JFrame {
         return loginPanel;
     }
 
+    /**
+     * Creates and configures the registration panel.
+     * This panel includes input fields for username, email, and password,
+     * a register button, and a button to switch back to the login view.
+     *
+     * @return a JPanel configured for the registration screen.
+     */
     private JPanel createRegisterPanel() {
         // Crear el panel principal para el registro
         JPanel registerPanel = new JPanel(new BorderLayout());
@@ -333,6 +296,10 @@ public class StartFrame extends JFrame {
         return registerPanel;
     }
 
+    /**
+     * Configures the basic properties of the main frame such as title, size,
+     * icon, default close operation, and window positioning.
+     */
     private void configureFrame() {
         setTitle(FRAME_TITLE);
         setSize(500, 700);
@@ -342,9 +309,8 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Switch view.
-     *
-     * @param view the view
+     * Switches the current visible view.
+     * @param view the view to show ("LOGIN" or "REGISTER")
      */
     public void switchView(String view) {
         actualCard = view;
@@ -352,7 +318,7 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Reset.
+     * Resets all input fields in both views.
      */
     public void reset() {
         userLogInField.setText("");
@@ -363,9 +329,8 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Gets name input.
-     *
-     * @return the name input
+     * Returns the name input based on the current view.
+     * @return the username entered
      */
     public String getNameInput() {
         String text;
@@ -377,9 +342,8 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Gets password input.
-     *
-     * @return the password input
+     * Returns the password input based on the current view.
+     * @return the password entered
      */
     public String getPasswordInput() {
         String text;
@@ -390,7 +354,7 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Gets email input.
+     * Gets the inputted email address from the register view.
      *
      * @return the email input
      */
@@ -399,9 +363,9 @@ public class StartFrame extends JFrame {
     }
 
     /**
-     * Register controller.
+     * Registers an action listener to handle user interactions.
      *
-     * @param listener the listener
+     * @param listener the listener to register
      */
     public void registerController(ActionListener listener) {
         loginButton.addActionListener(listener);

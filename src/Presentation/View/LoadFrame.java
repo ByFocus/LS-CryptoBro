@@ -3,7 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * The type Load frame.
+ * LoadFrame is a loading screen displayed during application startup.
+ * It shows the CryptoBro logo and a progress bar that indicates the loading progress.
  */
 public class LoadFrame extends JFrame {
     private static final String logoImgURL = "imgs/CryptoBro.png";
@@ -12,7 +13,9 @@ public class LoadFrame extends JFrame {
     private final JProgressBar progressBar;
 
     /**
-     * Instantiates a new Load frame.
+     * Constructs the loading screen frame.
+     * Displays the application logo and a progress bar to visually indicate loading progress.
+     * Sets up layout, size, and window icon.
      */
     public LoadFrame() {
         setLayout(new BorderLayout());
@@ -25,7 +28,7 @@ public class LoadFrame extends JFrame {
         progressBar = new JProgressBar();
         progressBar.setMinimum(0);
         progressBar.setMaximum(100);
-        progressBar.setStringPainted(true); // Business.Entities.Muestra el porcentaje en la barra
+        progressBar.setStringPainted(true); // Business.Entities. Muestra el porcentaje en la barra
         add(progressBar, BorderLayout.SOUTH);
 
         // Configurar tamaño y posición de la ventana
@@ -35,9 +38,9 @@ public class LoadFrame extends JFrame {
     }
 
     /**
-     * Sets progress.
+     * Updates the progress bar value.
      *
-     * @param progress the progress
+     * @param progress An integer from 0 to 100 representing the current progress percentage.
      */
     public void setProgress(int progress) {
         progressBar.setValue(progress);

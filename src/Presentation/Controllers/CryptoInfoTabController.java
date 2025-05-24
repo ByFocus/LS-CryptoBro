@@ -15,18 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Crypto info tab controller.
+ * Controller for handling crypto info popups.
+ * Manages actions such as buying/selling cryptos and price updates.
  */
 public class CryptoInfoTabController implements EventListener, ActionListener {
     private List<CryptoInfo> cryptoInfos;
     private static CryptoInfoTabController instance;
 
+    /**
+     * Private constructor for singleton pattern.
+     */
     private CryptoInfoTabController() {
         cryptoInfos = new ArrayList<>();
     }
 
     /**
-     * Gets instance.
+     * Gets the singleton instance.
      *
      * @return the instance
      */
@@ -38,11 +42,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
     }
 
     /**
-     * Display crypto info.
+     * Displays the CryptoInfo popup for a given crypto.
      *
-     * @param crypto the crypto
-     * @param mode   the mode
-     * @param row    the row
+     * @param crypto the crypto to show
+     * @param mode   the interaction mode (buy/sell)
+     * @param row    the row in the table associated
      */
     public void displayCryptoInfo(Crypto crypto, int mode, int row) {
         String cryptoName = crypto.getName();
@@ -55,9 +59,9 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
             String userName = AccountManager.getInstance().getCurrentUserName();
             units = WalletManager.getInstance().getNumCryptoInWallet(userName, cryptoName);
         }
-        CryptoInfo cryptoInfo =new CryptoInfo(cryptoName, mode, units, row);
+        CryptoInfo cryptoInfo = new CryptoInfo(cryptoName, mode, units, row);
 
-        cryptoInfo.updateData( MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()) );
+        cryptoInfo.updateData(MarketManager.getMarketManager().getHistoricalValuesByCryptoName(crypto.getName()));
 
         cryptoInfo.registerController(this);
         cryptoInfo.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -73,12 +77,17 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         });
         cryptoInfos.add(cryptoInfo);
         cryptoInfo.setVisible(true);
-        // si es el primer infopanel hay que suscribirse al evento
+
         if (cryptoInfos.size() == 1) {
             MarketManager.getMarketManager().subscribe(this, EventType.NEW_HISTORICAL_VALUE);
         }
     }
 
+    /**
+     * Reacts to new historical data updates.
+     *
+     * @param context the triggered event
+     */
     @Override
     public void update(EventType context) {
         switch (context) {
@@ -90,6 +99,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         }
     }
 
+    /**
+     * Handles button actions in the CryptoInfo popup.
+     *
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton sourceButton = (JButton) e.getSource();
@@ -111,10 +125,9 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                 } else {
                     MessageDisplayer.displayError("Brooooo, como vas a comprar 0?\nDe hecho, ¿qué es el ZerO?, tremenda rallada");
                 }
-
                 break;
+
             case CryptoInfo.SELL_CRYPTO:
-                JButton sellButton = (JButton) e.getSource();
                 int sellUnits = Integer.parseInt(cryptoInfo.getAmountLabel());
 
                 if (sellUnits > 0) {
@@ -122,13 +135,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
                         Purchase purchase = WalletTabController.getInstance().getPurchaseByRow(cryptoInfo.getRow());
                         sellCrypto(purchase, sellUnits);
                         MessageDisplayer.displayInformativeMessage("Has vendido " + sellUnits + " " + cryptoName + "!\n !Así se hace brother, de aquí a la luna!");
-                        cryptoInfo.modifyUnits(-1*sellUnits);
+                        cryptoInfo.modifyUnits(-1 * sellUnits);
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
-
                     cryptoInfo.resetAmount();
-
                 } else {
                     MessageDisplayer.displayError("¿Vender 0? ¿Brother, seguro que eso es rentable?");
                 }
@@ -158,7 +169,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         }
     }
 
-
+    /**
+     * Buys the specified amount of a given crypto.
+     *
+     * @param cryptoName the crypto name
+     * @param units      the amount to buy
+     * @throws BusinessExeption if the transaction fails
+     */
     private void buyCrypto(String cryptoName, int units) throws BusinessExeption {
         WalletManager walletManager = WalletManager.getInstance();
         User user = AccountManager.getInstance().getCurrentUser();
@@ -166,6 +183,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
         walletManager.addTransaction(user, crypto, units);
     }
 
+    /**
+     * Sells the specified units of a purchase.
+     *
+     * @param purchase the purchase
+     * @param units    the units to sell
+     * @throws BusinessExeption if the transaction fails
+     */
     private void sellCrypto(Purchase purchase, int units) throws BusinessExeption {
         WalletManager walletManager = WalletManager.getInstance();
         User user = AccountManager.getInstance().getCurrentUser();
@@ -173,13 +197,13 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
     }
 
     /**
-     * Close.
+     * Closes all open CryptoInfo windows and clears controller state.
      */
     public void close() {
         try {
             MarketManager.getMarketManager().unsubscribe(this, EventType.NEW_HISTORICAL_VALUE);
         } catch (NullPointerException ex) {
-            // si salta esta excepción es porque no estaba el controller suscrito, ya que no había ninguna cryptoInfo abierta
+            // If exception occurs, controller was not subscribed
         }
         for (CryptoInfo cryptoInfo : cryptoInfos) {
             cryptoInfo.dispose();

@@ -6,7 +6,9 @@ import Persistance.PersistanceExceptions.ConfigurationFileError;
 import com.google.gson.*;
 
 /**
- * The type Configuration jsondao.
+ * Data Access Object (DAO) for managing the application's configuration using a JSON file.
+ * This class handles reading from and writing to the "config.json" file that contains configuration parameters
+ * such as database connection details and administrator password.
  */
 public class ConfigurationJSONDAO implements ConfigurationDAO {
 
@@ -14,9 +16,9 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
     private final String CONFIG_ERROR = "Brother, hay un error con el fichero de configuracion.";
 
     /**
-     * Instantiates a new Configuration jsondao.
+     * Constructs a new ConfigurationJSONDAO and validates the existence of the configuration file.
      *
-     * @throws ConfigurationFileError the configuration file error
+     * @throws ConfigurationFileError if the configuration file cannot be accessed or does not exist.
      */
     public ConfigurationJSONDAO() throws ConfigurationFileError {
         try {
@@ -24,8 +26,14 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }catch (Exception e) {
             throw new ConfigurationFileError(CONFIG_ERROR);
         }
-     }
+    }
 
+    /**
+     * Retrieves the administrator password from the configuration file.
+     *
+     * @return the administrator password as a String.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public String getAdminPass() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -37,6 +45,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Updates the administrator password in the configuration file, preserving other configuration values.
+     *
+     * @param adminPass the new administrator password to be saved.
+     * @throws ConfigurationFileError if the file cannot be written or there is a formatting issue.
+     */
     public void setAdminPass(String adminPass) throws ConfigurationFileError {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject jsonObject = new JsonObject();
@@ -56,6 +70,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the database port number from the configuration file.
+     *
+     * @return the database port as an integer.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public int getDBPort() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -67,6 +87,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the database name from the configuration file.
+     *
+     * @return the database name as a String.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public String getDBName() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -78,6 +104,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the database username from the configuration file.
+     *
+     * @return the database username as a String.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public String getDBUser() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -89,6 +121,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the database password from the configuration file.
+     *
+     * @return the database password as a String.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public String getDBPass() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -100,6 +138,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the IP address of the database server from the configuration file.
+     *
+     * @return the IP address as a String.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public String getDBIP() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -111,6 +155,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the polling interval used for chart updates from the configuration file.
+     *
+     * @return the polling interval in seconds as a double.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public double getPollingInterval() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -121,6 +171,12 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 
+    /**
+     * Retrieves the maximum number of data points used in chart plotting from the configuration file.
+     *
+     * @return the maximum number of data points as an integer.
+     * @throws ConfigurationFileError if the file cannot be read or parsed.
+     */
     public int getMaximumDataPoints() throws ConfigurationFileError {
         Gson gson = new Gson();
 
@@ -131,5 +187,3 @@ public class ConfigurationJSONDAO implements ConfigurationDAO {
         }
     }
 }
-
-

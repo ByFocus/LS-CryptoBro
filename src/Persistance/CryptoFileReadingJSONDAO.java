@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Crypto file reading jsondao.
+ * DAO implementation for reading cryptocurrency data from a JSON file.
+ * This class parses .json files and converts them into a list of {@link Crypto} objects.
  */
-public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
+public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO {
+
     /**
-     * Instantiates a new Crypto file reading jsondao.
+     * Default constructor.
      */
     public CryptoFileReadingJSONDAO() {}
 
@@ -31,7 +33,13 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
     final static String ERROR_NOT_A_JSON = "El fichero debe ser JSON, ¡esfuérzate más BRO!";
     final static String ERROR_DATA_TYPE = "El formato del JSON es erróneo. Revisa que los campos obligatorios no sean nulos,\ny aseguráte de seguir formato del fichero de ejemplo";
 
-
+    /**
+     * Reads cryptocurrency data from a given JSON file and parses it into a list of {@link Crypto} objects.
+     *
+     * @param file the JSON file to read from
+     * @return a list of parsed {@link Crypto} instances
+     * @throws FileTypeException if the file is not a valid JSON, has syntax errors, is empty, or contains invalid data
+     */
     public List<Crypto> readCryptoFromFile(File file) throws FileTypeException {
         List<Crypto> cryptoList = new ArrayList<>();
         if (file.getName().toLowerCase().endsWith(".json")) {
@@ -39,7 +47,7 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
             try (FileReader reader = new FileReader(file)) {
                 JsonElement root;
                 try {
-                     root = gson.fromJson(reader, JsonElement.class);
+                    root = gson.fromJson(reader, JsonElement.class);
                 } catch (JsonSyntaxException e) {
                     throw new FileTypeException(e.getMessage());
                 }
@@ -66,20 +74,26 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
         return cryptoList;
     }
 
+    /**
+     * Parses a single {@link JsonObject} into a {@link Crypto} object.
+     *
+     * @param obj the JSON object containing the cryptocurrency data
+     * @return a {@link Crypto} instance
+     * @throws FileTypeException if required fields are missing or contain invalid values
+     */
     private Crypto parseCryptoFromJson(JsonObject obj) throws FileTypeException {
         try {
-
             String name = obj.has(NAME_FIELD) && !obj.get(NAME_FIELD).isJsonNull() ? obj.get(NAME_FIELD).getAsString() : null;
             String category = obj.has(CATEGORY_FIELD) && !obj.get(CATEGORY_FIELD).isJsonNull() ? obj.get(CATEGORY_FIELD).getAsString() : null;
             Double initialPrice = obj.has(INITIAL_PRICE_FIELD) && !obj.get(INITIAL_PRICE_FIELD).isJsonNull() ? obj.get(INITIAL_PRICE_FIELD).getAsDouble() : null;
             Integer volatility = obj.has(VOLATILITY_FIELD) && !obj.get(VOLATILITY_FIELD).isJsonNull() ? obj.get(VOLATILITY_FIELD).getAsInt() : null;
 
-            // Campos obligatorios
+            // Mandatory fields validation
             if (name == null || category == null || initialPrice == null || volatility == null) {
                 throw new FileTypeException(ERROR_DATA_TYPE);
             }
 
-            // El precio actual es un campo opcional
+            // Optional current price
             double currentPrice = initialPrice;
             if (obj.has(CURRENT_PRICE_FIELD) && !obj.get(CURRENT_PRICE_FIELD).isJsonNull()) {
                 String currentPriceStr = obj.get(CURRENT_PRICE_FIELD).getAsString();
@@ -88,7 +102,7 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO{
                 }
             }
 
-            // Comprobar que el precio no sea negativo
+            // Validate price positivity
             if (currentPrice <= 0 || initialPrice <= 0) {
                 throw new FileTypeException(ERROR_NEGATIVE_PRICES);
             }

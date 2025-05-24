@@ -10,15 +10,16 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * The type Wallet tab.
+ * The type Wallet tab represents the user interface tab that displays
+ * the user's current cryptocurrency wallet holdings.
  */
 public class WalletTab extends JPanel {
     private JTable walletTable;
 
     /**
-     * Instantiates a new Wallet tab.
+     * Constructs a new {@code WalletTab} with the provided list of purchases.
      *
-     * @param compras the compras
+     * @param compras the initial list of {@link Purchase} objects to display
      */
     public WalletTab(List<Purchase> compras) {
         this.setLayout(new BorderLayout());
@@ -59,18 +60,19 @@ public class WalletTab extends JPanel {
 
 
     /**
-     * Gets tabla data.
+     * Returns the JTable containing wallet data.
      *
-     * @return the tabla data
+     * @return the table component displaying the user's purchases
      */
     public JTable getTableData() {
         return walletTable;
     }
 
     /**
-     * Load purchases data.
+     * Updates the table with a new list of purchases.
+     * This method is thread-safe and should be used when wallet data changes.
      *
-     * @param newPurchases the new purchases
+     * @param newPurchases the new list of {@link Purchase} objects
      */
     public void loadPurchasesData(List<Purchase> newPurchases) {
         SwingUtilities.invokeLater(() -> {

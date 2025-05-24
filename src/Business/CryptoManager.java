@@ -12,18 +12,19 @@ import java.util.List;
 
 /**
  * The type Crypto manager.
+ * Handles all business logic related to cryptocurrency operations,
+ * including price updates, transactions, and file imports.
  */
-public class CryptoManager{
+public class CryptoManager {
     private static CryptoManager instance;
 
     /**
      * Instantiates a new Crypto manager.
      */
-    public CryptoManager(){
-    }
+    public CryptoManager() {}
 
     /**
-     * Gets crypto manager.
+     * Gets the singleton instance of CryptoManager.
      *
      * @return the crypto manager
      */
@@ -35,12 +36,12 @@ public class CryptoManager{
     }
 
     /**
-     * Gets all cryptos.
+     * Retrieves all cryptocurrencies from the persistence layer.
      *
-     * @return the all cryptos
-     * @throws BusinessExeption the business exeption
+     * @return the list of all cryptocurrencies
+     * @throws BusinessExeption if a data access error occurs
      */
-    public List<Crypto> getAllCryptos()  throws BusinessExeption{
+    public List<Crypto> getAllCryptos() throws BusinessExeption {
         try {
             CryptoDAO cryptoDA0 = new CryptoSQLDAO();
             return cryptoDA0.getAllCryptos();
@@ -50,15 +51,15 @@ public class CryptoManager{
     }
 
     /**
-     * Gets crypto by name.
+     * Retrieves a cryptocurrency by name.
      *
      * @param cryptoName the crypto name
-     * @return the crypto by name
-     * @throws BusinessExeption the business exeption
+     * @return the crypto object
+     * @throws BusinessExeption if the crypto is not found or access fails
      */
-    public Crypto getCryptoByName(String cryptoName)  throws BusinessExeption{
+    public Crypto getCryptoByName(String cryptoName) throws BusinessExeption {
         try {
-            CryptoDAO cryptoDA0 =new CryptoSQLDAO();
+            CryptoDAO cryptoDA0 = new CryptoSQLDAO();
             return cryptoDA0.getCryptoByName(cryptoName);
         } catch (PersistanceException e) {
             throw new DataPersistanceError(e.getMessage());
@@ -66,28 +67,28 @@ public class CryptoManager{
     }
 
     /**
-     * Bot make transaction.
+     * Performs a bot transaction with a unit change of +1 or -1.
      *
      * @param cryptoName the crypto name
-     * @param buy        the buy
+     * @param buy        whether to buy (true) or sell (false)
      */
-    public synchronized void botMakeTransaction(String cryptoName, boolean buy){
-        makeTransaction(cryptoName, buy? 1: -1);
+    public synchronized void botMakeTransaction(String cryptoName, boolean buy) {
+        makeTransaction(cryptoName, buy ? 1 : -1);
         new WalletManager().notifyChangeInCryptoValue(cryptoName);
     }
 
     /**
-     * Make transaction.
+     * Performs a transaction affecting the crypto's current price.
      *
      * @param cryptoName the crypto name
-     * @param units      the units
-     * @throws BusinessExeption the business exeption
+     * @param units      number of units (positive for buy, negative for sell)
+     * @throws BusinessExeption if data access fails
      */
     public synchronized void makeTransaction(String cryptoName, int units) throws BusinessExeption {
         try {
-            double priceMultiplier = (units>0? 1.01 : 0.99);
-            CryptoDAO cryptoDA0 =new CryptoSQLDAO();
-            double newPrice = cryptoDA0.getCryptoCurrentPrice(cryptoName)*priceMultiplier;
+            double priceMultiplier = (units > 0 ? 1.01 : 0.99);
+            CryptoDAO cryptoDA0 = new CryptoSQLDAO();
+            double newPrice = cryptoDA0.getCryptoCurrentPrice(cryptoName) * priceMultiplier;
             cryptoDA0.updateCryptoPrice(cryptoName, newPrice);
             MarketManager.getMarketManager().notify(EventType.CRYPTO_VALUES_CHANGED);
         } catch (PersistanceException e) {
@@ -96,11 +97,11 @@ public class CryptoManager{
     }
 
     /**
-     * Gets crypto current price.
+     * Gets the current price of a given cryptocurrency.
      *
      * @param cryptoName the crypto name
-     * @return the crypto current price
-     * @throws BusinessExeption the business exeption
+     * @return the current price
+     * @throws BusinessExeption if retrieval fails
      */
     public double getCryptoCurrentPrice(String cryptoName) throws BusinessExeption {
         try {
@@ -111,10 +112,10 @@ public class CryptoManager{
     }
 
     /**
-     * Delete crypto.
+     * Deletes a cryptocurrency and notifies affected users.
      *
      * @param cryptoName the crypto name
-     * @throws BusinessExeption the business exeption
+     * @throws BusinessExeption if deletion fails
      */
     public void deleteCrypto(String cryptoName) throws BusinessExeption {
         try {
@@ -128,18 +129,18 @@ public class CryptoManager{
     }
 
     /**
-     * Add crypto from files string.
+     * Adds cryptocurrencies from a list of JSON files.
      *
-     * @param files the files
-     * @return the string
-     * @throws BusinessExeption the business exeption
+     * @param files the list of files
+     * @return a log string describing the import process
+     * @throws BusinessExeption if reading or importing fails
      */
-    public String addCryptoFromFiles(List<File> files)  throws BusinessExeption {
+    public String addCryptoFromFiles(List<File> files) throws BusinessExeption {
         try {
             CryptoDAO cryptoDAO = new CryptoSQLDAO();
             StringBuilder log = new StringBuilder();
             for (int i = 0; i < files.size(); i++) {
-                log.append("\nFile #" + (i + 1) + ": " + files.get(i).getName()+"\n");
+                log.append("\nFile #" + (i + 1) + ": " + files.get(i).getName() + "\n");
                 try {
                     log.append(cryptoDAO.addCryptosFromFile(files.get(i)));
                 } catch (PersistanceException err) {
@@ -155,12 +156,12 @@ public class CryptoManager{
     }
 
     /**
-     * Get all crypto names string [ ].
+     * Retrieves all crypto names as a string array.
      *
-     * @return the string [ ]
-     * @throws BusinessExeption the business exeption
+     * @return the array of crypto names
+     * @throws BusinessExeption if data retrieval fails
      */
-    public String[] getAllCryptoNames() throws BusinessExeption{
+    public String[] getAllCryptoNames() throws BusinessExeption {
         List<Crypto> cryptos = getAllCryptos();
         String[] cryptoNames = new String[cryptos.size()];
         for (int i = 0; i < cryptos.size(); i++) {
@@ -169,12 +170,11 @@ public class CryptoManager{
         return cryptoNames;
     }
 
-
     /**
-     * Update crypto price.
+     * Updates the price of a given cryptocurrency.
      *
      * @param cryptoName the crypto name
-     * @param price      the price
+     * @param price      the new price
      */
     public void updateCryptoPrice(String cryptoName, double price) {
         try {

@@ -10,16 +10,18 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * The type Market tab.
+ * The type Market tab represents the UI panel responsible for displaying
+ * the current market view of available cryptocurrencies. It includes a table
+ * showing details about each crypto, styled with custom renderers.
  */
 public class MarketTab extends JPanel {
     private JTable cryptoTable;
 
-
     /**
-     * Instantiates a new Market tab.
+     * Constructs a new {@code MarketTab} panel with a list of cryptocurrencies
+     * to be displayed in a table.
      *
-     * @param cryptoList the crypto list
+     * @param cryptoList the initial list of {@code Crypto} objects to show in the table
      */
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
@@ -61,9 +63,10 @@ public class MarketTab extends JPanel {
     }
 
     /**
-     * Load crypto data.
+     * Loads and updates the table model with a new list of cryptocurrencies.
+     * This method ensures thread-safety using {@link SwingUtilities#invokeLater(Runnable)}.
      *
-     * @param cryptoList the crypto list
+     * @param cryptoList the updated list of {@code Crypto} objects
      */
     public void loadCryptoData(List<Crypto> cryptoList) {
         //this utility prevents and updates this in a safe way, because swing components are not thread-safe
@@ -73,9 +76,9 @@ public class MarketTab extends JPanel {
     }
 
     /**
-     * Gets tabla data.
+     * Returns the reference to the crypto table component.
      *
-     * @return the tabla data
+     * @return the {@code JTable} containing crypto data
      */
     public JTable getTablaData() {
         return cryptoTable;

@@ -13,7 +13,9 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * The type Main frame.
+ * The type Main frame, it is the main window of the CryptoBro application.
+ * It provides the graphical user interface (GUI) where users can view and manage
+ * their wallet, market data, and, if they're an admin, perform administrative actions.
  */
 public class MainFrame extends JFrame {
     //Constantes con titulos, enlaces a fots y textos
@@ -43,11 +45,13 @@ public class MainFrame extends JFrame {
     private AdminTab adminPanel;
 
     /**
-     * Instantiates a new Main frame.
+     * Constructs the main application frame for the user or admin.
+     * It sets up the window configuration, initializes user info (username, balance, and gains),
+     * and prepares the top profile panel.
      *
-     * @param identifier the identifier
-     * @param balance    the balance
-     * @param gains      the gains
+     * @param identifier the user's name or "admin"
+     * @param balance    the current account balance
+     * @param gains      the current estimated gains
      */
     public MainFrame(String identifier, String balance, String gains) {
         configureFrame();
@@ -66,7 +70,10 @@ public class MainFrame extends JFrame {
         this.getContentPane().add(configureProfile(), BorderLayout.NORTH);
     }
 
-
+    /**
+     * Configures the basic properties of the main application frame:
+     * title, size, icon, background color, close operation, and layout.
+     */
     private void configureFrame() {
         pack();
         setTitle(FRAME_TITLE);
@@ -80,11 +87,11 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Configure tabs.
+     * Configures the tabbed interface for the main application window.
+     * If the user is an admin, includes admin functionalities.
      *
-     * @param admin the admin
+     * @param admin true if the user is an admin, false otherwise
      */
-//Pestañas con las acciones
     public void configureTabs(boolean admin) {
         //MODIFICACIONES DE LAS CARACTERISTICAS DE UN TABBED PANE
         UIManager.put("TabbedPane.tabInsets", new Insets(5, 10, 5, 10));
@@ -109,7 +116,12 @@ public class MainFrame extends JFrame {
         getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
 
-    //Barra de arriba de la pagina
+    /**
+     * Builds the top profile bar with the user's name, balance, and estimated gains.
+     * Includes profile picture and stylized user info panel.
+     *
+     * @return a configured JPanel representing the profile section
+     */
     private JPanel configureProfile() {
         JPanel userMenu = new JPanel(new BorderLayout(20, 20));
         userMenu.setOpaque(false);
@@ -160,27 +172,30 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Gets user panel.
+     * Returns the user profile panel, used for attaching listeners or modifying display.
      *
-     * @return the user panel
+     * @return the user profile panel
      */
     public JPanel getUserPanel() {
         return userPanel;
     }
 
     /**
-     * Sets balance.
+     * Updates the balance label with the provided amount, formatted to two decimal places.
      *
-     * @param balance the balance
+     * @param balance the user's current balance
      */
     public void setBalance(double balance) {
         balanceCountLabel.setText(String.format("%.2f€", balance));
     }
 
     /**
-     * Sets estimated gains.
+     * Updates the estimated gains label and changes its color based on gain value:
+     * - Green for positive
+     * - Red for negative
+     * - White for zero
      *
-     * @param estimatedGains the estimated gains
+     * @param estimatedGains the user's estimated profit or loss
      */
     public void setEstimatedGains(double estimatedGains) {
         String gainsText;
@@ -199,7 +214,7 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Close.
+     * Closes and cleans up the main frame by removing tabs and resetting the panels.
      */
     public void close() {
         int index = mainPanel.indexOfComponent(marketPanel);

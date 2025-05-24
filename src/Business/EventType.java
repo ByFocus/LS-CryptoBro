@@ -1,27 +1,33 @@
 package Business;
 
 /**
- * The enum Event type.
+ * The enum EventType.
+ * Defines types of events that can be triggered in the business logic layer
+ * for notifying observers, such as updates in data or system state.
  */
 public enum EventType {
     /**
-     * Crypto values changed event type.
+     * Indicates that one or more cryptocurrency prices have changed.
      */
     CRYPTO_VALUES_CHANGED,
+
     /**
-     * User balance changed event type.
+     * Indicates that the user's balance has been updated.
      */
     USER_BALANCE_CHANGED,
+
     /**
-     * New historical value event type.
+     * Indicates that a new historical value has been recorded for a cryptocurrency.
      */
     NEW_HISTORICAL_VALUE,
+
     /**
-     * User estimated gains changed event type.
+     * Indicates that the user's estimated gains have changed.
      */
     USER_ESTIMATED_GAINS_CHANGED,
+
     /**
-     * New cryptos event type.
+     * Indicates that new cryptocurrencies have been added to the system.
      */
     NEW_CRYPTOS
 }

@@ -7,7 +7,9 @@ import Persistance.PersistanceExceptions.PersistanceException;
 import Persistance.SQL.UserSQLDAO;
 
 /**
- * The type Account manager.
+ * The type AccountManager.
+ * Manages user registration, login, password updates, and administrative access.
+ * Implements singleton pattern to maintain a unique user session.
  */
 public class AccountManager {
     private final String EXISTENT_USER_ERROR = "Bro, este usuario ya está registrado!";
@@ -29,7 +31,7 @@ public class AccountManager {
     private AccountManager() {}
 
     /**
-     * Gets instance.
+     * Gets the singleton instance of AccountManager.
      *
      * @return the instance
      */
@@ -41,12 +43,12 @@ public class AccountManager {
     }
 
     /**
-     * Register user.
+     * Registers a new user in the system.
      *
-     * @param username the username
-     * @param mail     the mail
-     * @param password the password
-     * @throws BusinessExeption the business exeption
+     * @param username the desired username
+     * @param mail     the email address
+     * @param password the chosen password
+     * @throws BusinessExeption if validation or persistence fails
      */
     public void registerUser(String username, String mail, String password) throws BusinessExeption{
         if (username.equalsIgnoreCase("admin")) {
@@ -83,12 +85,12 @@ public class AccountManager {
     }
 
     /**
-     * Login user user.
+     * Logs in a user by username and password.
      *
-     * @param username the username
+     * @param username the username or email
      * @param password the password
-     * @return the user
-     * @throws BusinessExeption the business exeption
+     * @return the logged-in User object
+     * @throws BusinessExeption if credentials are incorrect or user not found
      */
     public User loginUser (String username, String password) throws BusinessExeption {
         try {
@@ -108,10 +110,10 @@ public class AccountManager {
     }
 
     /**
-     * Change password.
+     * Changes the password of the currently logged-in user or the admin.
      *
-     * @param newPwd the new pwd
-     * @param oldPwd the old pwd
+     * @param newPwd the new password
+     * @param oldPwd the old password
      */
     public void changePassword(String newPwd, String oldPwd) throws  BusinessExeption{
         if(currentUser != null){
@@ -148,9 +150,9 @@ public class AccountManager {
     }
 
     /**
-     * Delete current user.
+     * Deletes the account of the currently logged-in user.
      *
-     * @throws BusinessExeption the business exeption
+     * @throws BusinessExeption if deletion fails
      */
     public void deleteCurrentUser() throws BusinessExeption{
         try {
@@ -163,7 +165,8 @@ public class AccountManager {
     }
 
     /**
-     * Check current user warning.
+     * Checks whether the current user has a pending crypto deletion warning.
+     * Throws a warning if true and resets the flag.
      */
     public void checkCurrentUserWarning() throws BusinessExeption{
            try {
@@ -179,10 +182,10 @@ public class AccountManager {
     }
 
     /**
-     * Admin access.
+     * Performs admin authentication.
      *
-     * @param password the password
-     * @throws BusinessExeption the business exeption
+     * @param password the admin password
+     * @throws BusinessExeption if password is incorrect
      */
     public void adminAccess(String password) throws BusinessExeption {
         try {
@@ -195,6 +198,12 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Validates a given password according to security rules.
+     *
+     * @param password the password to validate
+     * @throws BusinessExeption if the password is invalid
+     */
     private void checkPasswordIsValid (String password) throws BusinessExeption{
 
         if (password == null || password.length() < 8) {
@@ -229,6 +238,12 @@ public class AccountManager {
         }
     }
 
+    /**
+     * Validates the format of an email address.
+     *
+     * @param email the email to validate
+     * @throws BusinessExeption if the email format is invalid
+     */
     private void checkEmailIsValid(String email) throws BusinessExeption {
         /*the email regex-> ^ indicates the beggining of the string
         *   allows characters from a-z, A-Z, 0-9 and _+&*-
@@ -242,9 +257,9 @@ public class AccountManager {
     }
 
     /**
-     * Gets current user name.
+     * Gets the username of the current user.
      *
-     * @return the current user name
+     * @return the current user's username
      */
     public String getCurrentUserName() throws BusinessExeption{
         if (currentUser == null) {
@@ -256,7 +271,7 @@ public class AccountManager {
     }
 
     /**
-     * Gets current user.
+     * Gets the current logged-in user object.
      *
      * @return the current user
      */
@@ -266,10 +281,10 @@ public class AccountManager {
 
 
     /**
-     * Warn crypto deleted.
+     * Issues a crypto deletion warning to the user and updates their balance.
      *
-     * @param benefits the benefits
-     * @param username the username
+     * @param benefits the amount to credit
+     * @param username the user affected
      */
     public void warnCryptoDeleted(double benefits, String username) throws BusinessExeption {
         try {
@@ -283,9 +298,9 @@ public class AccountManager {
     }
 
     /**
-     * Update user balance.
+     * Updates the user's balance after a transaction.
      *
-     * @param change the change
+     * @param change the change in balance (positive or negative)
      */
     public void updateUserBalance(double change) throws BusinessExeption {
         try {
@@ -299,7 +314,7 @@ public class AccountManager {
     }
 
     /**
-     * Logout.
+     * Logs out the current user.
      */
     public void logout() {
         currentUser = null;

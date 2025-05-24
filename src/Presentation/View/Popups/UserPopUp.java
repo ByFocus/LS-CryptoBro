@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * The type User pop up.
+ * The type User pop up is a graphical user interface window representing the user's profile panel.
+ *  It displays the user's name, email, and provides interaction options such as:
+ *  logging out, changing password, deleting account, and adding balance (for non-admins).
  */
 public class UserPopUp extends JFrame {
 // Event constants
@@ -40,12 +42,13 @@ public class UserPopUp extends JFrame {
     private JButton deleteAccountButton;
     private JButton changePasswordButton;
     private JDialog changePwdDialog;
+
     /**
-     * Instantiates a new User pop up.
+     * Constructs and initializes the {@code UserPopUp} window for a user.
      *
-     * @param userName    the user name
-     * @param userEmail   the user email
-     * @param admin       the admin
+     * @param userName  the username to be displayed
+     * @param userEmail the user email to be displayed
+     * @param admin     whether the current user is an admin (disables balance-related options if true)
      */
     public UserPopUp(String userName, String userEmail, boolean admin) {
         configureFrame();
@@ -58,6 +61,9 @@ public class UserPopUp extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Configures the visual elements of the user profile section.
+     */
     private void configureUserProfile(){
         setSize(500, 600);
 
@@ -113,6 +119,11 @@ public class UserPopUp extends JFrame {
         c.add(userInfoPanel);
     }
 
+    /**
+     * Configures the interactive buttons depending on whether the user is an admin.
+     *
+     * @param admin {@code true} if the user is an administrator, which disables balance-related components.
+     */
     private void configureActions(boolean admin){
         // Bottom panel for other action buttons
         JPanel actionPanel = new JPanel();
@@ -159,9 +170,9 @@ public class UserPopUp extends JFrame {
     }
 
     /**
-     * Show change password dialog.
+     * Opens a dialog allowing the user to change their password.
      *
-     * @param controller the controller
+     * @param controller the action listener to handle dialog events
      */
     public void showChangePasswordDialog(ActionListener controller) {
         changePwdDialog = new JDialog(this, "Change Password", true);
@@ -202,9 +213,9 @@ public class UserPopUp extends JFrame {
 
 
     /**
-     * Gets old pwd field.
+     * Returns the password field for the old password.
      *
-     * @return the old pwd field
+     * @return the old password field
      */
     public JPasswordField getOldPwdField() { return oldPwdField; }
 

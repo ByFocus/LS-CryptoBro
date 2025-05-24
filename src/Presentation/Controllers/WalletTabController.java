@@ -16,35 +16,37 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
- * The type Wallet tab controller.
+ * Controller class responsible for managing the Wallet tab.
+ * It handles UI updates and user interactions related to user purchases.
  */
 public class WalletTabController implements EventListener, ActionListener {
     private WalletTab walletTab;
     private static WalletTabController instance;
 
     /**
-     * Instantiates a new Wallet tab controller.
+     * Instantiates a new Wallet tab controller and subscribes it to relevant market events.
      */
     public WalletTabController() {
         MarketManager.getMarketManager().subscribe(this, EventType.CRYPTO_VALUES_CHANGED);
     }
 
     /**
-     * Gets instance.
+     * Gets the singleton instance of the WalletTabController.
+     * Subscribes to additional events upon first instantiation.
      *
      * @return the instance
      */
     public static WalletTabController getInstance() {
         if (instance == null) {
             instance = new WalletTabController();
-            MarketManager.getMarketManager().subscribe(instance, EventType.USER_ESTIMATED_GAINS_CHANGED); // si la crypto que tiene el user cambia esto pasa
-            MarketManager.getMarketManager().subscribe(instance, EventType.USER_BALANCE_CHANGED); //si el balance cambia, el
+            MarketManager.getMarketManager().subscribe(instance, EventType.USER_ESTIMATED_GAINS_CHANGED);
+            MarketManager.getMarketManager().subscribe(instance, EventType.USER_BALANCE_CHANGED);
         }
         return instance;
     }
 
     /**
-     * Gets wallet tab.
+     * Returns the wallet tab UI, ensuring it is updated with current purchase data.
      *
      * @return the wallet tab
      */
@@ -53,17 +55,24 @@ public class WalletTabController implements EventListener, ActionListener {
         return walletTab;
     }
 
+    /**
+     * Updates the wallet tab with the current user's purchase data.
+     * Initializes the tab if it has not been created yet.
+     */
     private void updateWalletTab() {
         String user = AccountManager.getInstance().getCurrentUserName();
         List<Purchase> compras = new WalletManager().getWalletByUserName(user);
         if (walletTab == null) {
             walletTab = new WalletTab(compras);
-            SwingUtilities.invokeLater(() ->attachTableMouseListener());
+            SwingUtilities.invokeLater(() -> attachTableMouseListener());
         } else {
             walletTab.loadPurchasesData(compras);
         }
     }
 
+    /**
+     * Attaches a mouse listener to the table for responding to interactions (e.g., selling crypto).
+     */
     private void attachTableMouseListener() {
         walletTab.getTableData().addMouseListener(new MouseAdapter() {
             @Override
@@ -74,7 +83,11 @@ public class WalletTabController implements EventListener, ActionListener {
                     try {
                         CryptoManager cryptoManager = CryptoManager.getCryptoManager();
                         String cryptoName = String.valueOf(walletTab.getTableData().getValueAt(row, 0));
-                        CryptoInfoTabController.getInstance().displayCryptoInfo(cryptoManager.getCryptoByName(cryptoName),  CryptoInfo.MODE_SELL_CRYPTO, row);
+                        CryptoInfoTabController.getInstance().displayCryptoInfo(
+                                cryptoManager.getCryptoByName(cryptoName),
+                                CryptoInfo.MODE_SELL_CRYPTO,
+                                row
+                        );
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
@@ -83,6 +96,11 @@ public class WalletTabController implements EventListener, ActionListener {
         });
     }
 
+    /**
+     * Handles updates triggered by subscribed event types.
+     *
+     * @param context the event context
+     */
     @Override
     public void update(EventType context) {
         switch (context) {
@@ -93,16 +111,21 @@ public class WalletTabController implements EventListener, ActionListener {
         }
     }
 
+    /**
+     * Not used for any actions currently.
+     *
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No actions currently handled
     }
 
     /**
-     * Gets purchase by row.
+     * Gets a purchase object based on the table row index.
      *
-     * @param row the row
-     * @return the purchase by row
+     * @param row the row index
+     * @return the purchase at the specified row
      */
     public Purchase getPurchaseByRow(int row) {
         return ((WalletTableModel)walletTab.getTableData().getModel()).getPurchaseAtRow(row);

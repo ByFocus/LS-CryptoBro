@@ -12,18 +12,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * The type Application controller.
+ * Controller for the main application window.
+ * Manages the lifecycle of the application interface and updates user data based on events.
  */
 public class ApplicationController implements EventListener {
     private static ApplicationController instance;
 
     private MainFrame appFrame;
 
+    /**
+     * Private constructor for singleton pattern.
+     */
     private ApplicationController() {
     }
 
     /**
-     * Gets instance.
+     * Returns the singleton instance of the ApplicationController.
      *
      * @return the instance
      */
@@ -35,13 +39,13 @@ public class ApplicationController implements EventListener {
     }
 
     /**
-     * New application.
+     * Initializes and launches the application window.
      *
-     * @param identifier the identifier
-     * @param balance    the balance
-     * @param gains      the gains
-     * @param admin      the admin
-     * @throws PersistanceException the persistance exception
+     * @param identifier the user or admin identifier
+     * @param balance    the balance to display
+     * @param gains      the estimated gains to display
+     * @param admin      whether the current user is an admin
+     * @throws PersistanceException if an error occurs during data loading
      */
     public void newApplication(String identifier, String balance, String gains, boolean admin) {
         appFrame = new MainFrame(identifier, balance, gains);
@@ -55,13 +59,17 @@ public class ApplicationController implements EventListener {
             }
         });
 
-
         MarketManager market = MarketManager.getMarketManager();
         market.subscribe(this, EventType.USER_BALANCE_CHANGED);
         market.subscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);
         appFrame.setVisible(true);
     }
 
+    /**
+     * Handles updates based on event notifications.
+     *
+     * @param context the triggered event
+     */
     @Override
     public void update(EventType context) {
         switch (context) {
@@ -73,7 +81,7 @@ public class ApplicationController implements EventListener {
                         appFrame.setEstimatedGains(estimatedGains);
                     }
                 } catch (NoCurrentUser _) {
-                    //si está el admin no debe actualizarse
+                    // Skip update if admin is logged in
                 }
                 break;
             case EventType.USER_BALANCE_CHANGED:
@@ -83,14 +91,14 @@ public class ApplicationController implements EventListener {
                         appFrame.setBalance(balance);
                     }
                 } catch (NoCurrentUser _) {
-                    //si está el admin no debe actualizarse
+                    // Skip update if admin is logged in
                 }
                 break;
         }
     }
 
     /**
-     * Close.
+     * Closes the application window and unsubscribes from event listeners.
      */
     public void close() {
         MarketManager.getMarketManager().unsubscribe(this, EventType.USER_ESTIMATED_GAINS_CHANGED);

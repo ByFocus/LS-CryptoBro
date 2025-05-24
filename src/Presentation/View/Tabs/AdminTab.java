@@ -11,7 +11,10 @@ import java.io.File;
 import java.util.List;
 
 /**
- * The type Admin tab.
+ * AdminTab provides the graphical interface for administrative tasks within the application.
+ * It allows an administrator to:
+ * - Add new cryptocurrencies to the system.
+ * - Delete existing cryptocurrencies
  */
 public class AdminTab extends JPanel {
     private final String NUMB_FILES_TEXT_SING = " fichebro seleccionado";
@@ -21,14 +24,7 @@ public class AdminTab extends JPanel {
 
     private final String SELECT_DELETE_CRYPTO_TEXT = "Selecciona la cryptomoneda que quieres eliminar...";
     private final String DELETE_CRYPTO_BUTTON_TEXT = "BORRAR CRYPTO";
-
-    /**
-     * The constant ADD_CRYPTO_COMMAND.
-     */
     public static final String ADD_CRYPTO_COMMAND = "ADD CRYPTO";
-    /**
-     * The constant DEL_CRYPTO_COMMAND.
-     */
     public static final String DEL_CRYPTO_COMMAND = "DELETE CRYPTO";
 
     private JPanel addPanel;
@@ -43,18 +39,20 @@ public class AdminTab extends JPanel {
 
 
     /**
-     * Instantiates a new Admin tab.
+     * Constructs an {@code AdminTab} with a list of existing crypto names
+     * to populate the deletion combo box.
      *
-     * @param names the names
+     * @param names an array of crypto names available for deletion
      */
     public AdminTab(String[] names) {
         configureTab(names);
     }
 
     /**
-     * Handle files drop.
+     * Updates the interface when files are dropped onto the UI.
+     * Stores and displays the list of received files.
      *
-     * @param files the files
+     * @param files a list of files dropped onto the panel
      */
     public void handleFilesDrop(List<File> files) {
         lastFilesUpload = files;
@@ -68,15 +66,20 @@ public class AdminTab extends JPanel {
 
 
     /**
-     * Gets files dropped.
+     * Returns the list of files most recently dropped.
      *
-     * @return the files dropped
+     * @return a list of File objects, or null if no files were dropped
      */
     public List<File> getFilesDropped() {
         return lastFilesUpload;
         // no serà null porque solo se llama cuando es notificado el listener
     }
 
+    /**
+     * Configures and adds both the "add" and "delete" sections to the panel layout.
+     *
+     * @param names an array of crypto names to populate the deletion combo box
+     */
     private void configureTab(String[] names) {
         this.setLayout(new GridBagLayout());
         setBackground(new Color(70, 129, 137));
@@ -102,6 +105,12 @@ public class AdminTab extends JPanel {
         //añade panel
         add(deletePanel, proportions);
     }
+
+    /**
+     * Builds and initializes the UI components of the "Delete Crypto" section.
+     *
+     * @param names an array of crypto names to populate the combo box
+     */
     private void configureDeletePanel(String[] names) {
         deletePanel = new JPanel();
         deletePanel.setBackground(new Color(28, 80, 100, 255));
@@ -137,6 +146,11 @@ public class AdminTab extends JPanel {
         deletePanel.add(deleteButtonPanel);
         deletePanel.add(getVerticalGlue(0, 10));
     }
+
+    /**
+     * Builds and initializes the UI components of the "Add Crypto" section,
+     * including the drag-and-drop panel, file list, and add button.
+     */
     private void configureAddPanel() {
         addPanel = new JPanel();
         addPanel.setBackground(new Color(244, 233, 205));
@@ -218,6 +232,13 @@ public class AdminTab extends JPanel {
 
     }
 
+    /**
+     * Utility method to generate vertical spacing inside a BoxLayout.
+     *
+     * @param width  width of the spacer
+     * @param height height of the spacer
+     * @return the vertical spacer component
+     */
     private Component getVerticalGlue(int width, int height){
         Component glue = Box.createVerticalGlue();
         glue.setMinimumSize(new Dimension(width, height));
@@ -225,9 +246,9 @@ public class AdminTab extends JPanel {
     }
 
     /**
-     * Register controller.
+     * Registers the given action listener for the add and delete buttons.
      *
-     * @param newListener the new listener
+     * @param newListener the ActionListener to register
      */
     public void registerController(ActionListener newListener) {
         addButton.addActionListener(newListener);
@@ -236,9 +257,9 @@ public class AdminTab extends JPanel {
     }
 
     /**
-     * Reset tab.
+     * Resets the tab view to its initial state and updates the crypto dropdown.
      *
-     * @param cryptoNames the crypto names
+     * @param cryptoNames an array of current crypto names
      */
     public void resetTab(String[] cryptoNames) {
         filesNamesArea.setText("");
@@ -251,11 +272,11 @@ public class AdminTab extends JPanel {
     }
 
     /**
-     * Gets selected cryto.
+     * Returns the currently selected crypto in the delete dropdown.
      *
-     * @return the selected cryto
+     * @return the selected crypto name, or null if none selected
      */
-    public String getSelectedCryto() {
+    public String getSelectedCrypto() {
         try {
             return cryptoComboBox.getSelectedItem().toString();
         } catch (NullPointerException e) {

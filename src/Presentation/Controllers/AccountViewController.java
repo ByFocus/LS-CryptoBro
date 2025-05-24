@@ -15,7 +15,8 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 /**
- * The type Account view controller.
+ * Controller for managing account-related UI events and interactions.
+ * Handles user login, registration, password change, logout, and account deletion.
  */
 public class AccountViewController implements ActionListener, EventListener {
     private static AccountViewController instance;
@@ -30,15 +31,18 @@ public class AccountViewController implements ActionListener, EventListener {
     private final String ERROR_NO_EXISTENT_USER = "Bro no existente en nuestra BroBase";
     private final String ERROR_CONTRASEÑA_ERRONEA = "Bro te equivocaste de contraseña";
 
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
     private AccountViewController() {
         startView = new StartFrame();
         startView.registerController(this);
     }
 
     /**
-     * Gets instance.
+     * Returns the singleton instance of the controller.
      *
-     * @return the instance
+     * @return the controller instance
      */
     public static AccountViewController getInstance() {
         if (instance == null) instance = new AccountViewController();
@@ -47,14 +51,14 @@ public class AccountViewController implements ActionListener, EventListener {
     }
 
     /**
-     * Start.
+     * Starts the view by making the main frame visible.
      */
     public void start() {
         startView.setVisible(true);
     }
 
     /**
-     * Check user profile.
+     * Displays the current user's profile popup.
      */
     public void checkUserProfile() {
         userView.setVisible(true);
@@ -120,16 +124,25 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    /**
+     * Switches to the registration view in the UI.
+     */
     private void switchToRegisterView() {
         startView.switchView(StartFrame.REGISTER_VIEW);
         startView.reset();
     }
 
+    /**
+     * Switches to the login view in the UI.
+     */
     private void switchToLoginView() {
         startView.switchView(StartFrame.LOGIN_VIEW);
         startView.reset();
     }
 
+    /**
+     * Handles the user registration process.
+     */
     private void registerUser() {
         String userName = startView.getNameInput();
         String password = startView.getPasswordInput();
@@ -149,11 +162,14 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    /**
+     * Handles the user login process.
+     */
     private void loginUser() {
         String identifier = startView.getNameInput();
         String password = startView.getPasswordInput();
 
-        if(identifier.isEmpty() || password.isEmpty()) {
+        if (identifier.isEmpty() || password.isEmpty()) {
             MessageDisplayer.displayError(ERROR_EMPTY_FIELD);
         } else {
             if (identifier.equalsIgnoreCase("admin")) {
@@ -168,9 +184,8 @@ public class AccountViewController implements ActionListener, EventListener {
                 } catch (BusinessExeption e2) {
                     MessageDisplayer.displayError(e2.getMessage());
                 }
-            }
-            else {
-                try  {
+            } else {
+                try {
                     logInNormalUser(identifier, password);
                 } catch (BusinessExeption e1) {
                     MessageDisplayer.displayError(e1.getMessage());
@@ -179,9 +194,16 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    /**
+     * Logs in a regular user and updates the UI accordingly.
+     *
+     * @param identifier the username or email
+     * @param password   the password
+     * @throws BusinessExeption if login fails
+     */
     private void logInNormalUser(String identifier, String password) throws BusinessExeption {
         startView.reset();
-        User user =AccountManager.getInstance().loginUser(identifier, password);
+        User user = AccountManager.getInstance().loginUser(identifier, password);
         startView.dispose();
 
         DecimalFormat priceFormat = new DecimalFormat("#.#####€");
@@ -201,6 +223,9 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    /**
+     * Logs the current user out and resets the application state.
+     */
     private void userLogOut() {
         userView.dispose();
         ApplicationController.getInstance().close();
@@ -211,6 +236,9 @@ public class AccountViewController implements ActionListener, EventListener {
         startView.setVisible(true);
     }
 
+    /**
+     * Adds balance to the currently logged-in user.
+     */
     private void addBalance() {
         double change;
 
@@ -223,6 +251,10 @@ public class AccountViewController implements ActionListener, EventListener {
             MessageDisplayer.displayError("El saldo tiene que ser un real positivo, separado por puntos");
         }
     }
+
+    /**
+     * Deletes the current user's account after confirmation.
+     */
     private void userEraseAccount() {
         int option = MessageDisplayer.askConfirmation(ERASE_CONFIRMATION);
 
@@ -239,6 +271,11 @@ public class AccountViewController implements ActionListener, EventListener {
         }
     }
 
+    /**
+     * Event notification method. Currently unused.
+     *
+     * @param event the triggered event
+     */
     public void update(EventType event) {
 
     }

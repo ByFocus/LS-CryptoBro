@@ -7,25 +7,28 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 /**
- * The type Crypto table model.
+ * The type Crypto table model is a custom table model for displaying a list of cryptocurrencies
+ *  in a {@link JTable}. It formats and provides access to data such as the crypto name, category,
+ *  current price, and market variation (both absolute and percentage).
  */
 public class CryptoTableModel extends AbstractTableModel {
     private final List<Crypto> cryptos;
     private final String[] columnas = {"Nombre", "Categoría", "Precio Actual", "Variación", "Variación %"};
 
     /**
-     * Instantiates a new Crypto table model.
+     * Constructs a new {@code CryptoTableModel} with the specified list of cryptocurrencies.
      *
-     * @param cryptos the cryptos
+     * @param cryptos the list of {@link Crypto} objects to display
      */
     public CryptoTableModel(List<Crypto> cryptos) {
         this.cryptos = cryptos;
     }
 
     /**
-     * Sets data.
+     * Updates the data in the model with a new list of cryptocurrencies.
+     * This method ensures thread safety and notifies the table about cell or row changes accordingly.
      *
-     * @param newCryptos the new cryptos
+     * @param newCryptos the updated list of cryptocurrencies
      */
     public synchronized void setData(List<Crypto> newCryptos) {
 
@@ -56,17 +59,33 @@ public class CryptoTableModel extends AbstractTableModel {
         }
     }
 
-
+    /**
+     * Returns the number of rows in the table, corresponding to the number of cryptos.
+     *
+     * @return the number of rows
+     */
     @Override
     public int getRowCount() {
         return cryptos.size();
     }
 
+    /**
+     * Returns the number of columns in the table.
+     *
+     * @return the number of columns
+     */
     @Override
     public int getColumnCount() {
         return columnas.length;
     }
 
+    /**
+     * Returns the value for a specific cell at the given row and column.
+     *
+     * @param rowIndex    the row index
+     * @param columnIndex the column index
+     * @return the value to display in the table cell
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < cryptos.size()) {
@@ -86,6 +105,12 @@ public class CryptoTableModel extends AbstractTableModel {
         return null;
     }
 
+    /**
+     * Returns the name of the column at the specified index.
+     *
+     * @param column the column index
+     * @return the column name
+     */
     @Override
     public String getColumnName(int column) {
         return columnas[column];

@@ -12,21 +12,27 @@ import java.io.File;
 import java.util.List;
 
 /**
- * The type Admin tab controller.
+ * Controller for the admin tab. Handles admin-related actions such as
+ * adding or deleting cryptocurrencies.
  */
 public class AdminTabController implements ActionListener {
     private static AdminTabController instance;
     private AdminTab adminTab;
 
-    private AdminTabController() throws BusinessExeption{
-            adminTab = new AdminTab(CryptoManager.getCryptoManager().getAllCryptoNames());
-            adminTab.registerController(this);
+    /**
+     * Private constructor for the singleton pattern.
+     *
+     * @throws BusinessExeption if there is an error retrieving crypto names
+     */
+    private AdminTabController() throws BusinessExeption {
+        adminTab = new AdminTab(CryptoManager.getCryptoManager().getAllCryptoNames());
+        adminTab.registerController(this);
     }
 
     /**
-     * Gets instance.
+     * Returns the singleton instance of the controller.
      *
-     * @return the instance
+     * @return the AdminTabController instance
      */
     public static AdminTabController getInstance() {
         if (instance == null) {
@@ -36,7 +42,7 @@ public class AdminTabController implements ActionListener {
     }
 
     /**
-     * Gets admin tab.
+     * Returns the admin tab UI view.
      *
      * @return the admin tab
      */
@@ -44,13 +50,18 @@ public class AdminTabController implements ActionListener {
         return adminTab;
     }
 
+    /**
+     * Handles action events triggered by the admin tab UI.
+     *
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
         switch (e.getActionCommand()) {
             case AdminTab.ADD_CRYPTO_COMMAND:
                 List<File> files = adminTab.getFilesDropped();
-                if(files != null && !files.isEmpty()) {
+                if (files != null && !files.isEmpty()) {
                     CryptoManager cryptoManager = new CryptoManager();
                     try {
                         MessageDisplayer.displayInformativeMessage(cryptoManager.addCryptoFromFiles(files));
@@ -59,14 +70,13 @@ public class AdminTabController implements ActionListener {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
                     adminTab.resetTab(cryptoManager.getAllCryptoNames());
-                }else {
+                } else {
                     MessageDisplayer.displayError("Brother, no has añadido ningun fichebro!");
-
                 }
                 break;
 
             case AdminTab.DEL_CRYPTO_COMMAND:
-                String cryptoToDel = adminTab.getSelectedCryto();
+                String cryptoToDel = adminTab.getSelectedCrypto();
                 if (cryptoToDel != null) {
                     CryptoManager cryptoManager = new CryptoManager();
                     try {
@@ -79,7 +89,7 @@ public class AdminTabController implements ActionListener {
                     } catch (BusinessExeption ex) {
                         MessageDisplayer.displayError(ex.getMessage());
                     }
-                }else {
+                } else {
                     MessageDisplayer.displayError("No has seleccionado ninguna crypto, bro!");
                 }
         }

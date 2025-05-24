@@ -13,15 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Crypto sqldao.
+ * The type CryptoSQLDAO.
+ * SQL implementation of the CryptoDAO interface for managing cryptocurrency entities in the database.
  */
 public class CryptoSQLDAO implements CryptoDAO {
 
     private final String CRYPTO_FAILED = "Failed to create crypto entry";
 
+    /**
+     * Inserts a new cryptocurrency into the database.
+     *
+     * @param crypto the Crypto object to insert
+     * @throws PersistanceException if the insertion fails or the database connection is null
+     */
     public void createCrypto(Crypto crypto) throws PersistanceException {
 
-        String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility) VALUES (?, ?, ?, ?, ?)"; // Removed '?' from cryptoDeleted
+        String query = "INSERT INTO cryptocurrency (name, init_value, current_value, category, volatility) VALUES (?, ?, ?, ?, ?)";
 
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -51,10 +58,16 @@ public class CryptoSQLDAO implements CryptoDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Couldn't close stmt " + e.getMessage());
             }
-            // Note: Don't close conn here since it's managed by SQLConnector
         }
     }
 
+    /**
+     * Updates the current price of the given cryptocurrency in the database.
+     *
+     * @param cryptoName the name of the cryptocurrency
+     * @param price the new price to set
+     * @throws PersistanceException if the update fails or the cryptocurrency is not found
+     */
     public synchronized void updateCryptoPrice(String cryptoName, Double price)  throws PersistanceException{
 
         String query = "UPDATE cryptocurrency SET current_value = ? WHERE name = ?";
@@ -86,8 +99,14 @@ public class CryptoSQLDAO implements CryptoDAO {
         }
     }
 
+    /**
+     * Retrieves the current price of a cryptocurrency by name.
+     *
+     * @param cryptoName the name of the cryptocurrency
+     * @return the current price
+     * @throws PersistanceException if the cryptocurrency is not found or the database connection fails
+     */
     public double getCryptoCurrentPrice(String cryptoName) throws PersistanceException {
-        // Correct the query syntax to SELECT the current_value from the table
         String query = "SELECT current_value FROM cryptocurrency WHERE name = ?";
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -105,7 +124,6 @@ public class CryptoSQLDAO implements CryptoDAO {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // Retrieve the double value from the ResultSet
                 return rs.getDouble("current_value");
             } else {
                 throw new DBDataNotFound("No cryptocurrency found with name: " + cryptoName);
@@ -113,17 +131,21 @@ public class CryptoSQLDAO implements CryptoDAO {
         } catch (SQLException e) {
             throw new DBDataNotFound(e.getMessage());
         } finally {
-            // Safely close resources
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Error closing resources!");
-                // Use logging for resources closing error if necessary
             }
         }
     }
 
+    /**
+     * Deletes a cryptocurrency from the database by name.
+     *
+     * @param cryptoName the name of the cryptocurrency to delete
+     * @throws PersistanceException if the deletion fails or the crypto is not found
+     */
     public void deleteCrypto(String cryptoName) throws PersistanceException{
 
         String query = "DELETE FROM cryptocurrency WHERE name = ?";
@@ -138,7 +160,6 @@ public class CryptoSQLDAO implements CryptoDAO {
             stmt = conn.prepareStatement(query);
             stmt.setString(1, cryptoName);
 
-            // Execute the update
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
                 throw new DBDataNotFound("Couldn't find crypto");
@@ -156,6 +177,12 @@ public class CryptoSQLDAO implements CryptoDAO {
         }
     }
 
+    /**
+     * Retrieves all cryptocurrencies stored in the database.
+     *
+     * @return a list of Crypto objects
+     * @throws PersistanceException if the retrieval fails
+     */
     public List<Crypto> getAllCryptos()  throws PersistanceException{
         List<Crypto> cryptoList = new ArrayList<>();
         String query = "SELECT * FROM cryptocurrency";
@@ -191,11 +218,17 @@ public class CryptoSQLDAO implements CryptoDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Error closing resources");
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
         return cryptoList;
     }
 
+    /**
+     * Retrieves a cryptocurrency by its name.
+     *
+     * @param name the name of the cryptocurrency
+     * @return the matching Crypto object
+     * @throws PersistanceException if the crypto is not found or the query fails
+     */
     public Crypto getCryptoByName(String name)  throws PersistanceException{
 
         String query = "SELECT * FROM cryptocurrency WHERE name = ?";
@@ -223,7 +256,6 @@ public class CryptoSQLDAO implements CryptoDAO {
 
                 crypto = new Crypto(name, category, currentPrice, initialPrice, volatility);
             } else {
-                //AQUESTA EXCEPCIÓ ESTÀ BÉ
                 throw new DBDataNotFound("No crypto found with name: " + name);
             }
         } catch (SQLException e) {
@@ -235,11 +267,18 @@ public class CryptoSQLDAO implements CryptoDAO {
             } catch (SQLException e) {
                 throw new DBConnectionNotReached("Error closing resources");
             }
-            // Note: Don't close conn here as it's managed by SQLConnector
         }
         return crypto;
     }
 
+    /**
+     * Adds cryptocurrencies from a JSON file to the database.
+     * Cryptocurrencies that already exist are skipped.
+     *
+     * @param file the JSON file to read from
+     * @return a string log of how many and which cryptocurrencies were added
+     * @throws PersistanceException if reading or inserting fails
+     */
     public String addCryptosFromFile(File file) throws PersistanceException{
         List<Crypto> cryptos = new CryptoFileReadingJSONDAO().readCryptoFromFile(file);
         int cryptoCount = 0;
@@ -251,7 +290,6 @@ public class CryptoSQLDAO implements CryptoDAO {
                 error.append("\t\t" + crypto.getName() + " ya existe.\n");
             }
             catch (DBDataNotFound _) {
-                // si no es troba está bé;
                 createCrypto(crypto);
                 cryptoCount++;
             }

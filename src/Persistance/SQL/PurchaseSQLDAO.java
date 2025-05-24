@@ -13,10 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type Purchase sqldao.
+ * SQL implementation of the PurchaseDAO interface.
+ * Handles operations related to user purchases of cryptocurrencies.
  */
 public class PurchaseSQLDAO implements PurchaseDAO {
 
+    /**
+     * Adds a new purchase for a user.
+     *
+     * @param user     the user making the purchase
+     * @param purchase the purchase details
+     * @throws PersistanceException if database access fails
+     */
     public void addPurchase(User user, Purchase purchase)  throws PersistanceException {
 
         String query = "INSERT INTO purchase (user_name, crypto_name, number, buy_price) VALUES (?, ?, ?, ?)";
@@ -51,6 +59,13 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         }
     }
 
+    /**
+     * Retrieves all distinct usernames that have purchased a given cryptocurrency.
+     *
+     * @param cryptoName the name of the cryptocurrency
+     * @return list of usernames
+     * @throws PersistanceException if the query fails
+     */
     public List<String> getUsernamesByCryptoName(String cryptoName)  throws PersistanceException{
 
         List<String> usernames = new ArrayList<>();
@@ -86,6 +101,13 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         return usernames;
     }
 
+    /**
+     * Retrieves all purchases made by a specific user.
+     *
+     * @param user the username
+     * @return list of Purchase objects
+     * @throws PersistanceException if the query fails
+     */
     public List<Purchase> getPurchasesByUserName(String user)  throws PersistanceException{
         List<Purchase> purchases = new ArrayList<>();
         String query = "SELECT DISTINCT * FROM purchase WHERE user_name = ?";
@@ -121,6 +143,14 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         return purchases;
     }
 
+    /**
+     * Retrieves the database ID (buy_id) of a specific purchase.
+     *
+     * @param purchase the purchase object
+     * @param username the username who made the purchase
+     * @return the purchase ID from the database
+     * @throws PersistanceException if the purchase is not found or query fails
+     */
     private int getBuyId(Purchase purchase, String username) throws PersistanceException{
         int buyId = -1;
         String query = "SELECT buy_id FROM purchase WHERE crypto_name = ? AND user_name = ? AND number = ? AND buy_price = ?";
@@ -161,6 +191,14 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         return buyId;
     }
 
+    /**
+     * Subtracts units from a user's purchase. If the result is 0, deletes the purchase.
+     *
+     * @param purchase         the original purchase
+     * @param username         the user who owns the purchase
+     * @param unitsToSubtract  the number of units to subtract
+     * @throws PersistanceException if update fails, purchase is invalid, or user has insufficient units
+     */
     public void subtractUnits(Purchase purchase, String username, int unitsToSubtract) throws PersistanceException{
         String query = "UPDATE PURCHASE SET number = ? WHERE buy_id = ?";
         int newUnits = purchase.getUnits() - unitsToSubtract;
@@ -186,6 +224,15 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         }
     }
 
+    /**
+     * Sells all purchases of a specific cryptocurrency for a given user.
+     * Deletes the records and returns the total earnings.
+     *
+     * @param cryptoName the cryptocurrency to sell
+     * @param userName   the user performing the sale
+     * @return the total earnings from the sale
+     * @throws PersistanceException if retrieval or deletion fails
+     */
     public double sellAllPurchasesFromCrypto(String cryptoName, String userName) throws PersistanceException{
         String queryUnits = "SELECT SUM(number) FROM purchase WHERE crypto_name = ? AND user_name = ?";
         String queryDelete = "DELETE FROM purchase WHERE crypto_name = ? AND user_name = ?";
@@ -231,6 +278,12 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         return benefits;
     }
 
+    /**
+     * Deletes a specific purchase from the database by its ID.
+     *
+     * @param id the purchase ID (buy_id)
+     * @throws PersistanceException if deletion fails or purchase is not found
+     */
     private void deletePurchaseById(int id) throws PersistanceException{
         String query = "DELETE FROM purchase WHERE buy_id = ?";
         Connection conn = null;
@@ -260,6 +313,12 @@ public class PurchaseSQLDAO implements PurchaseDAO {
         }
     }
 
+    /**
+     * Deletes all purchases associated with a specific user.
+     *
+     * @param userName the username whose purchases should be deleted
+     * @throws PersistanceException if the deletion fails
+     */
     public void deletePurchasesFromUser(String userName) throws PersistanceException{
         String query = "DELETE FROM purchase WHERE user_name = ?";
         Connection conn = null;

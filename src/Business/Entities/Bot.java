@@ -8,6 +8,8 @@ import java.util.Random;
 
 /**
  * The type Bot.
+ * Simulates a trading bot that performs random transactions on a given cryptocurrency
+ * at a frequency based on its volatility.
  */
 public class Bot extends Thread {
     private int buyingPeriod;
@@ -17,41 +19,40 @@ public class Bot extends Thread {
     /**
      * Instantiates a new Bot.
      *
-     * @param crypto the crypto
+     * @param crypto the cryptocurrency to trade
      */
     public Bot(Crypto crypto) {
-        //buyingPeriod
         cryptoName = crypto.getName();
-        buyingPeriod = 5000/crypto.getVolatility();
+        buyingPeriod = 5000 / crypto.getVolatility();
         running = true;
-
     }
 
+    /**
+     * Runs the bot loop.
+     * Randomly decides to buy or sell, and performs a transaction through CryptoManager.
+     */
     @Override
     public void run() {
-        while (running) { //TODO: A lo mejor es preferible tener un booleano
+        while (running) {
             try {
                 boolean buy = new Random().nextBoolean();
                 try {
                     CryptoManager.getCryptoManager().botMakeTransaction(cryptoName, buy);
                     Thread.sleep(buyingPeriod);
                 } catch (BusinessExeption _) {
-
+                    // Silently ignore failed transactions
                 }
-
             } catch (InterruptedException _) {
-                //
+                // Thread interrupted, exit gracefully
             }
-
         }
     }
 
     /**
-     * Kill.
+     * Terminates the bot by stopping its loop and interrupting the thread.
      */
     public void kill() {
         interrupt();
         running = false;
     }
-
 }

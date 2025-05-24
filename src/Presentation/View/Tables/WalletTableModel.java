@@ -12,7 +12,9 @@ import java.nio.BufferOverflowException;
 import java.util.List;
 
 /**
- * The type Wallet table model.
+ * The type Wallet table model is a custom table model that manages the data displayed in the
+ *  wallet table view. It provides the structure and logic to present user purchases of cryptocurrencies,
+ *  including purchase amount, price, current value, and profit/loss.
  */
 public class WalletTableModel extends AbstractTableModel {
 
@@ -20,18 +22,19 @@ public class WalletTableModel extends AbstractTableModel {
     private List<Purchase> purchases;
 
     /**
-     * Instantiates a new Wallet table model.
+     * Constructs a new WalletTableModel with the given list of purchases.
      *
-     * @param purchases the compras
+     * @param purchases the list of user purchases
      */
     public WalletTableModel(List<Purchase> purchases) {
         this.purchases = purchases;
     }
 
     /**
-     * Sets data.
+     * Updates the table data with a new list of purchases.
+     * Preserves row structure when possible and minimizes repainting for performance.
      *
-     * @param newPurchases   the compras
+     * @param newPurchases the updated list of purchases
      */
     public void setData(List<Purchase> newPurchases) {
         SwingUtilities.invokeLater(() -> {
@@ -65,16 +68,33 @@ public class WalletTableModel extends AbstractTableModel {
         });
     }
 
+    /**
+     * Returns the number of rows (purchases).
+     *
+     * @return the row count
+     */
     @Override
     public int getRowCount() {
         return purchases.size();
     }
 
+    /**
+     * Returns the number of columns in the table.
+     *
+     * @return the column count
+     */
     @Override
     public int getColumnCount() {
         return columnas.length;
     }
 
+    /**
+     * Returns the value to display at the specified cell.
+     *
+     * @param rowIndex    the row index
+     * @param columnIndex the column index
+     * @return the value to display in the table cell
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)  {
         if (rowIndex <= purchases.size()) {
@@ -112,16 +132,22 @@ public class WalletTableModel extends AbstractTableModel {
         return null;
     }
 
+    /**
+     * Returns the name of the specified column.
+     *
+     * @param column the column index
+     * @return the column name
+     */
     @Override
     public String getColumnName(int column) {
         return columnas[column];
     }
 
     /**
-     * Gets purchase at row.
+     * Returns the {@link Purchase} object at the given row.
      *
-     * @param row the row
-     * @return the purchase at row
+     * @param row the row index
+     * @return the {@code Purchase} instance at the row
      */
     public Purchase getPurchaseAtRow(int row) {
         return purchases.get(row);

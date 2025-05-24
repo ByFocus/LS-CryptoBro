@@ -5,17 +5,36 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * The type Sell column render.
+ *  The WalletTableRender is a custom cell renderer for the wallet table used in the UI.
+ *  It supports different styling for table headers and cell content, including conditional
+ *  coloring and formatting based on the column and cell value.
  */
 public class WalletTableRender extends DefaultTableCellRenderer {
 
     private boolean headerFlag;
 
+    /**
+     * Constructs a new {@code WalletTableRender}.
+     *
+     * @param header true if the renderer is used for table headers; false for regular cells
+     */
     public WalletTableRender(boolean header) {
         super();
         headerFlag = header;
     }
 
+    /**
+     * Returns the component used for drawing the cell, with custom styling applied
+     * based on header status and cell content.
+     *
+     * @param table      the {@code JTable} that uses this renderer
+     * @param value      the value to assign to the cell
+     * @param isSelected whether the cell is selected
+     * @param hasFocus   whether the cell has focus
+     * @param row        the row index of the cell
+     * @param column     the column index of the cell
+     * @return the component used for rendering the cell
+     */
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

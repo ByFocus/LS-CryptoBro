@@ -2,6 +2,7 @@ package Business.Entities;
 
 /**
  * The type Purchase.
+ * Represents a cryptocurrency purchase made by a user, including the crypto name, number of units, and price per unit.
  */
 public class Purchase {
     private String crypto;
@@ -11,9 +12,9 @@ public class Purchase {
     /**
      * Instantiates a new Purchase.
      *
-     * @param cryptoName the crypto name
-     * @param units      the units
-     * @param priceUnit  the price unit
+     * @param cryptoName the name of the cryptocurrency
+     * @param units      the number of units purchased
+     * @param priceUnit  the price per unit at the time of purchase
      */
     public Purchase(String cryptoName, int units, double priceUnit) {
         this.crypto = cryptoName;
@@ -22,23 +23,23 @@ public class Purchase {
     }
 
     /**
-     * Gets crypto.
+     * Gets the name of the cryptocurrency.
      *
-     * @return the crypto
+     * @return the crypto name
      */
     public String getCrypto() { return crypto; }
 
     /**
-     * Gets units.
+     * Gets the number of units purchased.
      *
-     * @return the units
+     * @return the number of units
      */
     public int getUnits() { return units; }
 
     /**
-     * Gets price unit.
+     * Gets the price per unit at the time of purchase.
      *
-     * @return the price unit
+     * @return the unit price
      */
     public double getPriceUnit() { return priceUnit; }
 
