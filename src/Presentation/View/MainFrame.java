@@ -55,10 +55,10 @@ public class MainFrame extends JFrame {
         gainsCountLabel = new JLabel();
         if (gains.contains("-")) {
             gainsCountLabel.setForeground(Color.RED);
-        } else if (!gains.equals("None")){
+        } else if (!gains.equals("0")){
             gainsCountLabel.setForeground(Color.GREEN);
             gains = "+"+gains;
-        }
+        } else gains = "None";
 
         gainsCountLabel.setText(gains);
 

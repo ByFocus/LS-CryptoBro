@@ -190,13 +190,7 @@ public class AccountViewController implements ActionListener, EventListener {
 
                     String balance = priceFormat.format(user.getBalance());
                     double gains = WalletManager.getInstance().calculateEstimatedGainsByUserName(user.getUsername());
-                    String profit;
-                    if (gains == 0) {
-                        profit = "None";
-                    }
-                    else {
-                        profit = priceFormat.format(gains);
-                    }
+                    String profit = priceFormat.format(gains);
 
                     ApplicationController.getInstance().newApplication(user.getUsername(), balance , profit ,false);
                     userView = new UserPopUp(userName, user.getMail(), String.format("%.2f",user.getBalance()),false);
