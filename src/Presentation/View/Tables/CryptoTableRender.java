@@ -27,7 +27,7 @@ public class CryptoTableRender extends DefaultTableCellRenderer {
             ((JLabel)c).setBorder(BorderFactory.createLineBorder(new Color(3, 25, 38)));
         } else {
             if (column == 0) {
-                c.setBackground(new Color(28, 36, 52, 255)); //);//new Color(70, 129, 137));
+                c.setBackground(new Color(28, 36, 52, 255));
                 c.setForeground(Color.white);
                 c.setFont(new Font("Arial", Font.BOLD, 18));
             } else if (column == 3 || column == 4) {

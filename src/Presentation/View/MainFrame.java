@@ -99,12 +99,10 @@ public class MainFrame extends JFrame {
         mainPanel.addTab(MARKET_TAB_TITLE, marketPanel);
         if (admin) {
             adminPanel = AdminTabController.getInstance().getAdminTab();
-            adminPanel.setBackground(new Color(3, 25, 38));
             mainPanel.addTab(ADMIN_TAB_TITLE, adminPanel);
         }
         else {
             walletPanel = WalletTabController.getInstance().getWalletTab();
-            walletPanel.setBackground(new Color(157, 190, 187));
             mainPanel.addTab(WALLET_TAB_TITLE, walletPanel);
         }
 

@@ -13,7 +13,7 @@ import java.util.List;
  * The type Market tab.
  */
 public class MarketTab extends JPanel {
-    private JTable cryptoTabla;
+    private JTable cryptoTable;
 
 
     /**
@@ -23,36 +23,38 @@ public class MarketTab extends JPanel {
      */
     public MarketTab(List<Crypto> cryptoList) {
         this.setLayout(new BorderLayout());
-        setBackground(new Color(157, 190, 187));
+        //Color backColor = new Color(244, 233, 205, 200);
+        Color backColor =new Color(157, 190, 187);
+        setBackground(backColor);
 
-        CryptoTableModel modelo = new CryptoTableModel(cryptoList);
-        cryptoTabla = new JTable(modelo);
-        JTableHeader header = cryptoTabla.getTableHeader();
+        CryptoTableModel model = new CryptoTableModel(cryptoList);
+        cryptoTable = new JTable(model);
+        JTableHeader header = cryptoTable.getTableHeader();
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
         header.setReorderingAllowed(false);
         header.setDefaultRenderer(new CryptoTableRender(true));
 
 
-        cryptoTabla.setBackground(new Color(70, 129, 137));
-        cryptoTabla.setForeground(Color.white);
-        cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
-        cryptoTabla.setRowHeight(40);
-        cryptoTabla.setShowGrid(false);
-        cryptoTabla.setIntercellSpacing(new Dimension(0, 0));
-        for (int i = 0; i < cryptoTabla.getColumnCount(); i++) {
-            cryptoTabla.getColumnModel().getColumn(i).setCellRenderer(new CryptoTableRender(false));
+        cryptoTable.setBackground(new Color(70, 129, 137));
+        cryptoTable.setForeground(Color.white);
+        cryptoTable.setFont(new Font("Arial", Font.PLAIN, 18));
+        cryptoTable.setRowHeight(40);
+        cryptoTable.setShowGrid(false);
+        cryptoTable.setIntercellSpacing(new Dimension(0, 0));
+        for (int i = 0; i < cryptoTable.getColumnCount(); i++) {
+            cryptoTable.getColumnModel().getColumn(i).setCellRenderer(new CryptoTableRender(false));
         }
 
-        cryptoTabla.setRowSelectionAllowed(false);
-        cryptoTabla.setCellSelectionEnabled(true);
+        cryptoTable.setRowSelectionAllowed(false);
+        cryptoTable.setCellSelectionEnabled(true);
 
-        cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        cryptoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //cryptoTabla.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
 
-        JScrollPane scroll = new JScrollPane(cryptoTabla);
-        scroll.getViewport().setBackground(new Color(157, 190, 187));
-        scroll.setBackground(new Color(157, 190, 187));
-        scroll.getVerticalScrollBar().setBackground(new Color(157, 190, 187));
+        JScrollPane scroll = new JScrollPane(cryptoTable);
+        scroll.getViewport().setBackground(backColor);
+        scroll.setBackground(backColor);
+        scroll.getVerticalScrollBar().setBackground(backColor);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(scroll, BorderLayout.CENTER);
 
@@ -66,7 +68,7 @@ public class MarketTab extends JPanel {
     public void loadCryptoData(List<Crypto> cryptoList) {
         //this utility prevents and updates this in a safe way, because swing components are not thread-safe
         SwingUtilities.invokeLater(() -> {
-            ((CryptoTableModel) cryptoTabla.getModel()).setData(cryptoList);
+            ((CryptoTableModel) cryptoTable.getModel()).setData(cryptoList);
         });
     }
 
@@ -76,7 +78,7 @@ public class MarketTab extends JPanel {
      * @return the tabla data
      */
     public JTable getTablaData() {
-        return cryptoTabla;
+        return cryptoTable;
     }
 
 }

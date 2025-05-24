@@ -69,6 +69,7 @@ public class WalletTabController implements EventListener, ActionListener {
         walletTab.getTablaData().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.println("mouseClicked");
                 int row = walletTab.getTablaData().getSelectedRow();
                 int col = walletTab.getTablaData().getSelectedColumn();
                 if (row != -1 && col == 4) {

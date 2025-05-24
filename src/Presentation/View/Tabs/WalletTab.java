@@ -1,6 +1,7 @@
 package Presentation.View.Tabs;
 
 import Business.Entities.Purchase;
+import Presentation.View.Tables.CryptoTableRender;
 import Presentation.View.Tables.WalletTableRender;
 import Presentation.View.Tables.WalletTableModel;
 
@@ -22,22 +23,26 @@ public class WalletTab extends JPanel {
      */
     public WalletTab(List<Purchase> compras) {
         this.setLayout(new BorderLayout());
-        setBackground(new Color(70, 129, 137));
 
-        WalletTableModel modelo = new WalletTableModel(compras);
-        walletTable = new JTable(modelo);
+        //Color backColor =new Color(157, 190, 187);
+        Color backColor = new Color(244, 233, 205, 200);
+        setBackground(backColor);
+
+        WalletTableModel model = new WalletTableModel(compras);
+        walletTable = new JTable(model);
         JTableHeader header = walletTable.getTableHeader();
-        header.setBackground(new Color(3, 25, 38));
-        header.setForeground(Color.white);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
-        header.setFont(new Font("Arial", Font.BOLD, 16));
+        header.setReorderingAllowed(false);
+        header.setDefaultRenderer(new CryptoTableRender(true));
 
         walletTable.setRowHeight(40);
-        walletTable.setBackground(new Color(3, 25, 38));
+        walletTable.setBackground(new Color(28, 36, 52, 255));
         walletTable.setForeground(new Color(244, 233, 205));
         walletTable.setFont(new Font("Arial", Font.PLAIN, 18));
+        walletTable.setShowGrid(false);
+        walletTable.setIntercellSpacing(new Dimension(0, 0));
         for (int i = 0; i < walletTable.getColumnCount(); i++) {
-            walletTable.getColumnModel().getColumn(4).setCellRenderer(new WalletTableRender());
+            walletTable.getColumnModel().getColumn(i).setCellRenderer(new WalletTableRender(false));
         }
 
         walletTable.setRowSelectionAllowed(false);
@@ -46,6 +51,10 @@ public class WalletTab extends JPanel {
         walletTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scroll = new JScrollPane(walletTable);
+        scroll.getViewport().setBackground(backColor);
+        scroll.setBackground(backColor);
+        scroll.getVerticalScrollBar().setBackground(backColor);
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(scroll, BorderLayout.CENTER);
     }
 
