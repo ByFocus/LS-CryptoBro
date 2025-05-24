@@ -230,10 +230,10 @@ public class AccountManager {
     }
 
     private void checkEmailIsValid(String email) throws BusinessExeption {
-        /*the email regex-> ^ indicates the begining of the string
+        /*the email regex-> ^ indicates the beggining of the string
         *   allows characters from a-z, A-Z, 0-9 and _+&*-
-        *   also allows concatenetion with a point
-        *   then needs a @ followed by valid caracters and a point with more valid characters
+        *   also allows concatenation with a point
+        *   then needs a @ followed by valid characters and a point with more valid characters
         * */
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         if(!email.matches(emailRegex)) {

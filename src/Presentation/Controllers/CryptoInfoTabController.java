@@ -47,10 +47,11 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
     public void displayCryptoInfo(Crypto crypto, int mode, int row) {
         String cryptoName = crypto.getName();
 
-        int units;
+        int units = 0;
+
         if (mode == CryptoInfo.MODE_SELL_CRYPTO) {
             units = WalletTabController.getInstance().getPurchaseByRow(row).getUnits();
-        } else {
+        } else if (mode == CryptoInfo.MODE_BUY_CRYPTO) {
             String userName = AccountManager.getInstance().getCurrentUserName();
             units = WalletManager.getInstance().getNumCryptoInWallet(userName, cryptoName);
         }
@@ -136,6 +137,7 @@ public class CryptoInfoTabController implements EventListener, ActionListener {
             case CryptoInfo.CHANGE_PRICE:
                 try {
                     String amount = cryptoInfo.getAmountLabel();
+                    cryptoInfo.resetAmount();
                     double price = Double.parseDouble(amount);
                     if (price > 0) {
                         CryptoManager.getCryptoManager().updateCryptoPrice(cryptoName, price);
