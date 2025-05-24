@@ -96,7 +96,7 @@ public class AdminTab extends JPanel {
         proportions.fill = GridBagConstraints.BOTH;
         proportions.gridx = 0;
         proportions.gridy = 0;
-        proportions.weighty = 0.60;
+        proportions.weighty = 0.55;
         proportions.weightx = 1.0;
         //añade panel
         add(addPanel, proportions);
@@ -105,46 +105,48 @@ public class AdminTab extends JPanel {
         configureDeletePanel(names);
         //modifica proporciones del panel
         proportions.gridy = 1;
-        proportions.weighty = 0.40;
+        proportions.weighty = 0.45;
         //añade panel
         add(deletePanel, proportions);
     }
     private void configureDeletePanel(String[] names) {
         deletePanel = new JPanel();
-        deletePanel.setBackground(new Color(70, 129, 137));
+        deletePanel.setBackground(new Color(28, 80, 100, 255));
         deletePanel.setLayout(new BoxLayout(deletePanel, BoxLayout.Y_AXIS));
 
         JLabel deleteCryptoLabel = new JLabel(SELECT_DELETE_CRYPTO_TEXT);
         deleteCryptoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        deleteCryptoLabel.setForeground(Color.BLACK);
+        deleteCryptoLabel.setForeground(Color.WHITE);
         deleteCryptoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
         cryptoComboBox = new JComboBox<>(names);
-        cryptoComboBox.setMaximumSize(new Dimension(100, 5));
+        cryptoComboBox.setMaximumSize(new Dimension(100, 40));
+        cryptoComboBox.setFont(new Font("Arial", Font.PLAIN, 15));
 
         deleteButton = new JButton(DELETE_CRYPTO_BUTTON_TEXT);
-        deleteButton.setBackground(new Color(0, 51, 204)); // Dark blue background
+        deleteButton.setFont(new Font("Arial", Font.BOLD, 16));
+        deleteButton.setBackground(new Color(190, 50, 50, 200));//new Color(70, 129, 137));
         deleteButton.setForeground(Color.WHITE);
         deleteButton.setActionCommand(DEL_CRYPTO_COMMAND);
+        deleteButton.setBorderPainted(false);
 
         JPanel deleteButtonPanel = new JPanel();
         deleteButtonPanel.add(deleteButton);
-        deleteButtonPanel.setPreferredSize(new Dimension(120, 30));
+        deleteButtonPanel.setPreferredSize(new Dimension(120, 60));
         deleteButtonPanel.setOpaque(false);
-        deleteButtonPanel.setBorder(BorderFactory.createEmptyBorder(10,10,70,10));
+        deleteButtonPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         deletePanel.add(getVerticalGlue(0,10));
         deletePanel.add(deleteCryptoLabel);
-        deletePanel.add(getVerticalGlue(0,5));
-        deletePanel.add(cryptoComboBox);
         deletePanel.add(getVerticalGlue(0,10));
+        deletePanel.add(cryptoComboBox);
         deletePanel.add(deleteButtonPanel);
         deletePanel.add(getVerticalGlue(0, 10));
     }
     private void configureAddPanel() {
         addPanel = new JPanel();
-        addPanel.setBackground(new Color(120, 129, 0));
+        addPanel.setBackground(new Color(244, 233, 205));
         addPanel.setLayout(new BoxLayout(addPanel, BoxLayout.Y_AXIS));
 
         JLabel dropCryptosLabel = new JLabel(DROP_FILES_TEXT);
@@ -198,8 +200,11 @@ public class AdminTab extends JPanel {
         howManyFilesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         addButton = new JButton(ADD_CRYPTO_BUTTON_TEXT);
-        addButton.setBackground(new Color(0, 51, 204)); // Dark blue background
+        addButton.setFont(new Font("Arial", Font.BOLD, 16));
+        addButton.setBackground(new Color(70, 129, 137));
         addButton.setForeground(Color.WHITE);
+        addButton.setActionCommand(DEL_CRYPTO_COMMAND);
+        addButton.setBorderPainted(false);
         addButton.setActionCommand(ADD_CRYPTO_COMMAND);
 
         JPanel addButtonPanel = new JPanel();
@@ -214,7 +219,6 @@ public class AdminTab extends JPanel {
         addPanel.add(dropPanel);
         addPanel.add(getVerticalGlue(0, 2));
         addPanel.add(howManyFilesLabel);
-        addPanel.add(getVerticalGlue(0, 2));
         addPanel.add(addButtonPanel);
         addPanel.add(Box.createVerticalGlue());
 

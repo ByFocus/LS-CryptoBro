@@ -165,7 +165,7 @@ public class CryptoGraph extends JPanel {
             if (samples.getLast().getPrecio() >= samples.getFirst().getPrecio()) {
                 g2d.setColor(new Color(50, 205, 50)); // Verde
             } else {
-                g2d.setColor(new Color(205, 50, 50)); // Verde
+                g2d.setColor(new Color(205, 50, 50)); // Rojo
             }
             g2d.setStroke(new BasicStroke(2.0f));
 

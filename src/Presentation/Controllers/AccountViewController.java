@@ -163,7 +163,7 @@ public class AccountViewController implements ActionListener, EventListener {
                     AccountManager.getInstance().adminAccess(password);
 
                     startView.dispose();
-                    ApplicationController.getInstance().newApplication("admin", "UNLIMITED", "INFINITE", true);
+                    ApplicationController.getInstance().newApplication("admin", "ILIMITADO", "INFINITO", true);
                     userView = new UserPopUp("Admin", "Admin@gmail.com", true);
                     userView.registerController(this);
                 } catch (BusinessExeption e2) {
