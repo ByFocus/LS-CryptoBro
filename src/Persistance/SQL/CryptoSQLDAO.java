@@ -130,7 +130,7 @@ public class CryptoSQLDAO implements CryptoDAO {
                 throw new DBDataNotFound("No se ha encontrado la cryptomoneda con el nombre: " + cryptoName);
             }
         } catch (SQLException e) {
-            throw new DBDataNotFound(e.getMessage());
+            throw new DBDataNotFound(DB_CONNECTION_FAILED);
         } finally {
             try {
                 if (rs != null) rs.close();

@@ -218,7 +218,7 @@ public class PurchaseSQLDAO implements PurchaseDAO {
                 throw new DBConnectionNotReached(PURCHASE_ERROR);
             }
         } catch (SQLException e) {
-            throw new DBConnectionNotReached(e.getMessage());
+            throw new DBConnectionNotReached(DB_CONNECTION_FAILED);
         }
         if (newUnits == 0) {
             deletePurchaseById(buyId);
