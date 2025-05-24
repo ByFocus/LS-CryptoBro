@@ -9,6 +9,7 @@ import Presentation.View.Popups.MessageDisplayer;
 import Presentation.View.Tables.WalletTableModel;
 import Presentation.View.Tabs.WalletTab;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -50,6 +51,21 @@ public class WalletTabController implements EventListener, ActionListener {
      */
     public WalletTab getWalletTab() {
         updateWalletTab();
+        return walletTab;
+    }
+
+    private void updateWalletTab() {
+        String user = AccountManager.getInstance().getCurrentUserName();
+        List<Purchase> compras = new WalletManager().getWalletByUserName(user);
+        if (walletTab == null) {
+            walletTab = new WalletTab(compras);
+            SwingUtilities.invokeLater(() ->attachTableMouseListener());
+        } else {
+            walletTab.loadPurchasesData(compras);
+        }
+    }
+
+    private void attachTableMouseListener() {
         walletTab.getTablaData().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -66,17 +82,6 @@ public class WalletTabController implements EventListener, ActionListener {
                 }
             }
         });
-        return walletTab;
-    }
-
-    private void updateWalletTab() {
-        String user = AccountManager.getInstance().getCurrentUserName();
-        List<Purchase> compras = new WalletManager().getWalletByUserName(user);
-        if (walletTab == null) {
-            walletTab = new WalletTab(compras);
-        } else {
-            walletTab.loadPurchasesData(compras);
-        }
     }
 
     @Override

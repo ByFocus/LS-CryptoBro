@@ -32,6 +32,8 @@ public class MarketTab extends JPanel {
         header.setForeground(Color.white);
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
         header.setFont(new Font("Arial", Font.BOLD, 16));
+        header.setReorderingAllowed(false);
+        header.setBorder(BorderFactory.createLineBorder(Color.black));
         cryptoTabla.setBackground(new Color(70, 129, 137));
         cryptoTabla.setForeground(new Color(255, 255, 255));
         cryptoTabla.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -44,7 +46,7 @@ public class MarketTab extends JPanel {
         cryptoTabla.setCellSelectionEnabled(true);
 
         cryptoTabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        cryptoTabla.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
+        //cryptoTabla.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255)));
 
         JScrollPane scroll = new JScrollPane(cryptoTabla);
         scroll.getViewport().setBackground(new Color(244, 233, 205));

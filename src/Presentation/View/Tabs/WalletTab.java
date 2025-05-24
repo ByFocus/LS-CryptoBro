@@ -32,12 +32,13 @@ public class WalletTab extends JPanel {
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
         header.setFont(new Font("Arial", Font.BOLD, 16));
 
-        walletTable.setRowHeight(75);
+        walletTable.setRowHeight(40);
         walletTable.setBackground(new Color(3, 25, 38));
         walletTable.setForeground(new Color(244, 233, 205));
         walletTable.setFont(new Font("Arial", Font.PLAIN, 18));
-        walletTable.getColumnModel().getColumn(4).setCellRenderer(new WalletTableRender());
-        walletTable.getColumnModel().getColumn(3).setCellRenderer(new WalletTableRender());
+        for (int i = 0; i < walletTable.getColumnCount(); i++) {
+            walletTable.getColumnModel().getColumn(4).setCellRenderer(new WalletTableRender());
+        }
 
         walletTable.setRowSelectionAllowed(false);
         walletTable.setCellSelectionEnabled(true);
@@ -45,7 +46,7 @@ public class WalletTab extends JPanel {
         walletTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scroll = new JScrollPane(walletTable);
-        add(scroll);
+        add(scroll, BorderLayout.CENTER);
     }
 
 
