@@ -79,8 +79,6 @@ public class UserSQLDAO implements UserDAO {
         return user;
     }
 
-
-
     public boolean validateUser(String identifier, String password) throws PersistanceException{
         String query = "SELECT 1 FROM user WHERE (user_name = ? OR email = ?) AND password = ?";
         Connection conn = SQLConnector.getInstance().getConnection();
@@ -151,7 +149,7 @@ public class UserSQLDAO implements UserDAO {
             stmt.setString(1, flagValue? "1": "0");
             stmt.setString(2, identifier);
             stmt.setString(3, identifier);
-            //TODO: Tirar excepcion si no se ha afectado a ninguna columna
+
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
                 throw new DBConnectionNotReached("Failed to update user");
@@ -160,6 +158,7 @@ public class UserSQLDAO implements UserDAO {
             throw new DBConnectionNotReached(e.getMessage());
         }
     }
+
     public void updatePassword(String identifier, String password) throws PersistanceException{
         String query = "UPDATE USER SET password = ? WHERE user_name = ? OR email = ?";
         try {

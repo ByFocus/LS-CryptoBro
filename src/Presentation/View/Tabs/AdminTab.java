@@ -126,7 +126,7 @@ public class AdminTab extends JPanel {
 
         deleteButton = new JButton(DELETE_CRYPTO_BUTTON_TEXT);
         deleteButton.setFont(new Font("Arial", Font.BOLD, 16));
-        deleteButton.setBackground(new Color(190, 50, 50, 200));//new Color(70, 129, 137));
+        deleteButton.setBackground(new Color(168, 49, 49));
         deleteButton.setForeground(Color.WHITE);
         deleteButton.setActionCommand(DEL_CRYPTO_COMMAND);
         deleteButton.setBorderPainted(false);
