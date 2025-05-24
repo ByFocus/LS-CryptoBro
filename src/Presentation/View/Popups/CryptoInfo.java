@@ -62,7 +62,7 @@ public class CryptoInfo extends JFrame {
     private void configureFrame(){
         setTitle(TITLE);
         setIconImage(new ImageIcon(iconImgURL).getImage());
-        setSize(800, 600);
+        setSize(900, 600);
         getContentPane().setBackground(new Color(28,36,52,255));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -89,7 +89,7 @@ public class CryptoInfo extends JFrame {
         cryptoPriceInfo.setOpaque(false);
         cryptoPriceInfo.setLayout(new GridBagLayout());
         cryptoPriceInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cryptoPriceInfo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 600));
+        cryptoPriceInfo.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 720));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
