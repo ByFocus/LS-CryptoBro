@@ -18,7 +18,7 @@ public class RoundedButton extends JButton {
     public RoundedButton(String label, int radius) {
         super(label);
         this.radius = radius;
-        setContentAreaFilled(false); // Prevent default background fill
+        setContentAreaFilled(false);
     }
 
     /**
@@ -31,11 +31,9 @@ public class RoundedButton extends JButton {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw the rounded background using the current background color
         g2.setColor(getBackground());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
 
-        // Paint the text and icon as usual
         super.paintComponent(g2);
         g2.dispose();
     }

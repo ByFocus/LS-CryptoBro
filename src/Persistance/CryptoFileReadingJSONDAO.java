@@ -88,12 +88,10 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO {
             Double initialPrice = obj.has(INITIAL_PRICE_FIELD) && !obj.get(INITIAL_PRICE_FIELD).isJsonNull() ? obj.get(INITIAL_PRICE_FIELD).getAsDouble() : null;
             Integer volatility = obj.has(VOLATILITY_FIELD) && !obj.get(VOLATILITY_FIELD).isJsonNull() ? obj.get(VOLATILITY_FIELD).getAsInt() : null;
 
-            // Mandatory fields validation
             if (name == null || category == null || initialPrice == null || volatility == null) {
                 throw new FileTypeException(ERROR_DATA_TYPE);
             }
 
-            // Optional current price
             double currentPrice = initialPrice;
             if (obj.has(CURRENT_PRICE_FIELD) && !obj.get(CURRENT_PRICE_FIELD).isJsonNull()) {
                 String currentPriceStr = obj.get(CURRENT_PRICE_FIELD).getAsString();
@@ -102,7 +100,6 @@ public class CryptoFileReadingJSONDAO implements CryptoFileReadingDAO {
                 }
             }
 
-            // Validate price positivity
             if (currentPrice <= 0 || initialPrice <= 0) {
                 throw new FileTypeException(ERROR_NEGATIVE_PRICES);
             }

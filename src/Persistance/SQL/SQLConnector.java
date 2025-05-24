@@ -52,30 +52,6 @@ public class SQLConnector {
     }
 
     /**
-     * Executes a SELECT SQL query and returns the ResultSet.
-     * Caller is responsible for closing the ResultSet and Statement.
-     *
-     * @param query the SQL SELECT query
-     * @return the result set of the query
-     * @throws DBConnectionNotReached if query execution or connection fails
-     */
-    public ResultSet selectQuery(String query) throws DBConnectionNotReached {
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            Connection connection = getConnection();
-            if (connection == null) {
-                throw new DBConnectionNotReached("Database connection is null");
-            }
-            stmt = connection.createStatement();
-            rs = stmt.executeQuery(query);
-            return rs;
-        } catch (SQLException e) {
-            throw new DBConnectionNotReached("Failed to execute select query " + e.getMessage());
-        }
-    }
-
-    /**
      * Establishes a connection to the database using the configured URL, username, and password.
      *
      * @throws DBConnectionNotReached if the connection cannot be established
@@ -104,21 +80,6 @@ public class SQLConnector {
             return conn;
         } catch (SQLException e) {
             throw new DBConnectionNotReached("Failed to establish database connection");
-        }
-    }
-
-    /**
-     * Closes the current database connection, if open.
-     *
-     * @throws DBConnectionNotReached if closing the connection fails
-     */
-    public void disconnect() throws DBConnectionNotReached {
-        try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            throw new DBConnectionNotReached("Problem when closing the connection.");
         }
     }
 }

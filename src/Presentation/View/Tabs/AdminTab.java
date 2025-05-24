@@ -72,7 +72,6 @@ public class AdminTab extends JPanel {
      */
     public List<File> getFilesDropped() {
         return lastFilesUpload;
-        // no serà null porque solo se llama cuando es notificado el listener
     }
 
     /**

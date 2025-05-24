@@ -56,12 +56,12 @@ public class AccountManager {
         }
         try{
             UserDAO userDAO = new UserSQLDAO();
-            userDAO.getUserByUsernameOrEmail(username); //donde se crea esto?
+            userDAO.getUserByUsernameOrEmail(username);
             throw new UserAuthentificationError(EXISTENT_USER_ERROR);
         } catch (DBDataNotFound _) {
             try {
                 UserDAO userDAO = new UserSQLDAO();
-                userDAO.getUserByUsernameOrEmail(mail); //donde se crea esto?
+                userDAO.getUserByUsernameOrEmail(mail);
                 throw new UserAuthentificationError(EXISTENT_MAIL_ERROR);
             } catch (DBDataNotFound _) {
                 checkPasswordIsValid(password);
@@ -73,7 +73,6 @@ public class AccountManager {
                 } catch (PersistanceException ex) {
                     throw new DataPersistanceError(ex.getMessage());
                 }
-                //TODO: Actualmente esto no te logea habría que mirarlo, en el controller se pueden llamar registerUser y loginuser segidas
             }
             catch (PersistanceException e) {
                 throw new DataPersistanceError(e.getMessage());
@@ -245,11 +244,6 @@ public class AccountManager {
      * @throws BusinessExeption if the email format is invalid
      */
     private void checkEmailIsValid(String email) throws BusinessExeption {
-        /*the email regex-> ^ indicates the beggining of the string
-        *   allows characters from a-z, A-Z, 0-9 and _+&*-
-        *   also allows concatenation with a point
-        *   then needs a @ followed by valid characters and a point with more valid characters
-        * */
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         if(!email.matches(emailRegex)) {
             throw new UserAuthentificationError(EMAIL_FORMAT_NOT_VALID);
